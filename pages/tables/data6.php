@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ชุดข้อมูลระยะเวลารอคอยทุกแผนก</title>
+  <title>ชุดข้อมูลประเภทนัดหมายเฉพาะผู้ป่วยนอก</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -229,7 +229,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../../index2.php" class="nav-link">
+                <a href="../../index4.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>ผู้ป่วยนัด</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../../index3.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>ผู้ป่วย Refer</p>
                 </a>
@@ -888,12 +894,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>ชุดข้อมูลระยะเวลารอคอยทุกแผนก</h1>
+            <h1>ชุดข้อมูลประเภทนัดหมายเฉพาะผู้ป่วยนอก</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="../../index.php">Home</a></li>
-              <li class="breadcrumb-item active">ชุดข้อมูลระยะเวลารอคอยทุกแผนก</li>
+              <li class="breadcrumb-item active">ชุดข้อมูลประเภทนัดหมายเฉพาะผู้ป่วยนอก</li>
             </ol>
           </div>
         </div>
@@ -907,7 +913,7 @@
           <div class="col-12">        
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">ชุดข้อมูลระยะเวลารอคอยทุกแผนก</h3>
+                <h3 class="card-title">ชุดข้อมูลประเภทนัดหมายเฉพาะผู้ป่วยนอก</h3>
                   <!-- /.input group -->
                 </div>
               </div>
@@ -915,70 +921,16 @@
             <?php 
             include('function.php');
             $objConnect = MSHOCI();
-            $SQLWaitting_ALL="select o.OPD_NO,p.hn,p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
-            ct.name as credit_name,ctm.name as cometohos,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,
-            (select sum(a.M_SELL) from  ACCIDENT_FINANCE_4 a where a.N17=o.opd_no) as price,
-            TO_CHAR(o.OPD_DATE,'yyyy-MM-dd')||' '||TO_CHAR(o.OPD_TIME,'HH24:MI:ss') as visit_time,
-            TO_CHAR(o.REACH_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.REACH_OPD_DATETIME,'HH24:MI:ss') as start_opd_time,
-            TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss') as screen_opd_time,
-            TO_CHAR(o.RX_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.RX_OPD_DATETIME,'HH24:MI:ss') rx_opd_time,
-            TO_CHAR(o.FINISH_OPD_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(o.FINISH_OPD_DATETIME,'HH24:MI:ss') as finnish_opd_time,
-            TO_CHAR(o.AFTER_DOC_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(o.AFTER_DOC_DATETIME,'HH24:MI:ss') as doctor_time,
-            (select TO_CHAR(ofh.DATETIME_IN_SECOND,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.DATETIME_IN_SECOND,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1) as DATETIME_IN_SECOND,
-            (select TO_CHAR(ofh.CHECK_DRUG_OK_DATE,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.CHECK_DRUG_OK_DATE,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1) as CHECK_DRUG_OK_DATE,
-            (select TO_CHAR(ofh.ALREADY_RECEIVE_DRUG_DATE,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.ALREADY_RECEIVE_DRUG_DATE,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1) as ALREADY_RECEIVE_DRUG_DATE,
-            DECODE(o.SCREENING_OPD_DATETIME,null, ' ',DECODE(o.OPD_TIME, null, ' ',ROUND((TO_DATE(TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')-
-            TO_DATE(TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')||' '||TO_CHAR(o.OPD_TIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')) *24*60,2))) as time_screen,
-            
-            DECODE(o.AFTER_DOC_DATETIME,null, ' ',DECODE(o.RX_OPD_DATETIME, null, ' ',ROUND((TO_DATE(TO_CHAR(o.AFTER_DOC_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(o.AFTER_DOC_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')-
-            TO_DATE(TO_CHAR(o.RX_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.RX_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')) *24*60,2))) as time_doctor,
-            
-            DECODE((select ofh.ALREADY_RECEIVE_DRUG_DATE from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1), null, 0,DECODE((select ofh.DATETIME_IN_SECOND
-            from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1), null, 0,
-            ROUND((TO_DATE((select TO_CHAR(ofh.ALREADY_RECEIVE_DRUG_DATE,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.ALREADY_RECEIVE_DRUG_DATE,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1),'YYYY-MM-DD HH24:MI:ss')-
-            TO_DATE((select TO_CHAR(ofh.DATETIME_IN_SECOND,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.DATETIME_IN_SECOND,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1),'YYYY-MM-DD HH24:MI:ss')) *1440, 2))) as time_drug,
-            
-            DECODE(o.SCREENING_OPD_DATETIME,null, ' ',DECODE((select ofh.DATETIME_IN_SECOND
-            from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1), null, ' ',ROUND((TO_DATE((select TO_CHAR(ofh.DATETIME_IN_SECOND,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.DATETIME_IN_SECOND,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1),'YYYY-MM-DD HH24:MI:ss')-TO_DATE(TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')) *1440, 2))) as time_drugload,
-            DECODE((o.SCREENING_OPD_DATETIME),null, ' ',DECODE(o.RX_OPD_DATETIME, null, ' ',ROUND((TO_DATE(TO_CHAR(o.RX_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.RX_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')-TO_DATE(TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')
-            ) *24*60,2))) as time_docdrug,
-            ROUND(
-            DECODE(o.SCREENING_OPD_DATETIME,null, 0,DECODE(o.OPD_TIME, null, 0,ROUND((TO_DATE(TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')-
-            TO_DATE(TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')||' '||TO_CHAR(o.OPD_TIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')) *24*60,2)))+
-            DECODE(o.AFTER_DOC_DATETIME,null, 0,DECODE(o.RX_OPD_DATETIME, null, 0,ROUND((TO_DATE(TO_CHAR(o.AFTER_DOC_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(o.AFTER_DOC_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')-
-            TO_DATE(TO_CHAR(o.RX_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.RX_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')) *24*60,2)))
-            +
-            DECODE((select ofh.ALREADY_RECEIVE_DRUG_DATE from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1), null, 0,DECODE((select ofh.DATETIME_IN_SECOND
-            from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1), null, 0,
-            ROUND((TO_DATE((select TO_CHAR(ofh.ALREADY_RECEIVE_DRUG_DATE,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.ALREADY_RECEIVE_DRUG_DATE,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1),'YYYY-MM-DD HH24:MI:ss')-
-            TO_DATE((select TO_CHAR(ofh.DATETIME_IN_SECOND,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.DATETIME_IN_SECOND,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1),'YYYY-MM-DD HH24:MI:ss')) *1440, 2)))+
-            DECODE(o.SCREENING_OPD_DATETIME,null, 0,DECODE((select ofh.DATETIME_IN_SECOND
-            from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1), null, 0,ROUND((TO_DATE((select TO_CHAR(ofh.DATETIME_IN_SECOND,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.DATETIME_IN_SECOND,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1),'YYYY-MM-DD HH24:MI:ss')-TO_DATE(TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')) *1440, 2)))+
-            DECODE((o.SCREENING_OPD_DATETIME),null, 0,DECODE(o.RX_OPD_DATETIME, null, 0,ROUND((TO_DATE(TO_CHAR(o.RX_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.RX_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')-TO_DATE(TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')
-            ) *24*60,2))),2)as sum_time,(select n.name from native_code n where n.native_id=p.native_id and rownum<=1) as nat_name,o.mark_yn
+            $SQLOPDComtohos="select o.OPD_NO,p.hn,p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
+            ct.name as credit_name,ctm.name as cometohos,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
+            DBMS_LOB.SUBSTR(o.symptom_clob) as Symptom,o.past_illness
+            ,(select n.name from native_code n where n.native_id=p.native_id and rownum<=1) as nat_name,o.mark_yn
             from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
-            where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and
-            o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and
-            doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
-            pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and o.OPD_DATE BETWEEN TO_DATE('2023-11-22','yyyy-mm-dd')  and TO_DATE('2023-11-22','yyyy-mm-dd') +0.99999
-            Order by pl.PLACECODE Desc";
+            where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.mark_yn='Y' and o.COME_TO_HOSPITAL_CODE='01' and
+            o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
+            pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') = TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd') Order by pl.PLACECODE Desc";
 	    if($objConnect){
-		$stid = oci_parse($objConnect, $SQLWaitting_ALL);
+		$stid = oci_parse($objConnect, $SQLOPDComtohos);
 		oci_execute($stid);
             ?>
               <!-- /.card-header -->
@@ -995,22 +947,14 @@
                 <th>มาโดย</th>
                 <th>แผนก</th>
                 <th>ชื่อแพทย์ที่ตรวจ</th>
-                <th>PRICE</th>
-                <th>เวลาเปิด Visit</th>
-                <th>เวลาลง ความดัน/ส่วนสูง</th>
-                <th>เวลาพยาบาลซักประวัติ</th>
-                <th>RX_OPD_TIME</th>
-                <th>FINNISH_OPD_TIME</th>
-                <th>DOCTOR_TIME</th>
-                <th>DATETIME_IN_SECOND</th>
-                <th>CHECK_DRUG_OK_DATE</th>
-                <th>ALREADY_RECEIVE_DRUG_DATE</th>
-                <th>ใช้เวลาในการซักประวัติ</th>
-                <th>ใช้เวลาในการตรวจ</th>
-                <th>ใช้เวลาในการคีย์รายการยา</th>
-                <th>TIME_DRUGLOAD</th>
-                <th>TIME_DOCDRUG</th>
-                <th>เวลารวมทั้งหมด/นาที</th>
+                <th>น้ำหนัก</th>
+                <th>ส่วนสูง</th>
+                <th>BMI</th>
+                <th>bp_systolic</th>
+                <th>bp_diastolic</th>
+                <th>palse</th>
+                <th>symptom_clob</th>
+                <th>past_illness</th>
                 <th>สัญชาติ</th>
                 <th>ตรวจแล้ว</th>
             </tr>
