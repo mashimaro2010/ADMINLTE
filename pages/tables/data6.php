@@ -913,9 +913,44 @@
           <div class="col-12">        
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">ชุดข้อมูลประเภทนัดหมายเฉพาะผู้ป่วยนอก</h3>
+<!--ใส่เลือกวันที่ -->                
+        <form>
+        <div class="row form-group">
+          <div class="row justify-content-center">
+            <div class="col-4">
+              <div class="input-group date" id="datepickerstart">
+                <label for="date" id="startDate" name="startDate" class="col-sm-2 col-form-label">วันที่เริ่ม :</label>
+                <input type="text" class="form-control" />
+                <span class="input-group-append">
+                  <span class="input-group-text bg-white d-block">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="input-group date" id="datepickerend">
+                <label for="date" class="col-sm-3 col-form-label">วันที่สิ้นสุด :</label>
+                <input type="text" name="endDate" class="form-control" />
+                <span class="input-group-append">
+                  <span class="input-group-text bg-white d-block">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+                </span>
+              </div>
+            </div>
+
+            <div class="col-4">
+              <div class="input-group date" id="datepickerend">
+              <button type="button" class="btn btn-primary click" onclick="Senddate()">click</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </form>
+      <!-- จบใส่เลือกวันที่ -->
                   <!-- /.input group -->
-                </div>
               </div>
               <!-- Function Connect Oracle Data Base -->
             <?php 
@@ -1066,6 +1101,21 @@
       "responsive": true,
     });
   });
+</script>
+<script type="text/javascript">
+      document.querySelector('.click').addEventListener('click', (e) => {
+  // Do whatever you want
+      e.target.textContent = 'Load Data!';
+      });
+      $(function () {
+        $("#datepickerstart").datepicker({ format: "dd/mm/yyyy",autoclose: true, });
+      });
+      $(function () {
+        $("#datepickerend").datepicker({ format: "dd/mm/yyyy",autoclose: true, });
+      });
+      function Senddate() {
+        alert(startdate);
+      }
 </script>
 </body>
 </html>
