@@ -476,7 +476,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data6.php" class="nav-link active">
+                <a href="pages/tables/data6.php" class="nav-link">
                   <i class="fas fa-table nav-icon"></i>
                   <p>ชุดข้อมูลคนไข้นัด</p>
                 </a>
