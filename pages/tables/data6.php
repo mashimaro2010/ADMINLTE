@@ -4,7 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ชุดข้อมูลประเภทนัดหมายเฉพาะผู้ป่วยนอก</title>
-
+  <style>
+        .container {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+        }
+    </style>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -913,44 +921,15 @@
           <div class="col-12">        
             <div class="card">
               <div class="card-header">
-<!--ใส่เลือกวันที่ -->                
-        <form>
-        <div class="row form-group">
-          <div class="row justify-content-center">
-            <div class="col-4">
-              <div class="input-group date" id="datepickerstart">
-                <label for="date" id="startDate" name="startDate" class="col-sm-2 col-form-label">วันที่เริ่ม :</label>
-                <input type="text" class="form-control" />
-                <span class="input-group-append">
-                  <span class="input-group-text bg-white d-block">
-                    <i class="fa fa-calendar"></i>
-                  </span>
-                </span>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="input-group date" id="datepickerend">
-                <label for="date" class="col-sm-3 col-form-label">วันที่สิ้นสุด :</label>
-                <input type="text" name="endDate" class="form-control" />
-                <span class="input-group-append">
-                  <span class="input-group-text bg-white d-block">
-                    <i class="fa fa-calendar"></i>
-                  </span>
-                </span>
-              </div>
-            </div>
 
-            <div class="col-4">
-              <div class="input-group date" id="datepickerend">
-              <button type="button" class="btn btn-primary click" onclick="Senddate()">click</button>
-              </div>
-            </div>
-
-          </div>
-        </div>
+<!--ใส่เลือกวันที่ -->
+      <div class="container">                
+      <form>
+        <label for="start-date">วันที่เริ่ม :</label><input type="date" id="start-date" name="start-date" required placeholder="DD-MM-YYYY">
+        <label for="end-date">วันที่สิ้นสุด :</label><input type="date" id="end-date" name="end-date" required placeholder="DD-MM-YYYY">
+        <button type="button" class="btn btn-primary click" onclick="Senddate()">click</button> 
       </form>
-      <!-- จบใส่เลือกวันที่ -->
-                  <!-- /.input group -->
+      </div>
               </div>
               <!-- Function Connect Oracle Data Base -->
             <?php 

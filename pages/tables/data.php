@@ -922,7 +922,8 @@
           <div class="col-12">        
             <div class="card">
               <div class="card-header">
-        <form>
+
+      <form>
         <div class="row form-group">
           <div class="row justify-content-center">
             <div class="col-4">
@@ -947,13 +948,11 @@
                 </span>
               </div>
             </div>
-
-            <div class="col-4">
+              <div class="col-4">
               <div class="input-group date" id="datepickerend">
-              <button type="button" class="btn btn-primary click" onclick="Senddate()">click</button>
+              <button type="button" class="btn btn-primary click" onclick="Senddate()">click</button>  
               </div>
             </div>
-
           </div>
         </div>
       </form>
