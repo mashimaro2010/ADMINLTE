@@ -17,8 +17,9 @@
   <link rel="stylesheet" type="text/css" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- JQVMap -->
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-  <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-  <script src="plugins/jqvmap/maps/jquery.vmap.world.js"></script>
+  <script src="path/to/jquery.vmap.min.js"></script>
+  <script src="path/to/maps/jquery.vmap.usa_en.js"></script>
+  <script src="path/to/your/dashboard.js"></script>
   <!-- Theme style -->
   <link rel="stylesheet" type="text/css" href="dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
