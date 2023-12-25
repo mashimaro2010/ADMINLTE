@@ -34,8 +34,17 @@
   <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <!-- Daterangepicker style -->
+  <script src="https://cdn.jsdelivr.net/npm/daterangepicker@latest/daterangepicker.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.1.0/locale/th.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/daterangepicker@3.1.1/daterangepicker.js"></script>
+  <style>
+  #date-range-picker {
+    text-align: center; /* จัดตัวหนังสือให้อยู่ตรงกลาง */
+    box-sizing: border-box; /* ไม่นับ padding และ border ในการคำนวณความกว้าง */
+  }
+</style>
+  
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -319,18 +328,50 @@
       </div><!-- /.container-fluid -->
     </section>
 
+    <form id="date-form" method="post">
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
             <div class="col-12 form-group">
                 <label for="start-date">วันที่เริ่ม :</label>
-                <input type="text" id="date-range-picker"/>
+                <input type="text" name="StartDateRange"/>
                 <label for="end-date">วันที่สิ้นสุด :</label>
-                <input type="text" id="date-range-picker"/>
+                <input type="text" Name="EndDateRange"/>
+                <button type="submit">ค้นหา</button> 
             </div>
         </div>
       </div>
     </div>
+<?php
+$startDate = "";
+$endDate = "";
+// ตรวจสอบทั้ง StartDateRange และ EndDateRange
+if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
+  $startDate = $_POST['StartDateRange'];
+  $endDate = $_POST['EndDateRange'];
+  // ทำสิ่งที่คุณต้องการทำกับ $startDate และ $endDate
+  $SQLOPDComtohos="select o.OPD_NO,p.hn,p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
+            ct.name as credit_name,ctm.name as cometohos,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
+            DBMS_LOB.SUBSTR(o.symptom_clob) as Symptom,o.past_illness
+            ,(select n.name from native_code n where n.native_id=p.native_id and rownum<=1) as nat_name,o.mark_yn
+            from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
+            where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.mark_yn='Y' and o.COME_TO_HOSPITAL_CODE='01' and
+            o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
+            pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between '$startDate' and '$endDate' Order by pl.PLACECODE Desc";
+} else {
+  // กรณีที่มีอย่างน้อยหนึ่งคีย์ไม่มีอยู่
+  // ทำสิ่งที่เหมาะสมสำหรับกรณีนี้
+  $SQLOPDComtohos="select o.OPD_NO,p.hn,p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
+            ct.name as credit_name,ctm.name as cometohos,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
+            DBMS_LOB.SUBSTR(o.symptom_clob) as Symptom,o.past_illness
+            ,(select n.name from native_code n where n.native_id=p.native_id and rownum<=1) as nat_name,o.mark_yn
+            from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
+            where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.mark_yn='Y' and o.COME_TO_HOSPITAL_CODE='01' and
+            o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
+            pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') =TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')  Order by pl.PLACECODE Desc";
+}
+?>
+    </form>
 
     <!-- Main content -->
     <section class="content">
@@ -344,24 +385,16 @@
 <!--ใส่เลือกวันที่ -->
 
               <!-- Function Connect Oracle Data Base -->
-            <?php 
+            <?php
             include('function.php');
-            $objConnect = MSHOCI();
-            $SQLOPDComtohos="select o.OPD_NO,p.hn,p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
-            ct.name as credit_name,ctm.name as cometohos,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
-            DBMS_LOB.SUBSTR(o.symptom_clob) as Symptom,o.past_illness
-            ,(select n.name from native_code n where n.native_id=p.native_id and rownum<=1) as nat_name,o.mark_yn
-            from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
-            where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.mark_yn='Y' and o.COME_TO_HOSPITAL_CODE='01' and
-            o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
-            pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') = TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd') Order by pl.PLACECODE Desc";
+            $objConnect = MSHOCI();            
 	    if($objConnect){
 		$stid = oci_parse($objConnect, $SQLOPDComtohos);
 		oci_execute($stid);
             ?>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="ReferData" class="table table-bordered table-striped">
+                <table id="AppointmentData" class="table table-bordered table-striped">
                 <thead>
             <tr>
                 <th>OPD_NO</th>
@@ -456,30 +489,44 @@
 <!--script src="../../dist/js/demo.js"></script-->
 <!-- Date Rang Picker -->
 <script>
-    $(function() {
-        $('#date-range-picker').daterangepicker({
-            startDate: '01/01/2022',
-            endDate: '01/07/2022',
-            opens: 'left', // กำหนดว่าแบบกำหนดเป็น Calendar จะอยู่ทางซ้ายหรือทางขวา
-            locale: {
-                format: 'MM/DD/YYYY',
-                cancelLabel: 'Clear'
-            }
-        });
-
-        $('#date-range-picker').on('apply.daterangepicker', function(ev, picker) {
-            console.log('Start Date: ' + picker.startDate.format('MM/DD/YYYY'));
-            console.log('End Date: ' + picker.endDate.format('MM/DD/YYYY'));
-        });
-
-        $('#date-range-picker').on('cancel.daterangepicker', function() {
-            console.log('Date range cleared');
-        });
+  $(function() {
+    $('input[name="StartDateRange"]').daterangepicker({
+      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
+      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
+      locale: {
+        format: 'YYYY-MM-DD',
+        applyLabel: 'ตกลง',
+        cancelLabel: 'ยกเลิก',
+        fromLabel: 'จาก',
+        toLabel: 'ถึง',
+        customRangeLabel: 'กำหนดเอง',
+        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        firstDay: 1
+      }
     });
+  });
+  $(function() {
+    $('input[name="EndDateRange"]').daterangepicker({
+      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
+      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
+      locale: {
+        format: 'YYYY-MM-DD',
+        applyLabel: 'ตกลง',
+        cancelLabel: 'ยกเลิก',
+        fromLabel: 'จาก',
+        toLabel: 'ถึง',
+        customRangeLabel: 'กำหนดเอง',
+        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        firstDay: 1
+      }
+    });
+  });
 </script>
-<script> 
+<script>
   $(function () {
-    $("#ReferData").DataTable({
+    $("#AppointmentData").DataTable({
       "responsive": true, 
       "lengthChange": true, 
       "autoWidth": false,
@@ -491,7 +538,7 @@
       "search": 'none'}
     }
 
-    }).buttons().container().appendTo('#ReferData_wrapper .col-md-6:eq(0)');
+    }).buttons().container().appendTo('#AppointmentData_wrapper .col-md-6:eq(0)');
 
     $('#example2').DataTable({
       "paging": true,
