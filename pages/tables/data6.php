@@ -337,6 +337,13 @@
                 <input type="text" name="StartDateRange"/>
                 <label for="end-date">วันที่สิ้นสุด :</label>
                 <input type="text" Name="EndDateRange"/>
+                <label for="opd_visit_type">ประเภทผู้ป่วย :</label>
+                <select id="opd_visit_type" name="opd_visit_type">
+                    <option value="D">นัด</option>
+                    <option value="R">ทะเบียน</option>
+                    <option value="O">Own Visit</option>
+                    <option value="C">Consult</option>
+                </select>
                 <button type="submit">ค้นหา</button> 
             </div>
         </div>
@@ -345,47 +352,49 @@
 <?php
 $startDate = "";
 $endDate = "";
+$SQLOPDComtohos = "";
 // ตรวจสอบทั้ง StartDateRange และ EndDateRange
-if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && isset($_POST['EndDateRange']) && isset($_POST['opd_visit_type'])) {
   $startDate = $_POST['StartDateRange'];
   $endDate = $_POST['EndDateRange'];
+  $selectedOpdVisitType = $_POST['opd_visit_type'];
   // ทำสิ่งที่คุณต้องการทำกับ $startDate และ $endDate
-  $SQLOPDComtohos="select o.OPD_NO,p.hn,p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
-            ct.name as credit_name,ctm.name as cometohos,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
-            DBMS_LOB.SUBSTR(o.symptom_clob) as Symptom,o.past_illness
-            ,(select n.name from native_code n where n.native_id=p.native_id and rownum<=1) as nat_name,o.mark_yn
-            from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
-            where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.mark_yn='Y' and o.COME_TO_HOSPITAL_CODE='01' and
-            o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
-            pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between '$startDate' and '$endDate' Order by pl.PLACECODE Desc";
+  $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
+  ct.name as credit_name,ctm.name as cometohos,o.mark_yn,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
+  DBMS_LOB.SUBSTR(o.symptom_clob) as Symptom,o.past_illness
+  ,(select n.name from native_code n where n.native_id=p.native_id and rownum<=1) as nat_name
+  from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
+  where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.opd_visit_type='$selectedOpdVisitType'
+  and o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
+  pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and
+  TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between '$startDate' and '$endDate' Order by pl.PLACECODE Desc";
 } else {
   // กรณีที่มีอย่างน้อยหนึ่งคีย์ไม่มีอยู่
   // ทำสิ่งที่เหมาะสมสำหรับกรณีนี้
-  $SQLOPDComtohos="select o.OPD_NO,p.hn,p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
-            ct.name as credit_name,ctm.name as cometohos,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
-            DBMS_LOB.SUBSTR(o.symptom_clob) as Symptom,o.past_illness
-            ,(select n.name from native_code n where n.native_id=p.native_id and rownum<=1) as nat_name,o.mark_yn
-            from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
-            where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.mark_yn='Y' and o.COME_TO_HOSPITAL_CODE='01' and
-            o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
-            pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') =TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')  Order by pl.PLACECODE Desc";
+  $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
+  ct.name as credit_name,ctm.name as cometohos,o.mark_yn,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
+  DBMS_LOB.SUBSTR(o.symptom_clob) as Symptom,o.past_illness
+  ,(select n.name from native_code n where n.native_id=p.native_id and rownum<=1) as nat_name
+  from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
+  where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.opd_visit_type='D'
+  and o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
+  pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and
+  TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd') and TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd') Order by pl.PLACECODE Desc";
 }
 ?>
     </form>
 
     <!-- Main content -->
     <section class="content">
-
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">        
             <div class="card">
               <div class="card-header">
-
-<!--ใส่เลือกวันที่ -->
-
+<!--ใส่เลือกวันที่ --> 
               <!-- Function Connect Oracle Data Base -->
-            <?php
+    <div style="text-align:center; font-size: 16px; font-weight: bold; ">
+              <?php echo 'จากวันที่:'.$startDate.' ถึงวันที่ :'.$endDate;?></div><?php
             include('function.php');
             $objConnect = MSHOCI();            
 	    if($objConnect){
@@ -396,7 +405,8 @@ if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
               <div class="card-body">
                 <table id="AppointmentData" class="table table-bordered table-striped">
                 <thead>
-            <tr>
+                <tr>
+                <th>ประเภท Visit</th>
                 <th>OPD_NO</th>
                 <th>HN</th>
                 <th>ชื่อ นามสกุล</th>
@@ -404,20 +414,20 @@ if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
 				        <th>อายุ</th>
                 <th>ชื่อสิทธิ์</th>
                 <th>มาโดย</th>
+                <th>สถานะการมาตรวจ</th>
                 <th>แผนก</th>
-                <th>ชื่อแพทย์ที่ตรวจ</th>
+                <th>แพทย์ที่ตรวจ</th>
                 <th>น้ำหนัก</th>
                 <th>ส่วนสูง</th>
                 <th>BMI</th>
-                <th>bp_systolic</th>
-                <th>bp_diastolic</th>
-                <th>palse</th>
-                <th>symptom_clob</th>
-                <th>past_illness</th>
+                <th>BP_Systolic</th>
+                <th>BP_Diastolic</th>
+                <th>Palse</th>
+                <th>Symptom</th>
+                <th>Past_Illness</th>
                 <th>สัญชาติ</th>
-                <th>ตรวจแล้ว</th>
-            </tr>
-        </thead>
+                </tr>
+                </thead>
 <?php
 		echo "<tbody>";
 	while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
@@ -439,17 +449,11 @@ if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
 ?>
                 </table>
               </div>
-              <!-- /.card-body -->
             </div>
-            <!-- /.card -->
           </div>
-          <!-- /.col -->
         </div>
-        <!-- /.row -->
       </div>
-      <!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
   <footer class="main-footer">
