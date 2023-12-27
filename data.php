@@ -37,7 +37,8 @@ case pl.PLACECODE
 from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
 where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.mark_yn='Y' and o.COME_TO_HOSPITAL_CODE='01' and
 o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
-pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') =TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')  group by pl.PLACECODE
+pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') =TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')  
+group by pl.PLACECODE
 Order by score Desc";
     $Result = oci_parse($objConnect, $SQLERPatientCount);
 	oci_execute($Result);

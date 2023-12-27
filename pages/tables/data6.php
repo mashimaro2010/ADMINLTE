@@ -337,12 +337,19 @@
                 <input type="text" name="StartDateRange"/>
                 <label for="end-date">วันที่สิ้นสุด :</label>
                 <input type="text" Name="EndDateRange"/>
-                <label for="opd_visit_type">ประเภทผู้ป่วย :</label>
-                <select id="opd_visit_type" name="opd_visit_type">
-                    <option value="D">นัด</option>
-                    <option value="R">ทะเบียน</option>
-                    <option value="O">Own Visit</option>
-                    <option value="C">Consult</option>
+                <label for="COME_TO_HOSPITAL_CODE">ประเภทการมา :</label>
+                <select id="COME_TO_HOSPITAL_CODE" name="COME_TO_HOSPITAL_CODE">
+                    <option value="01">นัด</option>
+                    <option value="02">ทะเบียน</option>
+                    <option value="03">Refer</option>
+                    <option value="04">Consult</option>
+                    <option value="05">Walk IN</option>
+                    <option value="06">มาตามนัดรถเข็นนั่ง</option>
+                    <option value="07">มาตามนัดรถเข็นนอน</option>
+                    <option value="08">ได้รับการส่งตัวจาก EMS</option>
+                    <option value="09">เยียมบ้าน</option>
+                    <option value="10">รับบริการสาธารณสุขระบบทางไกล(TELETHEALTH/TELEMEDICINE)</option>
+                    <option value="11">ส่งมาจากผู้ป่วยใน</option>
                 </select>
                 <button type="submit">ค้นหา</button> 
             </div>
@@ -354,25 +361,29 @@ $startDate = "";
 $endDate = "";
 $SQLOPDComtohos = "";
 // ตรวจสอบทั้ง StartDateRange และ EndDateRange
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && isset($_POST['EndDateRange']) && isset($_POST['opd_visit_type'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && isset($_POST['EndDateRange']) && isset($_POST['COME_TO_HOSPITAL_CODE'])) {
   $startDate = $_POST['StartDateRange'];
   $endDate = $_POST['EndDateRange'];
-  $selectedOpdVisitType = $_POST['opd_visit_type'];
+  $COME_TO_HOSPITAL_CODE = $_POST['COME_TO_HOSPITAL_CODE'];
   // ทำสิ่งที่คุณต้องการทำกับ $startDate และ $endDate
-  $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
-  ct.name as credit_name,ctm.name as cometohos,o.mark_yn,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
+  $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,TO_CHAR(o.OPD_DATE,'yyyy-mm-dd'),p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,
+  trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
+  ct.name as credit_name,ctm.name as cometohos,o.mark_yn,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,
+  o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
   DBMS_LOB.SUBSTR(o.symptom_clob) as Symptom,o.past_illness
   ,(select n.name from native_code n where n.native_id=p.native_id and rownum<=1) as nat_name
   from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
-  where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.opd_visit_type='$selectedOpdVisitType'
+  where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.opd_visit_type='D'
   and o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
-  pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and
+  pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL and ctm.CODE='$COME_TO_HOSPITAL_CODE' and
   TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between '$startDate' and '$endDate' Order by pl.PLACECODE Desc";
 } else {
   // กรณีที่มีอย่างน้อยหนึ่งคีย์ไม่มีอยู่
   // ทำสิ่งที่เหมาะสมสำหรับกรณีนี้
-  $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
-  ct.name as credit_name,ctm.name as cometohos,o.mark_yn,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
+  $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,TO_CHAR(o.OPD_DATE,'yyyy-mm-dd'),p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,
+  trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
+  ct.name as credit_name,ctm.name as cometohos,o.mark_yn,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,
+  o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
   DBMS_LOB.SUBSTR(o.symptom_clob) as Symptom,o.past_illness
   ,(select n.name from native_code n where n.native_id=p.native_id and rownum<=1) as nat_name
   from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
@@ -394,7 +405,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && i
 <!--ใส่เลือกวันที่ --> 
               <!-- Function Connect Oracle Data Base -->
     <div style="text-align:center; font-size: 16px; font-weight: bold; ">
-              <?php echo 'จากวันที่:'.$startDate.' ถึงวันที่ :'.$endDate;?></div><?php
+    <?php
+if (isset($_POST['COME_TO_HOSPITAL_CODE'])) {
+    $selectedValue = $_POST['COME_TO_HOSPITAL_CODE'];
+
+    // Define meanings for each value
+    $meanings = [
+        "01" => "นัด",
+        "02" => "ทะเบียน",
+        "03" => "Refer",
+        "04" => "Consult",
+        "05" => "Walk IN",
+        "06" => "มาตามนัดรถเข็นนั่ง",
+        "07" => "มาตามนัดรถเข็นนอน",
+        "08" => "ได้รับการส่งตัวจาก EMS",
+        "09" => "เยียมบ้าน",
+        "10" => "รับบริการสาธารณสุขระบบทางไกล(TELEHEALTH/TELEMEDICINE)",
+        "11" => "ส่งมาจากผู้ป่วยใน"
+    ];
+
+    // Check if the selected value exists in the meanings array
+    if (array_key_exists($selectedValue, $meanings)) {
+        $selectedMeaning = $meanings[$selectedValue];
+        echo "<div>จากวันที่:$startDate ถึงวันที่ :$endDate ประเภทการมา: $selectedMeaning</div>";
+    } else {
+        echo "<div>Invalid selection</div>";
+    }
+}
+?>
+            </div>
+            <?php
             include('function.php');
             $objConnect = MSHOCI();            
 	    if($objConnect){
@@ -409,12 +449,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && i
                 <th>ประเภท Visit</th>
                 <th>OPD_NO</th>
                 <th>HN</th>
+                <th>วันที่ Visit</th>
                 <th>ชื่อ นามสกุล</th>
                 <th>เพศ</th>
 				        <th>อายุ</th>
                 <th>ชื่อสิทธิ์</th>
                 <th>มาโดย</th>
-                <th>สถานะการมาตรวจ</th>
+                <th>สถานะตรวจ</th>
                 <th>แผนก</th>
                 <th>แพทย์ที่ตรวจ</th>
                 <th>น้ำหนัก</th>
@@ -458,7 +499,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && i
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.2.0
+      <b>Data Center โรงพยาบาลแม่สอด Version</b> 1.0.0
     </div>
     <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
   </footer>
