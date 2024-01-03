@@ -452,7 +452,7 @@
               <div class="card-header">
                 <h5 class="card-title">กราฟแสดงจำนวนผู้ป่วยที่มาตามนัดแยกตามแผนก</h5>
               </div>
-              <div class="card-tools"><canvas id="myChart"></canvas></div>  
+              <canvas id="myChart" style="width: 300px; height: 300px;"></canvas>
             </div>
           </div>
         </div>
@@ -484,6 +484,5 @@
 <script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
 <!-- ChartJS -->
 <script src="mychart.js"></script>
-<script src="dist/js/pages/dashboard2.js"></script>
 </body>
 </html>

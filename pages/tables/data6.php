@@ -327,7 +327,42 @@
         </div>
       </div><!-- /.container-fluid -->
     </section>
+    <?php
+    $currentDate = date('Y-m-d');
+    $startDate = $currentDate;
+    $endDate = $currentDate;
+    $sqlFilePath = realpath('../sqlcommands/AppointData.sql');
+    if (isset($_POST['Mark'])) {
+    $Mark = $_POST['Mark'];
+    // Define meanings for each value
+    $meanings = [
+        "1" => "ตรวจแล้ว",
+        "2" => "ยังไม่ได้ตรวจ",
+        "3" => "ทั้งหมด"
+    ];
 
+    // Check if the selected value exists in the meanings array
+    if (array_key_exists($Mark, $meanings)) {
+        $selectedMeaning = $meanings[$Mark];
+        $startDate = $_POST['StartDateRange'];
+        $endDate = $_POST['EndDateRange'];
+        $Mark = $_POST['Mark'];
+    } else {
+        echo "<div>Invalid selection</div>";
+    }
+    } else
+    { 
+      $Mark='3';
+    // ตรวจสอบว่าไฟล์มีอยู่หรือไม่
+    if ($sqlFilePath !== false && file_exists($sqlFilePath)) {
+    // อ่านเนื้อหาของไฟล์ SQL
+    $SQLOPDComtohos = file_get_contents($sqlFilePath);
+    // เพิ่มโค้ดที่ต้องการทำต่อไป
+    } else {
+      die('ไม่สามารถอ่านไฟล์ SQL ได้');
+    }
+    }
+    ?>
     <form id="date-form" method="post">
     <div class="container-fluid">
       <div class="row">
@@ -337,19 +372,11 @@
                 <input type="text" name="StartDateRange"/>
                 <label for="end-date">วันที่สิ้นสุด :</label>
                 <input type="text" Name="EndDateRange"/>
-                <label for="COME_TO_HOSPITAL_CODE">ประเภทการมา :</label>
-                <select id="COME_TO_HOSPITAL_CODE" name="COME_TO_HOSPITAL_CODE">
-                    <option value="01">นัด</option>
-                    <option value="02">ทะเบียน</option>
-                    <option value="03">Refer</option>
-                    <option value="04">Consult</option>
-                    <option value="05">Walk IN</option>
-                    <option value="06">มาตามนัดรถเข็นนั่ง</option>
-                    <option value="07">มาตามนัดรถเข็นนอน</option>
-                    <option value="08">ได้รับการส่งตัวจาก EMS</option>
-                    <option value="09">เยียมบ้าน</option>
-                    <option value="10">รับบริการสาธารณสุขระบบทางไกล(TELETHEALTH/TELEMEDICINE)</option>
-                    <option value="11">ส่งมาจากผู้ป่วยใน</option>
+                <label for="Mark">ตรวจแล้ว :</label>
+                <select id="Mark" name="Mark">
+                    <option value="1">ตรวจแล้ว</option>
+                    <option value="2">ไม่ได้ตรวจ</option>
+                    <option value="3">ทั้งหมด</option>
                 </select>
                 <button type="submit">ค้นหา</button> 
             </div>
@@ -357,16 +384,16 @@
       </div>
     </div>
 <?php
-$startDate = "";
-$endDate = "";
-$SQLOPDComtohos = "";
+//$startDate = "";
+//$endDate = "";
+//$SQLOPDComtohos = "";
 // ตรวจสอบทั้ง StartDateRange และ EndDateRange
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && isset($_POST['EndDateRange']) && isset($_POST['COME_TO_HOSPITAL_CODE'])) {
-  $startDate = $_POST['StartDateRange'];
-  $endDate = $_POST['EndDateRange'];
-  $COME_TO_HOSPITAL_CODE = $_POST['COME_TO_HOSPITAL_CODE'];
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && isset($_POST['EndDateRange']) or isset($_POST['Mark'])) {
+
   // ทำสิ่งที่คุณต้องการทำกับ $startDate และ $endDate
-  $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,TO_CHAR(o.OPD_DATE,'yyyy-mm-dd'),p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,
+  if ($Mark=='1') {
+  $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') as VisitDate,TO_CHAR(o.Reach_OPD_DATETIME, 'YYYY-MM-DD HH24:MI:SS') as TimeArrive,
+  p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,
   trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
   ct.name as credit_name,ctm.name as cometohos,o.mark_yn,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,
   o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
@@ -375,12 +402,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && i
   from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
   where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.opd_visit_type='D'
   and o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
-  pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL and ctm.CODE='$COME_TO_HOSPITAL_CODE' and
+  pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL and o.mark_yn='Y' and
   TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between '$startDate' and '$endDate' Order by pl.PLACECODE Desc";
-} else {
-  // กรณีที่มีอย่างน้อยหนึ่งคีย์ไม่มีอยู่
-  // ทำสิ่งที่เหมาะสมสำหรับกรณีนี้
-  $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,TO_CHAR(o.OPD_DATE,'yyyy-mm-dd'),p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,
+  }elseif ($Mark=='2') {
+  $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') as VisitDate,TO_CHAR(o.Reach_OPD_DATETIME, 'YYYY-MM-DD HH24:MI:SS') as TimeArrive,
+  p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,
   trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
   ct.name as credit_name,ctm.name as cometohos,o.mark_yn,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,
   o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
@@ -389,12 +415,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && i
   from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
   where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.opd_visit_type='D'
   and o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
-  pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and
-  TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd') and TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd') Order by pl.PLACECODE Desc";
+  pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL and o.mark_yn is NULL and
+  TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between '$startDate' and '$endDate' Order by pl.PLACECODE Desc";
+  }elseif ($Mark=='3'){
+  $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') as VisitDate,TO_CHAR(o.Reach_OPD_DATETIME, 'YYYY-MM-DD HH24:MI:SS') as TimeArrive,
+  p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,
+  trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
+  ct.name as credit_name,ctm.name as cometohos,o.mark_yn,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,
+  o.wt_kg,o.Height_cm,o.bmi,o.bp_systolic,o.bp_diastolic,o.palse,
+  DBMS_LOB.SUBSTR(o.symptom_clob) as Symptom,o.past_illness
+  ,(select n.name from native_code n where n.native_id=p.native_id and rownum<=1) as nat_name
+  from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
+  where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.opd_visit_type='D'
+  and o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
+  pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL and 
+  TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between '$startDate' and '$endDate' Order by pl.PLACECODE Desc";
+  }
+    // กรณีที่มีอย่างน้อยหนึ่งคีย์ไม่มีอยู่
+    // ทำสิ่งที่เหมาะสมสำหรับกรณีนี้
 }
 ?>
     </form>
-
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -404,42 +445,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && i
               <div class="card-header">
 <!--ใส่เลือกวันที่ --> 
               <!-- Function Connect Oracle Data Base -->
-    <div style="text-align:center; font-size: 16px; font-weight: bold; ">
-    <?php
-if (isset($_POST['COME_TO_HOSPITAL_CODE'])) {
-    $selectedValue = $_POST['COME_TO_HOSPITAL_CODE'];
-
-    // Define meanings for each value
-    $meanings = [
-        "01" => "นัด",
-        "02" => "ทะเบียน",
-        "03" => "Refer",
-        "04" => "Consult",
-        "05" => "Walk IN",
-        "06" => "มาตามนัดรถเข็นนั่ง",
-        "07" => "มาตามนัดรถเข็นนอน",
-        "08" => "ได้รับการส่งตัวจาก EMS",
-        "09" => "เยียมบ้าน",
-        "10" => "รับบริการสาธารณสุขระบบทางไกล(TELEHEALTH/TELEMEDICINE)",
-        "11" => "ส่งมาจากผู้ป่วยใน"
-    ];
-
-    // Check if the selected value exists in the meanings array
-    if (array_key_exists($selectedValue, $meanings)) {
-        $selectedMeaning = $meanings[$selectedValue];
-        echo "<div>จากวันที่:$startDate ถึงวันที่ :$endDate ประเภทการมา: $selectedMeaning</div>";
-    } else {
-        echo "<div>Invalid selection</div>";
-    }
+              <?php if (!isset($selectedMeaning)) {
+    $selectedMeaning = "ทั้งหมด"; // หรือใส่ค่าตามที่คุณต้องการ
 }
 ?>
-            </div>
-            <?php
+  <div style="text-align:center; font-size: 22px; font-weight: bold; color: blue;">
+  <?php 
+              
+              echo "วันที่เริ่ม : ".$startDate."วันที่สิ้นสุด:".$endDate;
+              echo "สถานะ :".$selectedMeaning;
+              
+  ?>
+  </div>
+            <?php          
             include('function.php');
             $objConnect = MSHOCI();            
-	    if($objConnect){
-		$stid = oci_parse($objConnect, $SQLOPDComtohos);
-		oci_execute($stid);
+            if($objConnect){
+            $stid = oci_parse($objConnect, $SQLOPDComtohos);
+            oci_execute($stid);
             ?>
               <!-- /.card-header -->
               <div class="card-body">
@@ -450,13 +473,14 @@ if (isset($_POST['COME_TO_HOSPITAL_CODE'])) {
                 <th>OPD_NO</th>
                 <th>HN</th>
                 <th>วันที่ Visit</th>
+                <th>มาถึง</th>
                 <th>ชื่อ นามสกุล</th>
                 <th>เพศ</th>
 				        <th>อายุ</th>
                 <th>ชื่อสิทธิ์</th>
                 <th>มาโดย</th>
                 <th>สถานะตรวจ</th>
-                <th>แผนก</th>
+                <th>ห้องตรวจ</th>
                 <th>แพทย์ที่ตรวจ</th>
                 <th>น้ำหนัก</th>
                 <th>ส่วนสูง</th>
@@ -570,31 +594,39 @@ if (isset($_POST['COME_TO_HOSPITAL_CODE'])) {
   });
 </script>
 <script>
-  $(function () {
-    $("#AppointmentData").DataTable({
-      "responsive": true, 
-      "lengthChange": true, 
-      "autoWidth": false,
-      "fixedColumns": true,
-      "buttons": ["excel","print","pdf"],  //"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-      "exportOptions": {
-      "modifer": {
-      "page": 'all',
-      "search": 'none'}
-    }
+$(function () {
+  var userFilename = ""; // ตัวแปรสำหรับเก็บชื่อไฟล์ที่ผู้ใช้ป้อน
 
-    }).buttons().container().appendTo('#AppointmentData_wrapper .col-md-6:eq(0)');
-
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
+  $("#AppointmentData").DataTable({
+    "responsive": true, 
+    "lengthChange": true, 
+    "autoWidth": false,
+    "fixedColumns": true,
+    "buttons": [
+      {
+        extend: 'excelHtml5',
+        text: '<i class="fa fa-file-excel"></i> Excel', // เพิ่มไอคอน Excel
+        action: function ( e, dt, button, config ) {
+          userFilename = prompt("กำหนดชื่อไฟล์ที่บันทึก:", userFilename);
+          if (userFilename) { // ตรวจสอบว่าผู้ใช้ได้ป้อนชื่อไฟล์หรือไม่
+            $.extend(true, config, {
+              title: 'ชุดข้อมูลประเภทนัดหมาย',
+              filename: userFilename, // ใช้ชื่อไฟล์ที่ผู้ใช้ป้อน
+              exportOptions: {
+                modifier: {
+                  page: 'all',
+                  search: 'none'
+                }
+              }
+            });
+            $.fn.DataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
+          }
+        }
+      },
+      // ... คุณสามารถเพิ่มปุ่มอื่นๆ ตามต้องการ ...
+    ],
+  }).buttons().container().appendTo('#AppointmentData_wrapper .col-md-6:eq(0)');
+});
 </script>
 </body>
 </html>
