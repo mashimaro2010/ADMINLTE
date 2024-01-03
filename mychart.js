@@ -6,22 +6,26 @@ fetch('data.php')
         var dataValues = jsonData.map(item => item.SCORE);
 
         var myChart = new Chart(ctx, {
-            type: 'pie', // เปลี่ยนเป็น 'pie' เพื่อให้เป็น Pie Chart
+            type: 'pie',
             data: {
                 labels: labels,
                 datasets: [{
                     label: 'Scores',
                     data: dataValues,
                     backgroundColor: [
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(255, 0, 0, 0.2)',
+                        'rgba(0, 0, 255, 0.2)',
+                        'rgb(60, 179, 113, 0.2)',
+                        'rgba(238, 130, 238, 0.2)',
+                        'rgba(255, 165, 0, 0.2)',
                         // เพิ่มสีเพิ่มเติมตามจำนวนชิ้นใน Pie Chart
                     ],
                     borderColor: [
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 0, 0, 1)',
+                        'rgba(0, 0, 255, 1)',
+                        'rgb(60, 179, 113, 1)',
+                        'rgba(238, 130, 238, 1)',
+                        'rgba(255, 165, 0, 1)',
                         // เพิ่มสีเพิ่มเติมตามจำนวนชิ้นใน Pie Chart
                     ],
                     borderWidth: 1
@@ -37,8 +41,11 @@ fetch('data.php')
                         callbacks: {
                             label: function(context) {
                                 var label = context.label || '';
-                                var value = context.parsed || 0;
-                                return label + ': ' + value.toFixed(2); // แสดงค่าเป็นทศนิยม
+                                var value = context.parsed || '';
+                                var dataset = context.dataset || {};
+                                var total = dataset.data.reduce((acc, curr) => acc + curr, 0);
+                                var percentage = ((value / total) * 100).toFixed(2);
+                                return label + ': ' + parseInt(value) + ' (' + percentage + '%)';
                             }
                         }
                     }

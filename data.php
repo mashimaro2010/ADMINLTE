@@ -2,44 +2,75 @@
 header('Content-Type:application/json');
 include_once('function.php');
 $objConnect = MSHOCI();
-$SQLERPatientCount="select
-case pl.PLACECODE
- when '001' then 'อายุรกรรมชั้น 2'
- when '003' then 'ผิวหนังชั้น2'
- when '004' then 'วัณโรค'
- when '007' then 'โรคทั่วไป'
- when '008' then 'ฟอกไต'
- when '011' then 'ศัลยกรรม'
- when '018' then 'นรีเวช'
- when '019' then 'วัยทอง'
- when '020' then 'กุมารเวชกรรม'
- when '024' then 'หู คอ จมูก'
- when '026' then 'ตา'
- when '028' then 'ศัลยกรรมกระดูก'
- when '030' then 'จิตเวช'
- when '043' then 'ห้องฉีดยา'
- when '045' then 'ฝากครรภ์'
- when '051' then 'วางแผนครอบครัว'
- when '073' then 'ตรวจพิเศษ'
- when '133' then 'Admit Center'
- when '147' then 'โรคถุงลมโปร่งพองเรื้อรัง (COPD)'
- when '155' then 'คลินิกหัวใจชั้น2'
- when '160' then 'PM&R (ฟื้นฟู)'
- when '171' then 'กิจกรรมบำบัด'
- when '206' then 'CAPD Clinic'
- when '268' then 'Palliative_Care'
- when '405' then 'PLASTIC'
- when '408' then 'PREANESTHESIA'
- when '421' then 'ศัลยกรรมเด็ก'
- when '423' then 'คลินิกโรคต่อมไร้ท่อ'
- when '440' then 'ห้องนัดผ่าตัดใหญ่'
- end Title,count(o.OPD_NO) Score
-from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
-where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and o.mark_yn='Y' and o.COME_TO_HOSPITAL_CODE='01' and
-o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
-pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') =TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')  
-group by pl.PLACECODE
-Order by score Desc";
+$SQLERPatientCount="SELECT
+CASE pl.PLACECODE
+WHEN '001' THEN 'อายุรกรรมชั้น 2'
+    WHEN '002' THEN 'Napha Clinic'
+    WHEN '003' THEN 'ผิวหนังชั้น 2'
+    WHEN '004' THEN 'วัณโรค'
+    WHEN '005' THEN 'เบาหวาน'
+    WHEN '007' THEN 'โรคทั่วไป'
+    WHEN '008' THEN 'ฟอกไต'
+    WHEN '011' THEN 'ศัลยกรรม'
+    WHEN '012' THEN 'ศัลยกรรมประสาท'
+    WHEN '018' THEN 'นรีเวช'
+    WHEN '019' THEN 'วัยทอง'
+    WHEN '020' THEN 'กุมารเวชกรรม'
+    WHEN '024' THEN 'หู คอม จมูก'
+    WHEN '026' THEN 'ตา'
+    WHEN '028' THEN 'ศัลยกรรมกระดูก'
+    WHEN '030' THEN 'จิตเวช'
+    WHEN '043' THEN 'ห้องฉีดยา'
+    WHEN '045' THEN 'ฝากครรถ์'
+    WHEN '051' THEN 'วางแผนครอบครัว'
+    WHEN '073' THEN 'ตรวจพิเศษ'
+    WHEN '087' THEN 'เวชปฏิบัติ'
+    WHEN '133' THEN 'Admit Center'
+    WHEN '147' THEN 'โรคถุงลมโปร่งพองเรื้อรัง (COPD)'
+    WHEN '155' THEN 'คลินิกหัวใจชั้น2'
+    WHEN '160' THEN 'PM&R (ฟื้นฟู)'
+    WHEN '162' THEN 'Clinic CKD'
+    WHEN '171' THEN 'กิจกรรมบำบัด'
+    WHEN '206' THEN 'CAPD Clinic'
+    WHEN '268' THEN 'Palliative_Care'
+    WHEN '405' THEN 'PLASTIC'
+    WHEN '408' THEN 'PREANESTHESIA'
+    WHEN '421' THEN 'ศัลยกรรมเด็ก'
+    WHEN '422' THEN 'อายุรกรรมระบบประสาท'
+    WHEN '423' THEN 'คลินิกโรคต่อมไร้ท่อ'
+    WHEN '426' THEN 'ONCO'
+    WHEN '440' THEN 'ห้องนัดผ่าตัดใหญ่'
+    ELSE NULL
+END Title,
+COUNT(o.OPD_NO) Score
+FROM
+OPDS o,
+PATIENTS p,
+OPD_WAREHOUSE ow,
+CREDIT_TYPES ct,
+COME_TO_HOSPITAL_CODE ctm,
+PLACES pl,
+DOC_DBFS doc
+WHERE
+o.OPD_NO = ow.OPD_NO
+AND ow.credit_id = ct.credit_id
+AND o.PAT_RUN_HN = p.RUN_HN
+AND o.mark_yn = 'Y'
+AND o.COME_TO_HOSPITAL_CODE = '01'
+AND o.PAT_YEAR_HN = p.YEAR_HN
+AND o.COME_TO_HOSPITAL_CODE = ctm.CODE
+AND doc.DOC_CODE = o.DD_DOC_CODE
+AND o.PLA_PLACECODE = pl.PLACECODE
+AND pl.PT_PLACE_TYPE_CODE = '1'
+AND pl.Del_Flag IS NULL
+AND TO_CHAR(o.OPD_DATE, 'yyyy-mm-dd') = TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')
+GROUP BY
+pl.PLACECODE
+HAVING
+COUNT(o.OPD_NO) > 0
+ORDER BY
+Score DESC
+";
     $Result = oci_parse($objConnect, $SQLERPatientCount);
 	oci_execute($Result);
     $data = array();

@@ -8,8 +8,19 @@
     .card-tools {
         height: 100%; /* หรือค่าที่เหมาะสมกับการแสดงกราฟ */
     }
+    .StylemyChart {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    #date-range-picker {
+    text-align: center; /* จัดตัวหนังสือให้อยู่ตรงกลาง */
+    box-sizing: border-box; /* ไม่นับ padding และ border ในการคำนวณความกว้าง */
+  }
   </style>
-
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome Icons -->
@@ -32,6 +43,9 @@
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
   <!-- Chart JS  -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Daterangepicker style -->
+  <script src="https://cdn.jsdelivr.net/npm/daterangepicker@latest/daterangepicker.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.1.0/locale/th.js"></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -296,11 +310,10 @@
       </nav>
     </div>
   </aside>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <div class="content-header">
+    <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -308,15 +321,44 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">ผู้ป่วยใน</li>
+              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+              <li class="breadcrumb-item active">ผู้ป่วยนัด</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
+    </section>
+    <!-- Content Wrapper. Contains page content -->
+  <form id="date-form" method="post">
+    <?php
+    $Query_Clinic = "SELECT clinic_id, clinic_name FROM clinics";
+    ?>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+            <div class="col-12 form-group">
+                <label for="start-date">วันที่เริ่ม :</label>
+                <input type="text" name="StartDateRange"/>
+                <label for="end-date">วันที่สิ้นสุด :</label>
+                <input type="text" Name="EndDateRange"/>
+                <label for="Mark">ตรวจแล้ว :</label>
+                <select id="Mark" name="Mark">
+                    <option value="1">ตรวจแล้ว</option>
+                    <option value="2">ไม่ได้ตรวจ</option>
+                    <option value="3">ทั้งหมด</option>
+                </select>
+                <label for="Clinic">ห้องตรวจ :</label>
+                <select id="Clinic" name="Clinic">
+                    <option value="1">ตรวจแล้ว</option>
+                    <option value="2">ไม่ได้ตรวจ</option>
+                    <option value="3">ทั้งหมด</option>
+                </select>
+                <button type="submit">ค้นหา</button> 
+            </div>
+        </div>
+      </div>
     </div>
-    <!-- /.content-header -->
-
+    </form>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -348,7 +390,7 @@
             <div class="info-box">
               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-ambulance"></i><i class="fas fa-bed"></i></span>
               <div class="info-box-content">
-                <span class="info-box-text">จำนวน Refer ผู้ป่วยใน</span>
+                <span class="info-box-text">จำนวนนัด</span>
                 <span class="info-box-number">
                 <?php
                 if($objConnect){
@@ -377,7 +419,7 @@
             <div class="info-box mb-3">
               <span class="info-box-icon bg-info elevation-1"><i class="fas fa-female"></i><i class="fas fa-male"></i><i class="fas fa-ambulance"></i></span>
               <div class="info-box-content">
-                <span class="info-box-text">จำนวน Refer ผู้ป่วยนอก</span>
+                <span class="info-box-text">มาตามนัด</span>
                 <span class="info-box-number"><?php
                 if($objConnect){
                     $stid = oci_parse($objConnect, $SQLTOTAL_OPD_Refer);
@@ -408,7 +450,7 @@
             <div class="info-box mb-3">
               <span class="info-box-icon bg-info elevation-1"><i class="fas fa-ambulance"></i></span>
               <div class="info-box-content">
-                <span class="info-box-text">จำนวน Refer IN/OUT</span>
+                <span class="info-box-text">ขาดนัด</span>
                 <span class="info-box-number">760</span>
               </div>
               <!-- /.info-box-content -->
@@ -452,7 +494,9 @@
               <div class="card-header">
                 <h5 class="card-title">กราฟแสดงจำนวนผู้ป่วยที่มาตามนัดแยกตามแผนก</h5>
               </div>
-              <canvas id="myChart" style="width: 300px; height: 300px;"></canvas>
+              <div style="width: 800px; height: 800px; display: flex; justify-content: center; align-items: center;">
+              <canvas id="myChart" class="StylemyChart"></canvas>
+              </div>
             </div>
           </div>
         </div>
@@ -484,5 +528,41 @@
 <script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
 <!-- ChartJS -->
 <script src="mychart.js"></script>
+<script>
+  $(function() {
+    $('input[name="StartDateRange"]').daterangepicker({
+      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
+      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
+      locale: {
+        format: 'YYYY-MM-DD',
+        applyLabel: 'ตกลง',
+        cancelLabel: 'ยกเลิก',
+        fromLabel: 'จาก',
+        toLabel: 'ถึง',
+        customRangeLabel: 'กำหนดเอง',
+        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        firstDay: 1
+      }
+    });
+  });
+  $(function() {
+    $('input[name="EndDateRange"]').daterangepicker({
+      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
+      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
+      locale: {
+        format: 'YYYY-MM-DD',
+        applyLabel: 'ตกลง',
+        cancelLabel: 'ยกเลิก',
+        fromLabel: 'จาก',
+        toLabel: 'ถึง',
+        customRangeLabel: 'กำหนดเอง',
+        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        firstDay: 1
+      }
+    });
+  });
+</script>
 </body>
 </html>
