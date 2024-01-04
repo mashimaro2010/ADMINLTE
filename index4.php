@@ -8,16 +8,13 @@
     .card-tools {
         height: 100%; /* หรือค่าที่เหมาะสมกับการแสดงกราฟ */
     }
-    .StylemyChart {
-      max-width: 100%;
-      max-height: 100%;
-    }
+    
     #date-range-picker {
-    text-align: center; /* จัดตัวหนังสือให้อยู่ตรงกลาง */
-    box-sizing: border-box; /* ไม่นับ padding และ border ในการคำนวณความกว้าง */
-  }
+      text-align: center; /* จัดตัวหนังสือให้อยู่ตรงกลาง */
+      box-sizing: border-box; /* ไม่นับ padding และ border ในการคำนวณความกว้าง */
+    }
   </style>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
@@ -45,7 +42,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Daterangepicker style -->
   <script src="https://cdn.jsdelivr.net/npm/daterangepicker@latest/daterangepicker.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.1.0/locale/th.js"></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -331,7 +327,14 @@
     <!-- Content Wrapper. Contains page content -->
   <form id="date-form" method="post">
     <?php
-    $Query_Clinic = "SELECT clinic_id, clinic_name FROM clinics";
+   require_once 'pages/tables/OracleDB.php';
+   try {
+       $db = new OracleDB();
+       $places = $db->queryPlaces();
+   } catch (Exception $e) {
+       echo "Error: " . $e->getMessage();
+       $places = []; // ตั้งค่าเป็น array ว่างหากมีข้อผิดพลาด
+   }
     ?>
     <div class="container-fluid">
       <div class="row">
@@ -349,9 +352,11 @@
                 </select>
                 <label for="Clinic">ห้องตรวจ :</label>
                 <select id="Clinic" name="Clinic">
-                    <option value="1">ตรวจแล้ว</option>
-                    <option value="2">ไม่ได้ตรวจ</option>
-                    <option value="3">ทั้งหมด</option>
+                  <?php foreach ($places as $place): ?>
+                  <option value="<?php echo htmlspecialchars($place['PLACECODE']); ?>">
+                  <?php echo htmlspecialchars($place['FULLPLACE']); ?>
+                  </option>
+                <?php endforeach; ?>
                 </select>
                 <button type="submit">ค้นหา</button> 
             </div>
@@ -371,30 +376,79 @@
             ?>
             <!-- Query จำนวน admit -->
             <?php
-                  $SQLTOTAL_IPD_Refer="SELECT Count(ALL i.AN) as TOTAL_IPD_Refer
-                  FROM PATIENTS_REFER_HX refin,IPDTRANS i,PATIENTS p,CREDIT_TYPES ct,NATIVE_CODE n,PLACES pl,DEPARTS dep
-                  where i.an=refin.an and i.hn=p.hn and refin.CREDIT_ID=ct.CREDIT_ID(+) and  p.native_id=n.native_id(+)  and i.PLA_PLACECODE=pl.PLACECODE and
-                  dep.depend_on_id=pl.dep_depend_on_id and
-                  refin.OPDIPD='I' and i.DATEDISCH  BETWEEN to_date('30-09-2023','DD-MM-YYYY') and to_date('1-10-2024','DD-MM-YYYY')";
+                  $TotalUniqueOPD_NO="SELECT
+                  COUNT(DISTINCT o.OPD_NO) AS TotalUniqueOPD_NO
+                FROM
+                  OPDS o
+                  JOIN PATIENTS p ON o.PAT_RUN_HN = p.RUN_HN AND o.PAT_YEAR_HN = p.YEAR_HN
+                  JOIN OPD_WAREHOUSE ow ON o.OPD_NO = ow.OPD_NO
+                  JOIN CREDIT_TYPES ct ON ow.credit_id = ct.credit_id
+                  JOIN COME_TO_HOSPITAL_CODE ctm ON o.COME_TO_HOSPITAL_CODE = ctm.CODE
+                  JOIN PLACES pl ON o.PLA_PLACECODE = pl.PLACECODE
+                  JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
+                WHERE
+                  o.opd_visit_type='D'
+                  AND o.COME_TO_HOSPITAL_CODE = '01'
+                  AND pl.PT_PLACE_TYPE_CODE = '1'
+                  AND pl.Del_Flag IS NULL
+                  AND TO_CHAR(o.OPD_DATE, 'yyyy-mm-dd') = TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')";
 
-                  $SQLTOTAL_OPD_Refer="SELECT Count(ALL o.OPD_NO) as TOTAL_OPD_Refer
-                  FROM PATIENTS_REFER_HX refin,PATIENTS p,NATIVE_CODE n,CREDIT_TYPES ct,OPDS o,PLACES pl,DEPARTS dep
-                  where o.OPD_NO=refin.OPD_NO and  refin.PAT_RUN_HN=p.run_hn and  refin.PAT_YEAR_HN=p.year_hn and  p.native_id=n.native_id(+) and refin.CREDIT_ID=ct.CREDIT_ID(+) and o.PLA_PLACECODE=pl.PLACECODE and
-                  dep.depend_on_id=pl.dep_depend_on_id and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(CURRENT_DATE, 'yyyy-MM-dd')";
-
-                  $SQLTOTAL_IPD_DAED="select Count(ALL i.an) as TOTAL_IPD_DAED
-                  from IPDTRANS i,patients p
-                  where  i.hn = p.hn and  DEAD_FLAG='Y' and i.Dateadmit between to_date('30-09-2023','DD-MM-YYYY') and to_date('1-10-2024','DD-MM-YYYY')
-                  Order by Dateadmit asc";                                                                                                                          
+                  $TotalUniqueOPD_NO_Check="SELECT
+                  COUNT(DISTINCT o.OPD_NO) AS TotalUniqueOPD_NO_Check
+                  FROM
+                  OPDS o
+                  JOIN PATIENTS p ON o.PAT_RUN_HN = p.RUN_HN AND o.PAT_YEAR_HN = p.YEAR_HN
+                  JOIN OPD_WAREHOUSE ow ON o.OPD_NO = ow.OPD_NO
+                  JOIN CREDIT_TYPES ct ON ow.credit_id = ct.credit_id
+                  JOIN COME_TO_HOSPITAL_CODE ctm ON o.COME_TO_HOSPITAL_CODE = ctm.CODE
+                  JOIN PLACES pl ON o.PLA_PLACECODE = pl.PLACECODE
+                  JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
+                  WHERE o.opd_visit_type='D'
+                  AND o.mark_yn='Y'
+                  AND o.COME_TO_HOSPITAL_CODE = '01'
+                  AND pl.PT_PLACE_TYPE_CODE = '1'
+                  AND pl.Del_Flag IS NULL
+                  AND TO_CHAR(o.OPD_DATE, 'yyyy-mm-dd') = TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')";
+                  
+                  $TotalDifference="SELECT
+                  (SELECT COUNT(DISTINCT o.OPD_NO)
+                   FROM OPDS o
+                   JOIN PATIENTS p ON o.PAT_RUN_HN = p.RUN_HN AND o.PAT_YEAR_HN = p.YEAR_HN
+                   JOIN OPD_WAREHOUSE ow ON o.OPD_NO = ow.OPD_NO
+                   JOIN CREDIT_TYPES ct ON ow.credit_id = ct.credit_id
+                   JOIN COME_TO_HOSPITAL_CODE ctm ON o.COME_TO_HOSPITAL_CODE = ctm.CODE
+                   JOIN PLACES pl ON o.PLA_PLACECODE = pl.PLACECODE
+                   JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
+                   WHERE o.opd_visit_type='D'
+                   AND o.COME_TO_HOSPITAL_CODE = '01'
+                   AND pl.PT_PLACE_TYPE_CODE = '1'
+                   AND pl.Del_Flag IS NULL
+                   AND TO_CHAR(o.OPD_DATE, 'yyyy-mm-dd') = TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')) -
+                  (SELECT COUNT(DISTINCT o.OPD_NO)
+                   FROM OPDS o
+                   JOIN PATIENTS p ON o.PAT_RUN_HN = p.RUN_HN AND o.PAT_YEAR_HN = p.YEAR_HN
+                   JOIN OPD_WAREHOUSE ow ON o.OPD_NO = ow.OPD_NO
+                   JOIN CREDIT_TYPES ct ON ow.credit_id = ct.credit_id
+                   JOIN COME_TO_HOSPITAL_CODE ctm ON o.COME_TO_HOSPITAL_CODE = ctm.CODE
+                   JOIN PLACES pl ON o.PLA_PLACECODE = pl.PLACECODE
+                   JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
+                   WHERE o.opd_visit_type='D'
+                   AND o.mark_yn='Y'
+                   AND o.COME_TO_HOSPITAL_CODE = '01'
+                   AND pl.PT_PLACE_TYPE_CODE = '1'
+                   AND pl.Del_Flag IS NULL
+                   AND TO_CHAR(o.OPD_DATE, 'yyyy-mm-dd') = TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')) AS Difference
+              FROM DUAL";
+                                                                                                                       
             ?>
             <div class="info-box">
-              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-ambulance"></i><i class="fas fa-bed"></i></span>
+              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-calendar-check"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">จำนวนนัด</span>
                 <span class="info-box-number">
                 <?php
                 if($objConnect){
-                    $stid = oci_parse($objConnect, $SQLTOTAL_IPD_Refer);
+                    $stid = oci_parse($objConnect, $TotalUniqueOPD_NO);
                     oci_execute($stid);
                     while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
                       foreach ($row as $item) {
@@ -417,12 +471,12 @@
           <!-- /.col -->
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-female"></i><i class="fas fa-male"></i><i class="fas fa-ambulance"></i></span>
+              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-calendar-check"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">มาตามนัด</span>
                 <span class="info-box-number"><?php
                 if($objConnect){
-                    $stid = oci_parse($objConnect, $SQLTOTAL_OPD_Refer);
+                    $stid = oci_parse($objConnect, $TotalUniqueOPD_NO_Check);
                     oci_execute($stid);
                     while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
                       foreach ($row as $item) {
@@ -448,24 +502,12 @@
 
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-ambulance"></i></span>
+              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-calendar-check"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">ขาดนัด</span>
-                <span class="info-box-number">760</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-book-dead"></i></span>
-              <div class="info-box-content">
-                <span class="info-box-text">จำนวนเสียชีวิต</span>
                 <span class="info-box-number"><?php
                 if($objConnect){
-                    $stid = oci_parse($objConnect, $SQLTOTAL_IPD_DAED);
+                    $stid = oci_parse($objConnect, $TotalDifference);
                     oci_execute($stid);
                     while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
                       foreach ($row as $item) {
@@ -478,11 +520,14 @@
                     {
                       echo "ไม่สามารถติดต่อ Oracle ได้";
                     }
-              ?>
-              </span>
+              ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-12 col-sm-6 col-md-3">
             <!-- /.info-box -->
           </div>
           <!-- /.col -->
@@ -492,11 +537,12 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h5 class="card-title">กราฟแสดงจำนวนผู้ป่วยที่มาตามนัดแยกตามแผนก</h5>
-              </div>
-              <div style="width: 800px; height: 800px; display: flex; justify-content: center; align-items: center;">
-              <canvas id="myChart" class="StylemyChart"></canvas>
-              </div>
+                <h5 class="card-title">Pie Chart แสดงจำนวนผู้ป่วยนัดแยกตามแผนก</h5>
+                
+            </div>
+            <div class="container-fluid" style="width: 800px; height: 800px;">
+              <canvas id="myChart"></canvas>
+            </div>
             </div>
           </div>
         </div>
@@ -512,7 +558,6 @@
     </div>
   </footer>
 </div>
-<script src="plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap -->
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- overlayScrollbars -->

@@ -36,7 +36,6 @@
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
   <!-- Daterangepicker style -->
   <script src="https://cdn.jsdelivr.net/npm/daterangepicker@latest/daterangepicker.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.1.0/locale/th.js"></script>
 
   <style>
   #date-range-picker {
