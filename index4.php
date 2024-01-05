@@ -194,7 +194,7 @@
     <!-- Brand Logo -->
     <a href="index3.php" class="brand-link">
       <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-2" style="opacity: .8">
-      <span class="brand-text font-weight-light">DataCenterรพ.แม่สอด</span>
+      <span class="brand-text font-weight-light">DataCenter รพ.แม่สอด</span>
     </a>
 
     <!-- Sidebar -->
@@ -326,7 +326,7 @@
     </section>
     <!-- Content Wrapper. Contains page content -->
   <form id="date-form" method="post">
-    <?php
+  <?php
    require_once 'pages/tables/OracleDB.php';
    try {
        $db = new OracleDB();
@@ -335,11 +335,13 @@
        echo "Error: " . $e->getMessage();
        $places = []; // ตั้งค่าเป็น array ว่างหากมีข้อผิดพลาด
    }
+   include 'process_post_data.php';
+   include 'process_department_data.php';
     ?>
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-            <div class="col-12 form-group">
+            <div class="col-12">
                 <label for="start-date">วันที่เริ่ม :</label>
                 <input type="text" name="StartDateRange"/>
                 <label for="end-date">วันที่สิ้นสุด :</label>
@@ -350,8 +352,8 @@
                     <option value="2">ไม่ได้ตรวจ</option>
                     <option value="3">ทั้งหมด</option>
                 </select>
-                <label for="Clinic">ห้องตรวจ :</label>
-                <select id="Clinic" name="Clinic">
+                <label for="DepartmentCode">ห้องตรวจ :</label>
+                <select id="Departmentcode" name="DepartmentCode">
                   <?php foreach ($places as $place): ?>
                   <option value="<?php echo htmlspecialchars($place['PLACECODE']); ?>">
                   <?php echo htmlspecialchars($place['FULLPLACE']); ?>
@@ -364,11 +366,43 @@
       </div>
     </div>
     </form>
+    <?php
+    $TotalAppointment = $TotalAppointmentAccept = $TotalAppointmentFail = null;
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && isset($_POST['EndDateRange']) 
+    or isset($_POST['Mark']) or isset($_POST['DepartmentCode'])) {
+      $startDate = $_POST['StartDateRange'];
+      $endDate = $_POST['EndDateRange'];
+      $Mark = $_POST['Mark'];
+      $Department = $_POST['DepartmentCode'];
+      try {
+      $db = new OracleDB();
+        // เรียกใช้ methods พร้อมส่งพารามิเตอร์
+      $TotalAppointment = $db->getTotalUniqueOPD_NO($startDate, $endDate, $Mark, $Department);
+        // จัดการกับผลลัพธ์ ...
+
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
+    } else{
+      $currentDate = date('Y-m-d');
+      $startDate = $currentDate;
+      $endDate = $currentDate;
+      $Mark='3';
+      $TotalAppointment = $db->getTotalUniqueOPD_NO($startDate, $endDate, $Mark);
+//      $Department = 'ทุกห้องตรวจ';
+    } 
+    ?>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <!-- Info boxes -->
         <div class="row">
+        <div class="col-12">
+          
+        <div style="text-align:center; font-size: 22px; font-weight: bold; color: blue;">
+            <?php echo "<h4>วันที่เริ่ม : ".$startDate." วันที่สิ้นสุด: ".$endDate." สถานะ : ".$selectedMeaning." ห้องตรวจ :".$selectedDepartmentDescription."</h4>";?>
+        </div>        
+          </div>
           <div class="col-12 col-sm-6 col-md-3">
           <?php
             	    include('pages/tables/function.php');
@@ -386,7 +420,7 @@
                   JOIN COME_TO_HOSPITAL_CODE ctm ON o.COME_TO_HOSPITAL_CODE = ctm.CODE
                   JOIN PLACES pl ON o.PLA_PLACECODE = pl.PLACECODE
                   JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
-                WHERE
+                  WHERE
                   o.opd_visit_type='D'
                   AND o.COME_TO_HOSPITAL_CODE = '01'
                   AND pl.PT_PLACE_TYPE_CODE = '1'
@@ -445,24 +479,11 @@
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-calendar-check"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">จำนวนนัด</span>
-                <span class="info-box-number">
+                <span class="info-box-number">                 
                 <?php
-                if($objConnect){
-                    $stid = oci_parse($objConnect, $TotalUniqueOPD_NO);
-                    oci_execute($stid);
-                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
-                      foreach ($row as $item) {
-                          echo  $item;
-                       
-                        }
-                    }
-                }
-                    else
-                    {
-                      echo "ไม่สามารถติดต่อ Oracle ได้";
-                    }
-              ?>  
-                </span>
+                    echo $TotalAppointment;
+                ?>  
+              </span>
               </div>
               <!-- /.info-box-content -->
             </div>

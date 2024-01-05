@@ -11,7 +11,7 @@ class OracleDB {
     }
 
     public function queryPlaces() {
-        $sql = "SELECT PLACECODE, FULLPLACE FROM PLACES WHERE PT_PLACE_TYPE_CODE = '1' AND Del_Flag IS NULL";
+        $sql = "SELECT PLACECODE, FULLPLACE FROM PLACES WHERE PT_PLACE_TYPE_CODE = '1' AND Del_Flag IS NULL order by FULLPLACE desc";
         $statement = oci_parse($this->connection, $sql);
         oci_execute($statement);
 
@@ -26,6 +26,40 @@ class OracleDB {
 
     public function __destruct() {
         oci_close($this->connection);
+    }
+
+    public function getTotalUniqueOPD_NO($startDate, $endDate, $Mark) {
+        $sql = "SELECT COUNT(DISTINCT o.OPD_NO) AS TotalUniqueOPD_NO
+        FROM
+        OPDS o
+        JOIN PATIENTS p ON o.PAT_RUN_HN = p.RUN_HN AND o.PAT_YEAR_HN = p.YEAR_HN
+        JOIN OPD_WAREHOUSE ow ON o.OPD_NO = ow.OPD_NO
+        JOIN CREDIT_TYPES ct ON ow.credit_id = ct.credit_id
+        JOIN COME_TO_HOSPITAL_CODE ctm ON o.COME_TO_HOSPITAL_CODE = ctm.CODE
+        JOIN PLACES pl ON o.PLA_PLACECODE = pl.PLACECODE
+        JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
+        WHERE
+        o.opd_visit_type='D'
+        AND o.COME_TO_HOSPITAL_CODE = '01'
+        AND pl.PT_PLACE_TYPE_CODE = '1'
+        AND pl.Del_Flag IS NULL
+        AND TO_CHAR(o.OPD_DATE, 'yyyy-mm-dd') BETWEEN :startDate AND :endDate"; // ระบุเงื่อนไขอื่นๆ ตามต้องการ
+        $statement = oci_parse($this->connection, $sql);
+    
+         // ตรวจสอบการผูกตัวแปร
+         oci_bind_by_name($statement, ":startDate", $startDate);
+         oci_bind_by_name($statement, ":endDate", $endDate);
+        // ตรวจสอบการรัน query
+        if (!oci_execute($statement)) {
+        $error = oci_error($statement);
+        throw new Exception("Query execution failed: " . $error['message']);
+        }
+        $row = oci_fetch_assoc($statement);
+        if ($row) {
+        return $row['TOTALUNIQUEOPD_NO'];
+        } else {
+        echo "No data found";
+        }
     }
 }
 ?>
