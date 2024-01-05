@@ -391,6 +391,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && i
 
   // ทำสิ่งที่คุณต้องการทำกับ $startDate และ $endDate
   if ($Mark=='1') {
+  echo "Loop1";
   $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') as VisitDate,TO_CHAR(o.Reach_OPD_DATETIME, 'YYYY-MM-DD HH24:MI:SS') as TimeArrive,
   p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,
   trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
@@ -404,6 +405,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && i
   pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL and o.mark_yn='Y' and
   TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between '$startDate' and '$endDate' Order by pl.PLACECODE Desc";
   }elseif ($Mark=='2') {
+  echo "Loop2";
   $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') as VisitDate,TO_CHAR(o.Reach_OPD_DATETIME, 'YYYY-MM-DD HH24:MI:SS') as TimeArrive,
   p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,
   trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
@@ -417,6 +419,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && i
   pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL and o.mark_yn is NULL and
   TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between '$startDate' and '$endDate' Order by pl.PLACECODE Desc";
   }elseif ($Mark=='3'){
+    echo "Loop3";
   $SQLOPDComtohos="select o.opd_visit_type,o.OPD_NO,p.hn,TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') as VisitDate,TO_CHAR(o.Reach_OPD_DATETIME, 'YYYY-MM-DD HH24:MI:SS') as TimeArrive,
   p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,
   trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
@@ -451,8 +454,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && i
   <div style="text-align:center; font-size: 22px; font-weight: bold; color: blue;">
   <?php 
               
-              echo "วันที่เริ่ม : ".$startDate."วันที่สิ้นสุด:".$endDate;
-              echo "สถานะ :".$selectedMeaning;
+              echo "<h1> วันที่เริ่ม : ".$startDate." วันที่สิ้นสุด: ".$endDate;
+              echo "สถานะ : ".$selectedMeaning."</h1>";
               
   ?>
   </div>
@@ -490,6 +493,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && i
                 <th>Symptom</th>
                 <th>Past_Illness</th>
                 <th>สัญชาติ</th>
+                <th>ห้องตรวจ</th>
                 </tr>
                 </thead>
 <?php
