@@ -367,30 +367,37 @@
     </div>
     </form>
     <?php
-    $TotalAppointment = $TotalAppointmentAccept = $TotalAppointmentFail = null;
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && isset($_POST['EndDateRange']) 
-    or isset($_POST['Mark']) or isset($_POST['DepartmentCode'])) {
-      $startDate = $_POST['StartDateRange'];
-      $endDate = $_POST['EndDateRange'];
-      $Mark = $_POST['Mark'];
-      $Department = $_POST['DepartmentCode'];
-      try {
-      $db = new OracleDB();
-        // เรียกใช้ methods พร้อมส่งพารามิเตอร์
-      $TotalAppointment = $db->getTotalUniqueOPD_NO($startDate, $endDate, $Mark, $Department);
-        // จัดการกับผลลัพธ์ ...
-
-    } catch (Exception $e) {
-        echo "Error: " . $e->getMessage();
-    }
-    } else{
+    $TotalAppointment=$TotalAppointment = null;
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      // ตรวจสอบตัวแปรต่างๆ ที่ส่งมา
+      $startDate = isset($_POST['StartDateRange']) ? $_POST['StartDateRange'] : null;
+      $endDate = isset($_POST['EndDateRange']) ? $_POST['EndDateRange'] : null;
+      $Mark = isset($_POST['Mark']) ? $_POST['Mark'] : null;
+      $Department = isset($_POST['DepartmentCode']) ? $_POST['DepartmentCode'] : null;
+  
+      // ตรวจสอบว่าค่าที่จำเป็นถูกตั้งค่าหรือไม่
+      if ($startDate && $endDate && $Mark && $Department) {
+          // ค่าที่จำเป็นถูกตั้งค่าทั้งหมด
+          try {
+              $db = new OracleDB();
+              $TotalAppointment = $db->getTotalUniqueOPD_NO($startDate, $endDate, $Mark, $Department);
+              // จัดการกับผลลัพธ์ ...
+          } catch (Exception $e) {
+              echo "Error: " . $e->getMessage();
+          }
+      } else {
+          // หนึ่งหรือหลายค่าไม่ถูกตั้งค่า
+          // จัดการกับสถานการณ์นี้ (เช่น แสดงข้อความผิดพลาดหรือค่าเริ่มต้น)
+      }
+  } else {
+      // การร้องขอไม่ใช่ POST หรือไม่มีตัวแปรที่จำเป็นถูกส่งมา
+      // จัดการกับสถานการณ์นี้
       $currentDate = date('Y-m-d');
-      $startDate = $currentDate;
-      $endDate = $currentDate;
-      $Mark='3';
-      $TotalAppointment = $db->getTotalUniqueOPD_NO($startDate, $endDate, $Mark);
-//      $Department = 'ทุกห้องตรวจ';
-    } 
+      $startDate = isset($startDate) ? $startDate : $currentDate;
+      $endDate = isset($endDate) ? $endDate : $currentDate;
+      $Mark = isset($Mark) ? $Mark : '3';
+      $Department = isset($Department) ? $Department : 'ทุกห้องตรวจ';
+  }  
     ?>
     <!-- Main content -->
     <section class="content">
