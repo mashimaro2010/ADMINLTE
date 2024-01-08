@@ -348,8 +348,8 @@
                 <input type="text" Name="EndDateRange"/>
                 <label for="Mark">ตรวจแล้ว :</label>
                 <select id="Mark" name="Mark">
-                    <option value="1">ตรวจแล้ว</option>
-                    <option value="2">ไม่ได้ตรวจ</option>
+                    <option value="Y">ตรวจแล้ว</option>
+                    <option value="is NULL">ไม่ได้ตรวจ</option>
                     <option value="3">ทั้งหมด</option>
                 </select>
                 <label for="DepartmentCode">ห้องตรวจ :</label>
@@ -367,7 +367,7 @@
     </div>
     </form>
     <?php
-    $TotalAppointment=$TotalAppointment = null;
+    $TotalAppointment = null;
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       // ตรวจสอบตัวแปรต่างๆ ที่ส่งมา
       $startDate = isset($_POST['StartDateRange']) ? $_POST['StartDateRange'] : null;
@@ -381,6 +381,9 @@
           try {
               $db = new OracleDB();
               $TotalAppointment = $db->getTotalUniqueOPD_NO($startDate, $endDate, $Mark, $Department);
+              $getTotalOPD_Accept_Come=$db->getTotalOPD_Accept_Come($startDate, $endDate, $Mark,$Department);
+              $getTotalOPD_Not_Come=$db->getTotalOPD_Not_Come($startDate, $endDate);
+
               // จัดการกับผลลัพธ์ ...
           } catch (Exception $e) {
               echo "Error: " . $e->getMessage();
@@ -395,9 +398,13 @@
       $currentDate = date('Y-m-d');
       $startDate = isset($startDate) ? $startDate : $currentDate;
       $endDate = isset($endDate) ? $endDate : $currentDate;
-      $Mark = isset($Mark) ? $Mark : '3';
+      $Mark = isset($Mark) ? $Mark : 'Y';
       $Department = isset($Department) ? $Department : 'ทุกห้องตรวจ';
-  }  
+      $db = new OracleDB();
+      $TotalAppointment = $db->getTotalUniqueOPD_NO_Default($startDate, $endDate, $Mark, $Department);
+      $getTotalOPD_Accept_Come=$db->getTotalOPD_Accept_Come($startDate, $endDate, $Mark,$Department);
+      $getTotalOPD_Not_Come=$db->getTotalOPD_Not_Come($startDate, $endDate);
+  }   
     ?>
     <!-- Main content -->
     <section class="content">
@@ -417,40 +424,7 @@
             ?>
             <!-- Query จำนวน admit -->
             <?php
-                  $TotalUniqueOPD_NO="SELECT
-                  COUNT(DISTINCT o.OPD_NO) AS TotalUniqueOPD_NO
-                FROM
-                  OPDS o
-                  JOIN PATIENTS p ON o.PAT_RUN_HN = p.RUN_HN AND o.PAT_YEAR_HN = p.YEAR_HN
-                  JOIN OPD_WAREHOUSE ow ON o.OPD_NO = ow.OPD_NO
-                  JOIN CREDIT_TYPES ct ON ow.credit_id = ct.credit_id
-                  JOIN COME_TO_HOSPITAL_CODE ctm ON o.COME_TO_HOSPITAL_CODE = ctm.CODE
-                  JOIN PLACES pl ON o.PLA_PLACECODE = pl.PLACECODE
-                  JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
-                  WHERE
-                  o.opd_visit_type='D'
-                  AND o.COME_TO_HOSPITAL_CODE = '01'
-                  AND pl.PT_PLACE_TYPE_CODE = '1'
-                  AND pl.Del_Flag IS NULL
-                  AND TO_CHAR(o.OPD_DATE, 'yyyy-mm-dd') = TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')";
-
-                  $TotalUniqueOPD_NO_Check="SELECT
-                  COUNT(DISTINCT o.OPD_NO) AS TotalUniqueOPD_NO_Check
-                  FROM
-                  OPDS o
-                  JOIN PATIENTS p ON o.PAT_RUN_HN = p.RUN_HN AND o.PAT_YEAR_HN = p.YEAR_HN
-                  JOIN OPD_WAREHOUSE ow ON o.OPD_NO = ow.OPD_NO
-                  JOIN CREDIT_TYPES ct ON ow.credit_id = ct.credit_id
-                  JOIN COME_TO_HOSPITAL_CODE ctm ON o.COME_TO_HOSPITAL_CODE = ctm.CODE
-                  JOIN PLACES pl ON o.PLA_PLACECODE = pl.PLACECODE
-                  JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
-                  WHERE o.opd_visit_type='D'
-                  AND o.mark_yn='Y'
-                  AND o.COME_TO_HOSPITAL_CODE = '01'
-                  AND pl.PT_PLACE_TYPE_CODE = '1'
-                  AND pl.Del_Flag IS NULL
-                  AND TO_CHAR(o.OPD_DATE, 'yyyy-mm-dd') = TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')";
-                  
+                
                   $TotalDifference="SELECT
                   (SELECT COUNT(DISTINCT o.OPD_NO)
                    FROM OPDS o
@@ -502,22 +476,11 @@
               <span class="info-box-icon bg-success elevation-1"><i class="fas fa-calendar-check"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">มาตามนัด</span>
-                <span class="info-box-number"><?php
-                if($objConnect){
-                    $stid = oci_parse($objConnect, $TotalUniqueOPD_NO_Check);
-                    oci_execute($stid);
-                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
-                      foreach ($row as $item) {
-                          echo  $item;
-                       
-                        }
-                    }
-                }
-                    else
-                    {
-                      echo "ไม่สามารถติดต่อ Oracle ได้";
-                    }
-              ?></span>
+                <span class="info-box-number">
+                <?php
+                echo $getTotalOPD_Accept_Come;
+                ?>
+                </span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -533,22 +496,9 @@
               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-calendar-check"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">ขาดนัด</span>
-                <span class="info-box-number"><?php
-                if($objConnect){
-                    $stid = oci_parse($objConnect, $TotalDifference);
-                    oci_execute($stid);
-                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
-                      foreach ($row as $item) {
-                          echo  $item;
-                       
-                        }
-                    }
-                }
-                    else
-                    {
-                      echo "ไม่สามารถติดต่อ Oracle ได้";
-                    }
-              ?></span>
+                <span class="info-box-number">
+                  <?php echo $getTotalOPD_Not_Come;?>
+                </span>
               </div>
               <!-- /.info-box-content -->
             </div>
