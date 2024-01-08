@@ -367,7 +367,7 @@
     </div>
     </form>
     <?php
-    $TotalAppointment = null;
+    $getTotalUniqueOPD_NO = null;
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       // ตรวจสอบตัวแปรต่างๆ ที่ส่งมา
       $startDate = isset($_POST['StartDateRange']) ? $_POST['StartDateRange'] : null;
@@ -380,9 +380,9 @@
           // ค่าที่จำเป็นถูกตั้งค่าทั้งหมด
           try {
               $db = new OracleDB();
-              $TotalAppointment = $db->getTotalUniqueOPD_NO($startDate, $endDate, $Mark, $Department);
+              $getTotalUniqueOPD_NO = $db->getTotalUniqueOPD_NO($startDate, $endDate, $Mark, $Department);
               $getTotalOPD_Accept_Come=$db->getTotalOPD_Accept_Come($startDate, $endDate, $Mark,$Department);
-              $getTotalOPD_Not_Come=$db->getTotalOPD_Not_Come($startDate, $endDate);
+              $getTotalOPD_Not_Come=$db->getTotalOPD_Not_Come($startDate, $endDate,$Department);
 
               // จัดการกับผลลัพธ์ ...
           } catch (Exception $e) {
@@ -401,9 +401,9 @@
       $Mark = isset($Mark) ? $Mark : 'Y';
       $Department = isset($Department) ? $Department : 'ทุกห้องตรวจ';
       $db = new OracleDB();
-      $TotalAppointment = $db->getTotalUniqueOPD_NO_Default($startDate, $endDate, $Mark, $Department);
-      $getTotalOPD_Accept_Come=$db->getTotalOPD_Accept_Come($startDate, $endDate, $Mark,$Department);
-      $getTotalOPD_Not_Come=$db->getTotalOPD_Not_Come($startDate, $endDate);
+      $getTotalUniqueOPD_NO = $db->getTotalUniqueOPD_NO_Default($startDate, $endDate, $Mark, $Department);
+      $getTotalOPD_Accept_Come=$db->getTotalOPD_Accept_Come_Default($startDate, $endDate);
+      $getTotalOPD_Not_Come=$db->getTotalOPD_not_Come_Default($startDate, $endDate);
   }   
     ?>
     <!-- Main content -->
@@ -418,51 +418,14 @@
         </div>        
           </div>
           <div class="col-12 col-sm-6 col-md-3">
-          <?php
-            	    include('pages/tables/function.php');
-                  $objConnect = MSHOCI();
-            ?>
             <!-- Query จำนวน admit -->
-            <?php
-                
-                  $TotalDifference="SELECT
-                  (SELECT COUNT(DISTINCT o.OPD_NO)
-                   FROM OPDS o
-                   JOIN PATIENTS p ON o.PAT_RUN_HN = p.RUN_HN AND o.PAT_YEAR_HN = p.YEAR_HN
-                   JOIN OPD_WAREHOUSE ow ON o.OPD_NO = ow.OPD_NO
-                   JOIN CREDIT_TYPES ct ON ow.credit_id = ct.credit_id
-                   JOIN COME_TO_HOSPITAL_CODE ctm ON o.COME_TO_HOSPITAL_CODE = ctm.CODE
-                   JOIN PLACES pl ON o.PLA_PLACECODE = pl.PLACECODE
-                   JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
-                   WHERE o.opd_visit_type='D'
-                   AND o.COME_TO_HOSPITAL_CODE = '01'
-                   AND pl.PT_PLACE_TYPE_CODE = '1'
-                   AND pl.Del_Flag IS NULL
-                   AND TO_CHAR(o.OPD_DATE, 'yyyy-mm-dd') = TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')) -
-                  (SELECT COUNT(DISTINCT o.OPD_NO)
-                   FROM OPDS o
-                   JOIN PATIENTS p ON o.PAT_RUN_HN = p.RUN_HN AND o.PAT_YEAR_HN = p.YEAR_HN
-                   JOIN OPD_WAREHOUSE ow ON o.OPD_NO = ow.OPD_NO
-                   JOIN CREDIT_TYPES ct ON ow.credit_id = ct.credit_id
-                   JOIN COME_TO_HOSPITAL_CODE ctm ON o.COME_TO_HOSPITAL_CODE = ctm.CODE
-                   JOIN PLACES pl ON o.PLA_PLACECODE = pl.PLACECODE
-                   JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
-                   WHERE o.opd_visit_type='D'
-                   AND o.mark_yn='Y'
-                   AND o.COME_TO_HOSPITAL_CODE = '01'
-                   AND pl.PT_PLACE_TYPE_CODE = '1'
-                   AND pl.Del_Flag IS NULL
-                   AND TO_CHAR(o.OPD_DATE, 'yyyy-mm-dd') = TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')) AS Difference
-              FROM DUAL";
-                                                                                                                       
-            ?>
             <div class="info-box">
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-calendar-check"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">จำนวนนัด</span>
                 <span class="info-box-number">                 
                 <?php
-                    echo $TotalAppointment;
+                    echo $getTotalUniqueOPD_NO;
                 ?>  
               </span>
               </div>
