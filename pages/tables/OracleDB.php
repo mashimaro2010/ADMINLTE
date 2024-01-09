@@ -135,7 +135,7 @@ class OracleDB {
     }
 
     //คนไข้ที่นัดมา และมาตามนัด เลือกตามห้องตรวจ
-    public function getTotalUniqueOPD_NO($startDate, $endDate, $Mark,$Department) {
+    public function getTotalUniqueOPD_NO($startDate, $endDate,$Department) {
         $sql = "SELECT COUNT(DISTINCT o.OPD_NO) AS TotalUniqueOPD_NO
         FROM
         OPDS o
@@ -147,7 +147,6 @@ class OracleDB {
         JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
         WHERE
         o.opd_visit_type='D'
-        AND o.mark_yn= :Mark
         AND pl.PLACECODE = :Department
         AND o.COME_TO_HOSPITAL_CODE = '01'
         AND pl.PT_PLACE_TYPE_CODE = '1'
@@ -159,7 +158,6 @@ class OracleDB {
          oci_bind_by_name($statement, ":startDate", $startDate);
          oci_bind_by_name($statement, ":endDate", $endDate);
          oci_bind_by_name($statement, ":Department", $Department);
-         oci_bind_by_name($statement, ":Mark", $Mark);
 
         // ตรวจสอบการรัน query
         if (!oci_execute($statement)) {
@@ -175,7 +173,7 @@ class OracleDB {
     }
 
     //กดค้นหา คนไข้ที่นัดมามาตรวจตามนัด
-    public function getTotalOPD_Accept_Come($startDate, $endDate,$Mark,$Department) {
+    public function getTotalOPD_Accept_Come($startDate, $endDate,$Department) {
         $sql = "SELECT COUNT(DISTINCT o.OPD_NO) AS TotalUniqueOPD_NO
         FROM
         OPDS o
@@ -187,7 +185,7 @@ class OracleDB {
         JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
         WHERE
         o.opd_visit_type='D'
-        AND o.mark_yn= :Mark
+        AND o.mark_yn='Y'
         AND pl.PLACECODE = :Department
         AND o.COME_TO_HOSPITAL_CODE = '01'
         AND pl.PT_PLACE_TYPE_CODE = '1'
@@ -199,7 +197,6 @@ class OracleDB {
          oci_bind_by_name($statement, ":startDate", $startDate);
          oci_bind_by_name($statement, ":endDate", $endDate);
          oci_bind_by_name($statement, ":Department", $Department);
-         oci_bind_by_name($statement, ":Mark", $Mark);
         // ตรวจสอบการรัน query
         if (!oci_execute($statement)) {
         $error = oci_error($statement);
@@ -239,6 +236,7 @@ class OracleDB {
          oci_bind_by_name($statement, ":endDate", $endDate);
          oci_bind_by_name($statement, ":Department", $Department);
         // ตรวจสอบการรัน query
+        
         if (!oci_execute($statement)) {
             $error = oci_error($statement);
             throw new Exception("Query execution failed: " . $error['message']);

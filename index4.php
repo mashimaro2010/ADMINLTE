@@ -335,7 +335,6 @@
        echo "Error: " . $e->getMessage();
        $places = []; // ตั้งค่าเป็น array ว่างหากมีข้อผิดพลาด
    }
-   include 'process_post_data.php';
    include 'process_department_data.php';
     ?>
     <div class="container-fluid">
@@ -346,12 +345,6 @@
                 <input type="text" name="StartDateRange"/>
                 <label for="end-date">วันที่สิ้นสุด :</label>
                 <input type="text" Name="EndDateRange"/>
-                <label for="Mark">ตรวจแล้ว :</label>
-                <select id="Mark" name="Mark">
-                    <option value="Y">ตรวจแล้ว</option>
-                    <option value="is NULL">ไม่ได้ตรวจ</option>
-                    <option value="3">ทั้งหมด</option>
-                </select>
                 <label for="DepartmentCode">ห้องตรวจ :</label>
                 <select id="Departmentcode" name="DepartmentCode">
                   <?php foreach ($places as $place): ?>
@@ -367,21 +360,21 @@
     </div>
     </form>
     <?php
-    $getTotalUniqueOPD_NO = null;
+    $getTotalUniqueOPD_NO=$getTotalOPD_Accept_Come=$getTotalOPD_Not_Come = null;
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       // ตรวจสอบตัวแปรต่างๆ ที่ส่งมา
       $startDate = isset($_POST['StartDateRange']) ? $_POST['StartDateRange'] : null;
       $endDate = isset($_POST['EndDateRange']) ? $_POST['EndDateRange'] : null;
-      $Mark = isset($_POST['Mark']) ? $_POST['Mark'] : null;
+      //$Mark = isset($_POST['Mark']) ? $_POST['Mark'] : null;
       $Department = isset($_POST['DepartmentCode']) ? $_POST['DepartmentCode'] : null;
   
       // ตรวจสอบว่าค่าที่จำเป็นถูกตั้งค่าหรือไม่
-      if ($startDate && $endDate && $Mark && $Department) {
+      if ($startDate && $endDate && $Department) {
           // ค่าที่จำเป็นถูกตั้งค่าทั้งหมด
           try {
               $db = new OracleDB();
-              $getTotalUniqueOPD_NO = $db->getTotalUniqueOPD_NO($startDate, $endDate, $Mark, $Department);
-              $getTotalOPD_Accept_Come=$db->getTotalOPD_Accept_Come($startDate, $endDate, $Mark,$Department);
+              $getTotalUniqueOPD_NO = $db->getTotalUniqueOPD_NO($startDate, $endDate, $Department);
+              $getTotalOPD_Accept_Come=$db->getTotalOPD_Accept_Come($startDate, $endDate, $Department);
               $getTotalOPD_Not_Come=$db->getTotalOPD_Not_Come($startDate, $endDate,$Department);
 
               // จัดการกับผลลัพธ์ ...
@@ -398,10 +391,10 @@
       $currentDate = date('Y-m-d');
       $startDate = isset($startDate) ? $startDate : $currentDate;
       $endDate = isset($endDate) ? $endDate : $currentDate;
-      $Mark = isset($Mark) ? $Mark : 'Y';
+      //$Mark = isset($Mark) ? $Mark : 'Y';
       $Department = isset($Department) ? $Department : 'ทุกห้องตรวจ';
       $db = new OracleDB();
-      $getTotalUniqueOPD_NO = $db->getTotalUniqueOPD_NO_Default($startDate, $endDate, $Mark, $Department);
+      $getTotalUniqueOPD_NO = $db->getTotalUniqueOPD_NO_Default($startDate, $endDate, $Department);
       $getTotalOPD_Accept_Come=$db->getTotalOPD_Accept_Come_Default($startDate, $endDate);
       $getTotalOPD_Not_Come=$db->getTotalOPD_not_Come_Default($startDate, $endDate);
   }   
@@ -414,7 +407,7 @@
         <div class="col-12">
           
         <div style="text-align:center; font-size: 22px; font-weight: bold; color: blue;">
-            <?php echo "<h4>วันที่เริ่ม : ".$startDate." วันที่สิ้นสุด: ".$endDate." สถานะ : ".$selectedMeaning." ห้องตรวจ :".$selectedDepartmentDescription."</h4>";?>
+            <?php echo "<h4>วันที่เริ่ม : ".$startDate." วันที่สิ้นสุด: ".$endDate." ห้องตรวจ :".$selectedDepartmentDescription."</h4>";?>
         </div>        
           </div>
           <div class="col-12 col-sm-6 col-md-3">
