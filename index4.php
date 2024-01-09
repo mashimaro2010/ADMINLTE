@@ -508,6 +508,18 @@
 <!-- ChartJS -->
 <script src="mychart.js"></script>
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var searchInput = document.getElementById("searchInput");
+      var departmentCodeSelect = document.getElementById("DepartmentCode");
+
+      searchInput.addEventListener("input", function () {
+          var searchText = searchInput.value.toLowerCase();
+          Array.from(departmentCodeSelect.options).forEach(function (option) {
+              var text = option.textContent.toLowerCase();
+              option.style.display = text.includes(searchText) ? "block" : "none";
+          });
+      });
+  });
   $(function() {
     $('input[name="StartDateRange"]').daterangepicker({
       singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
