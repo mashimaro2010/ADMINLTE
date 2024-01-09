@@ -24,6 +24,16 @@ class OracleDB {
         return $result;
     }
 
+    public function querySelectPlacesName($DepartmentCode) {
+        $sql = "SELECT FULLPLACE FROM PLACES WHERE PLACECODE='$DepartmentCode' and PT_PLACE_TYPE_CODE = '1' AND Del_Flag IS NULL order by FULLPLACE desc";
+        $statement = oci_parse($this->connection, $sql);
+        oci_execute($statement);
+        while ($row = oci_fetch_assoc($statement)) {
+            $result = $row['FULLPLACE'];
+            return $result;
+        }
+    }
+
     public function __destruct() {
         oci_close($this->connection);
     }

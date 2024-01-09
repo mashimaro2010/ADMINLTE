@@ -327,6 +327,7 @@
       </div><!-- /.container-fluid -->
     </section>
     <?php
+    include '../../DataAndSQL/process_department_data.php';
     $currentDate = date('Y-m-d');
     $startDate = $currentDate;
     $endDate = $currentDate;
@@ -345,6 +346,7 @@
         $selectedMeaning = $meanings[$Mark];
         $startDate = $_POST['StartDateRange'];
         $endDate = $_POST['EndDateRange'];
+        $DepartmentCode=$_POST['DepartmentCode'];
         $Mark = $_POST['Mark'];
     } else {
         echo "<div>Invalid selection</div>";
@@ -363,6 +365,17 @@
     }
     ?>
     <form id="date-form" method="post">
+    <?php
+   require_once 'OracleDB.php';
+   try {
+       $db = new OracleDB();
+       $places = $db->queryPlaces();
+   } catch (Exception $e) {
+       echo "Error: " . $e->getMessage();
+       $places = []; // ตั้งค่าเป็น array ว่างหากมีข้อผิดพลาด
+   }
+
+   ?>
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
@@ -377,18 +390,28 @@
                     <option value="2">ไม่ได้ตรวจ</option>
                     <option value="3">ทั้งหมด</option>
                 </select>
+                <label for="DepartmentCode">ห้องตรวจ :</label>
+                <select id="DepartmentCode" name="DepartmentCode">
+                  <?php foreach ($places as $place): ?>
+                  <option value="<?php echo htmlspecialchars($place['PLACECODE']); ?>">
+                  <?php echo htmlspecialchars($place['FULLPLACE']); ?>
+                  </option>
+                <?php endforeach; ?>
+                </select>
                 <button type="submit">ค้นหา</button> 
             </div>
         </div>
       </div>
     </div>
 <?php
-//$startDate = "";
-//$endDate = "";
-//$SQLOPDComtohos = "";
-// ตรวจสอบทั้ง StartDateRange และ EndDateRange
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && isset($_POST['EndDateRange']) or isset($_POST['Mark'])) {
-
+try {
+  $db = new OracleDB();
+  $DepartmentName = $db->querySelectPlacesName($DepartmentCode);
+} catch (Exception $e) {
+  $DepartmentName ='ทั้งหมด';
+}
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && isset($_POST['EndDateRange']) 
+Or isset($_POST['Mark']) or isset($_POST['DepartmentCode'])) {
   // ทำสิ่งที่คุณต้องการทำกับ $startDate และ $endDate
   if ($Mark=='1') {
   $SQLOPDComtohos="SELECT DISTINCT
@@ -425,6 +448,7 @@ FROM
   JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
 WHERE
   o.opd_visit_type = 'D'
+  AND pl.PLACECODE='$DepartmentCode'
   AND o.mark_yn='Y'
   AND o.COME_TO_HOSPITAL_CODE = '01'
   AND pl.PT_PLACE_TYPE_CODE = '1'
@@ -468,6 +492,7 @@ FROM
 WHERE
   o.opd_visit_type = 'D'
   AND o.mark_yn is NULL
+  AND pl.PLACECODE='$DepartmentCode'
   AND o.COME_TO_HOSPITAL_CODE = '01'
   AND pl.PT_PLACE_TYPE_CODE = '1'
   AND pl.Del_Flag IS NULL
@@ -509,6 +534,7 @@ FROM
   JOIN DOC_DBFS doc ON doc.DOC_CODE = o.DD_DOC_CODE
 WHERE
   o.opd_visit_type = 'D'
+  AND pl.PLACECODE='$DepartmentCode'
   AND o.COME_TO_HOSPITAL_CODE = '01'
   AND pl.PT_PLACE_TYPE_CODE = '1'
   AND pl.Del_Flag IS NULL
@@ -538,11 +564,11 @@ ORDER BY
   <?php 
               
               echo "<h1> วันที่เริ่ม : ".$startDate." วันที่สิ้นสุด: ".$endDate;
-              echo "สถานะ : ".$selectedMeaning."</h1>";
+              echo " สถานะ : ".$selectedMeaning." ห้องตรวจ: ".$DepartmentName."</h1>";
               
   ?>
   </div>
-            <?php          
+            <?php      
             include('function.php');
             $objConnect = MSHOCI();            
             if($objConnect){
