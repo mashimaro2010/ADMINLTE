@@ -404,14 +404,16 @@
       </div>
     </div>
 <?php
-try {
-  $db = new OracleDB();
-  $DepartmentName = $db->querySelectPlacesName($DepartmentCode);
-} catch (Exception $e) {
   $DepartmentName ='ทั้งหมด';
-}
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && isset($_POST['EndDateRange']) 
 Or isset($_POST['Mark']) or isset($_POST['DepartmentCode'])) {
+
+  try {
+    $db = new OracleDB();
+    $DepartmentName = $db->querySelectPlacesName($DepartmentCode);
+  } catch (Exception $e) {
+    $DepartmentName ='ทั้งหมด';
+  }
   // ทำสิ่งที่คุณต้องการทำกับ $startDate และ $endDate
   if ($Mark=='1') {
   $SQLOPDComtohos="SELECT DISTINCT
