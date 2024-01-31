@@ -53,6 +53,7 @@
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
       </li>
+      <!-- Navbar Logout -->
       <li class="nav-item">
         <a class="nav-link" id="logoutLink" role="button">
         <i class="fas fa-right-from-bracket"></i>Logout</a>
