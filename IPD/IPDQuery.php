@@ -11,7 +11,7 @@ class IPDQuery{
         }
     }
 
-    public function Total_IPDAdmit($startDate, $endDate){        
+    public function Total_IPDAdmit($startDate, $endDate){       
         $sql="Select Sum(Count(DISTINCT ip.AN)) as TOTAL_IPDADMIT
         from ipdtrans ip,places PL where ip.PLA_PLACECODE=pl.PLACECODE 
         and ip.Dateadmit between to_date(:startDate,'DD-MM-YYYY') and to_date(:endDate,'DD-MM-YYYY')
@@ -52,8 +52,8 @@ class IPDQuery{
     
     public function TOTAL_IPD_Daed($startDate, $endDate){
         $sql="select Count(ALL i.an) as TOTAL_IPD_DAED
-        from IPDTRANS i,patients p
-        where  i.hn = p.hn and  DEAD_FLAG='Y' and i.DATEDISCH between to_date(:startDate,'DD-MM-YYYY') and to_date(:endDate,'DD-MM-YYYY')
+        from IPDTRANS i,patients p 
+        where  i.hn = p.hn and  DEAD_FLAG='Y' and i.Dateadmit between to_date(:startDate,'DD-MM-YYYY') and to_date(:endDate,'DD-MM-YYYY')
         Order by Dateadmit asc";
         $statement = oci_parse($this->connection, $sql);
     

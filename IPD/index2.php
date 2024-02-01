@@ -51,7 +51,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index.php" class="nav-link">Home</a>
+        <a href="../index.php" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">ติดต่อ</a>
@@ -115,7 +115,7 @@
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-layer-group"></i>
+            <i class="fas fa-layer-group"></i>
               <p>
                 ประเภทผู้ป่วย
                 <i class="right fas fa-angle-left"></i>
@@ -124,32 +124,32 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="./index.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-wheelchair"></i>
                   <p>ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="./index2.php" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-bed-pulse"></i>
                   <p>ผู้ป่วยใน</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="./index4.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-calendar"></i>
                   <p>ผู้ป่วยนัด</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="./index3.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-truck-medical"></i>
                   <p>ผู้ป่วย Refer</p>
                 </a>
               </li>
             </ul>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-database"></i>
+              <i class="fas fa-database"></i>
               <p>
               ดูข้อมูล
                 <i class="fas fa-angle-left right"></i>
@@ -158,31 +158,31 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="pages/tables/data.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-clock"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอย</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="pages/tables/data2.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-bed-pulse"></i>
                   <p>ชุดข้อมูลคนไข้ Admit</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../pages/tables/data6.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-calendar"></i>
                   <p>ชุดข้อมูลคนไข้นัด</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="pages/tables/data3.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูล Refer ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="pages/tables/data4.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูล Refer ผู้ป่วยใน</p>
                 </a>
               </li>
@@ -199,8 +199,8 @@
     $startDate = $currentDate;
     $endDate = $currentDate;
     if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
-      $startDateTime = DateTime::createFromFormat('Y-m-d', $_POST['StartDateRange']);
-      $endDateTime = DateTime::createFromFormat('Y-m-d', $_POST['EndDateRange']);
+      $startDateTime = DateTime::createFromFormat('d-m-Y', $_POST['StartDateRange']);
+      $endDateTime = DateTime::createFromFormat('d-m-Y', $_POST['EndDateRange']);
   
       if ($startDateTime && $endDateTime) {
           // หากการสร้าง DateTime สำเร็จ
@@ -208,7 +208,6 @@
           $endDate = $endDateTime->format('d-m-Y');
       } else {
           // การสร้าง DateTime ล้มเหลว, จัดการข้อผิดพลาดที่นี่
-          // ตัวอย่าง: ตั้งค่าเป็นวันที่เริ่มต้นและสิ้นสุดเป็นค่าเริ่มต้น
           $startDate = '01-10-2022';
           $endDate = '30-09-2023';
       }
@@ -254,7 +253,7 @@
         <div class="row">
         <div class="row col-12" style="text-align:center; font-size: 22px; font-weight: bold; color: blue;">
         <h1 style="text-align:center; margin: 0 auto;">
-        วันที่เริ่ม:<?php echo $startDate?> วันที่สิ้นสุด:<?php echo $endDate?>  
+        วันที่เริ่ม:<?php echo $startDate?> วันที่สิ้นสุด:<?php echo $endDate?> 
         </h1>
         </div>  
           <div class="col-12 col-sm-6 col-md-3">
