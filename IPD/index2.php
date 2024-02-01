@@ -199,13 +199,24 @@
     $startDate = $currentDate;
     $endDate = $currentDate;
     if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
-      $startDate = DateTime::createFromFormat('Y-m-d', $_POST['StartDateRange'])->format('d-m-Y');
-      $endDate = DateTime::createFromFormat('Y-m-d', $_POST['EndDateRange'])->format('d-m-Y');
-    } else {
-        // ถ้าไม่มีข้อมูลที่ส่งมา กำหนดวันที่เริ่มต้นและสิ้นสุดเป็นค่าเริ่มต้น
-        $startDate = '01-10-2022';
-        $endDate = '30-09-2023';
-    }
+      $startDateTime = DateTime::createFromFormat('Y-m-d', $_POST['StartDateRange']);
+      $endDateTime = DateTime::createFromFormat('Y-m-d', $_POST['EndDateRange']);
+  
+      if ($startDateTime && $endDateTime) {
+          // หากการสร้าง DateTime สำเร็จ
+          $startDate = $startDateTime->format('d-m-Y');
+          $endDate = $endDateTime->format('d-m-Y');
+      } else {
+          // การสร้าง DateTime ล้มเหลว, จัดการข้อผิดพลาดที่นี่
+          // ตัวอย่าง: ตั้งค่าเป็นวันที่เริ่มต้นและสิ้นสุดเป็นค่าเริ่มต้น
+          $startDate = '01-10-2022';
+          $endDate = '30-09-2023';
+      }
+  } else {
+      // ถ้าไม่มีข้อมูลที่ส่งมา กำหนดวันที่เริ่มต้นและสิ้นสุดเป็นค่าเริ่มต้น
+      $startDate = '01-10-2022';
+      $endDate = '30-09-2023';
+  }
     ?>
   </aside>
   <form id="date-form" method="post">
