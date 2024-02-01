@@ -11,13 +11,12 @@ class IPDQuery{
         }
     }
 
-    public function Total_IPDAdmit($startDate, $endDate){
-        $sql="Select Sum(Count(DISTINCT ip.AN)) as Total_IPDAdmit
+    public function Total_IPDAdmit($startDate, $endDate){        
+        $sql="Select Sum(Count(DISTINCT ip.AN)) as TOTAL_IPDADMIT
         from ipdtrans ip,places PL where ip.PLA_PLACECODE=pl.PLACECODE 
         and ip.Dateadmit between to_date(:startDate,'DD-MM-YYYY') and to_date(:endDate,'DD-MM-YYYY')
         and PT_PLACE_TYPE_CODE='2' GROUP BY an,bed_no,ip.PLA_PLACECODE,pl.fullplace,FLNAME,DEGREE_OF_PATIENT_CODE,ip.Dateadmit,ip.Timeadmit,ip.Date_Created";
         $statement = oci_parse($this->connection, $sql);
-    
         // ผูกตัวแปร
         oci_bind_by_name($statement, ":startDate", $startDate);
         oci_bind_by_name($statement, ":endDate", $endDate);
@@ -28,11 +27,11 @@ class IPDQuery{
             throw new Exception("Query execution failed: " . $error['message']);
         }
         $row = oci_fetch_assoc($statement);
-        return isset($row['TOTAL_IPDADMIT']) ? $row['TOTAL_IPDADMIT'] : 0; // ตรวจสอบว่ามีคีย์ RecordCount ก่อนส่งค่ากลับ
+        return $TOTAL_IPDADMIT = isset($row['TOTAL_IPDADMIT']) ? $row['TOTAL_IPDADMIT'] : 0; // กำหนดค่าเริ่มต้นเป็น 0 ถ้าไม่มีข้อมูล
     }
 
     public function TOTAL_IPD_Disch($startDate, $endDate){
-        $sql="select Count(ALL i.an) as TOTAL_IPD_Disch
+        $sql="select Count(ALL i.an) as TOTAL_IPD_DISCH
         from IPDTRANS i,patients p
         where  i.hn = p.hn and  DEAD_FLAG='Y' and i.DATEDISCH between to_date(:startDate,'DD-MM-YYYY') and to_date(:endDate,'DD-MM-YYYY')
         Order by Dateadmit asc";
@@ -48,11 +47,11 @@ class IPDQuery{
             throw new Exception("Query execution failed: " . $error['message']);
         }
         $row = oci_fetch_assoc($statement);
-        return isset($row['TOTAL_IPD_DISCH']) ? $row['TOTAL_IPD_DISCH'] : 0; // ตรวจสอบว่ามีคีย์ RecordCount ก่อนส่งค่ากลับ
+        return $TOTAL_IPD_DISCH = isset($row['TOTAL_IPD_DISCH']) ? $row['TOTAL_IPD_DISCH'] : 0; // กำหนดค่าเริ่มต้นเป็น 0 ถ้าไม่มีข้อมูล        
     }
     
     public function TOTAL_IPD_Daed($startDate, $endDate){
-        $sql="select Count(ALL i.an) as TOTAL_IPD_Disch
+        $sql="select Count(ALL i.an) as TOTAL_IPD_DAED
         from IPDTRANS i,patients p
         where  i.hn = p.hn and  DEAD_FLAG='Y' and i.DATEDISCH between to_date(:startDate,'DD-MM-YYYY') and to_date(:endDate,'DD-MM-YYYY')
         Order by Dateadmit asc";
@@ -67,8 +66,8 @@ class IPDQuery{
             $error = oci_error($statement);
             throw new Exception("Query execution failed: " . $error['message']);
         }
-        $row = oci_fetch_assoc($statement);
-        return isset($row['TOTAL_IPD_DAED']) ? $row['TOTAL_IPD_DAED'] : 0; // ตรวจสอบว่ามีคีย์ RecordCount ก่อนส่งค่ากลับ
+        $row = oci_fetch_assoc($statement);        
+        return $TOTAL_IPD_DAED = isset($row['TOTAL_IPD_DAED']) ? $row['TOTAL_IPD_DAED'] : 0; // กำหนดค่าเริ่มต้นเป็น 0 ถ้าไม่มีข้อมูล 
     }
 }
 ?>

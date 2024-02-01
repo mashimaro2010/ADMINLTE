@@ -195,12 +195,16 @@
     <!-- /.sidebar -->
     <?php
     require_once 'IPDQuery.php';
-    $currentDate = date('Y-m-d');
+    $currentDate = date('d-m-Y');
     $startDate = $currentDate;
     $endDate = $currentDate;
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
-      $startDate = $_POST['StartDateRange'];
-      $endDate = $_POST['EndDateRange'];
+    if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
+      $startDate = DateTime::createFromFormat('Y-m-d', $_POST['StartDateRange'])->format('d-m-Y');
+      $endDate = DateTime::createFromFormat('Y-m-d', $_POST['EndDateRange'])->format('d-m-Y');
+    } else {
+        // ถ้าไม่มีข้อมูลที่ส่งมา กำหนดวันที่เริ่มต้นและสิ้นสุดเป็นค่าเริ่มต้น
+        $startDate = '01-10-2022';
+        $endDate = '30-09-2023';
     }
     ?>
   </aside>
@@ -242,48 +246,27 @@
         วันที่เริ่ม:<?php echo $startDate?> วันที่สิ้นสุด:<?php echo $endDate?>  
         </h1>
         </div>  
-          <div class="col-12 col-sm-6 col-md-3">          
+          <div class="col-12 col-sm-6 col-md-3">
+          <!-- Query version แรก -->            
           <?php
             	    include('../pages/tables/function.php');
                   $objConnect = MSHOCI();
             ?>
             <!-- Query จำนวน admit -->
-            <?php
-                  $SQLTOTAL_ADMIT="Select Sum(Count(DISTINCT ip.AN)) as TOTAL_ADMIT
-                  from ipdtrans ip,places PL where ip.PLA_PLACECODE=pl.PLACECODE 
-                  and ip.Dateadmit between to_date('30-09-2023','DD-MM-YYYY') and to_date('1-10-2024','DD-MM-YYYY')
-                  and PT_PLACE_TYPE_CODE='2' GROUP BY an,bed_no,ip.PLA_PLACECODE,pl.fullplace,FLNAME,DEGREE_OF_PATIENT_CODE,ip.Dateadmit,ip.Timeadmit,ip.Date_Created";
-
-                  $SQLTOTAL_IPD_Disch="select Count(ALL i.an) as TOTAL_IPD_Disch
-                  from IPDTRANS i,patients p
-                  where  i.hn = p.hn and  DEAD_FLAG='Y' and i.DATEDISCH between to_date('30-09-2023','DD-MM-YYYY') and to_date('1-10-2024','DD-MM-YYYY')
-                  Order by Dateadmit asc";
-
-                  $SQLTOTAL_IPD_DAED="select Count(ALL i.an) as TOTAL_IPD_DAED
-                  from IPDTRANS i,patients p
-                  where  i.hn = p.hn and  DEAD_FLAG='Y' and i.Dateadmit between to_date('30-09-2023','DD-MM-YYYY') and to_date('1-10-2024','DD-MM-YYYY')
-                  Order by Dateadmit asc";
-            ?>
             <div class="info-box">
               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-bed"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">จำนวน admit</span>
-                <span class="info-box-number">
-                <?php
-                if($objConnect){
-                    $stid = oci_parse($objConnect, $SQLTOTAL_ADMIT);
-                    oci_execute($stid);
-                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
-                      foreach ($row as $item) {
-                          echo  $item;                       
-                        }
-                    }
-                }
-                    else
-                    {
-                      echo "ไม่สามารถติดต่อ Oracle ได้";
-                    }
-              ?>  
+                <span class="info-box-number">                   
+              <?php
+              $db=new IPDQuery();
+              try{
+                $TOTAL_IPDADMIT=$db->Total_IPDAdmit($startDate, $endDate);
+                echo $TOTAL_IPDADMIT;
+              } catch(exception $e){
+                echo "Error:". $e->getMessage();
+              }
+              ?>
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -296,20 +279,15 @@
               <span class="info-box-icon bg-info elevation-1"><i class="fas fa-female"></i><i class="fas fa-male"></i><i class="far fa-smile"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">จำนวนจำหน่าย</span>
-                <span class="info-box-number"><?php
-                if($objConnect){
-                    $stid = oci_parse($objConnect, $SQLTOTAL_IPD_Disch);
-                    oci_execute($stid);
-                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
-                      foreach ($row as $item) {
-                          echo  $item;                       
-                        }
-                    }
-                }
-                    else
-                    {
-                      echo "ไม่สามารถติดต่อ Oracle ได้";
-                    }
+                <span class="info-box-number">
+              <?php
+              $db=new IPDQuery();
+              try{
+                $TOTAL_IPD_DISCH=$db->TOTAL_IPD_DISCH($startDate, $endDate);
+                echo $TOTAL_IPD_DISCH;
+              } catch(exception $e){
+                echo "Error:". $e->getMessage();
+              }
               ?>  
               </span>
               </div>
@@ -327,7 +305,9 @@
               <span class="info-box-icon bg-info elevation-1"><i class="fas fa-ambulance"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">จำนวน Refer IN/OUT</span>
-                <span class="info-box-number">760</span>
+                <span class="info-box-number">                  
+                760                            
+              </span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -339,21 +319,17 @@
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-book-dead"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">จำนวนเสียชีวิต</span>
-                <span class="info-box-number"><?php
-                if($objConnect){
-                    $stid = oci_parse($objConnect, $SQLTOTAL_IPD_DAED);
-                    oci_execute($stid);
-                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
-                      foreach ($row as $item) {
-                          echo  $item;                       
-                        }
-                    }
-                }
-                    else
-                    {
-                      echo "ไม่สามารถติดต่อ Oracle ได้";
-                    }
-              ?></span>
+                <span class="info-box-number">
+              <?php 
+              $db=new IPDQuery();
+              try{
+                $TOTAL_IPD_DAED=$db->TOTAL_IPD_DAED($startDate, $endDate);
+                echo $TOTAL_IPD_DAED;
+              } catch(exception $e){
+                echo "Error:". $e->getMessage();
+              }
+              ?>
+              </span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -406,7 +382,7 @@
       singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
       showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
       locale: {
-        format: 'YYYY-MM-DD',
+        format: 'DD-MM-YYYY',
         applyLabel: 'ตกลง',
         cancelLabel: 'ยกเลิก',
         fromLabel: 'จาก',
@@ -423,7 +399,7 @@
       singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
       showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
       locale: {
-        format: 'YYYY-MM-DD',
+        format: 'DD-MM-YYYY',
         applyLabel: 'ตกลง',
         cancelLabel: 'ยกเลิก',
         fromLabel: 'จาก',
