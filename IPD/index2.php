@@ -316,7 +316,15 @@
               <div class="info-box-content">
                 <span class="info-box-text">จำนวน Refer IN/OUT</span>
                 <span class="info-box-number">                  
-                760                            
+                <?php 
+              $db=new IPDQuery();
+              try{
+                $TOTAL_IPD_REFER=$db->TOTAL_IPD_REFER($startDate, $endDate);
+                echo $TOTAL_IPD_REFER;
+              } catch(exception $e){
+                echo "Error:". $e->getMessage();
+              }
+              ?>                            
               </span>
               </div>
               <!-- /.info-box-content -->
