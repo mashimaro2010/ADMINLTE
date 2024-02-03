@@ -4,16 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Data Center | โรงพยาบาลแม่สอด</title>
+  <!-- jquery -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-  <!-- เพิ่มไฟล์ Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome Icons-->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
@@ -22,18 +18,14 @@
   <link rel="stylesheet" href="../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- JQVMap -->
   <link rel="stylesheet" href="../plugins/jqvmap/jqvmap.min.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../dist/css/adminlte.min.css">
-  <!-- Daterangepicker style -->
-  <script src="https://cdn.jsdelivr.net/npm/daterangepicker@latest/daterangepicker.js"></script>
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -60,7 +52,8 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      <!-- Navbar Search -->
+    <!-- Right navbar links -->
+      <ul class="navbar-nav ml-auto">
       <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
@@ -68,10 +61,9 @@
       </li>
       <!-- Navbar Logout -->
       <li class="nav-item">
-      <a class="nav-link" id="logoutLink" role="button">
+        <a class="nav-link" id="logoutLink" role="button">
         <i class="fas fa-right-from-bracket"></i>Logout</a>
-      </a>
-      </li>
+       </li>
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -92,7 +84,7 @@
           <img src="../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">User ผู้ใช้งาน</a>
+          <a href="#" class="d-block">Alexander Pierce</a>
         </div>
       </div>
 
@@ -115,7 +107,7 @@
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
-            <i class="fas fa-layer-group"></i>
+              <i class="nav-icon fas fa-layer-group"></i>
               <p>
                 ประเภทผู้ป่วย
                 <i class="right fas fa-angle-left"></i>
@@ -123,13 +115,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="../opd/index.php" class="nav-link">
+                <a href="./index.php" class="nav-link">
                 <i class="fas fa-wheelchair"></i>
                   <p>ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index2.php" class="nav-link active">
+                <a href="./index2.php" class="nav-link">
                 <i class="fas fa-bed-pulse"></i>
                   <p>ผู้ป่วยใน</p>
                 </a>
@@ -141,7 +133,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index3.php" class="nav-link">
+                <a href="./index3.php" class="nav-link active">
                 <i class="fas fa-truck-medical"></i>
                   <p>ผู้ป่วย Refer</p>
                 </a>
@@ -149,7 +141,7 @@
             </ul>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="fas fa-database"></i>
+              <i class="nav-icon fas fa-database"></i>
               <p>
               ดูข้อมูล
                 <i class="fas fa-angle-left right"></i>
@@ -157,13 +149,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/tables/data.php" class="nav-link">
+                <a href="../pages/tables/data.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-clock"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอย</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/tables/data2.php" class="nav-link">
+                <a href="../pages/tables/data2.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-bed-pulse"></i>
                   <p>ชุดข้อมูลคนไข้ Admit</p>
                 </a>
@@ -171,74 +163,40 @@
               <li class="nav-item">
                 <a href="../pages/tables/data6.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-calendar"></i>
-                  <p>ชุดข้อมูลคนไข้นัด</p>
+                  <p>ชุดข้อมูล ผู้ป่วยนัด</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/tables/data3.php" class="nav-link">
+                <a href="../pages/tables/data3.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูล Refer ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/tables/data4.php" class="nav-link">
+                <a href="../pages/tables/data4.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูล Refer ผู้ป่วยใน</p>
                 </a>
-              </li>
+              </li>              
               </li> 
             </ul>
         </ul>
       </nav>
-      <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
-    <?php
-    require_once 'IPDQuery.php';
-    $currentDate = date('d-m-Y');
-    $startDate = $currentDate;
-    $endDate = $currentDate;
-    if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
-      $startDateTime = DateTime::createFromFormat('d-m-Y', $_POST['StartDateRange']);
-      $endDateTime = DateTime::createFromFormat('d-m-Y', $_POST['EndDateRange']);
-  
-      if ($startDateTime && $endDateTime) {
-          // หากการสร้าง DateTime สำเร็จ
-          $startDate = $startDateTime->format('d-m-Y');
-          $endDate = $endDateTime->format('d-m-Y');
-      } else {
-          // การสร้าง DateTime ล้มเหลว, จัดการข้อผิดพลาดที่นี่
-          $startDate = '01-10-2022';
-          $endDate = '30-09-2023';
-      }
-  } else {
-      // ถ้าไม่มีข้อมูลที่ส่งมา กำหนดวันที่เริ่มต้นและสิ้นสุดเป็นค่าเริ่มต้น
-      $startDate = '01-10-2022';
-      $endDate = '30-09-2023';
-  }
-    ?>
   </aside>
-  <form id="date-form" method="post">
+
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-3">
-            <h1 class="m-0">ประเภทผู้ป่วยใน</h1>            
+          <div class="col-sm-6">
+            <h1 class="m-0">ประเภทผู้ป่วย Refer</h1>
           </div><!-- /.col -->
-          <div class="col-sm-7 form-group">
-                <label for="start-date">วันที่เริ่ม :</label>
-                <input type="text" name="StartDateRange" id="start-date">
-                <label for="end-date">วันที่สิ้นสุด :</label>
-                <input type="text" name="EndDateRange" id="end-date">
-                <label for="Mark">ตรวจแล้ว :</label>            
-                <button type="submit">ค้นหา</button> 
-          </div>
-          <div class="col-sm-2">
+          <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
               <li class="breadcrumb-item active">ผู้ป่วยใน</li>
             </ol>
           </div><!-- /.col -->
@@ -246,37 +204,56 @@
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-  </form>
+
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+        <!-- Info boxes -->
         <div class="row">
-        <div class="row col-12" style="text-align:center; font-size: 22px; font-weight: bold; color: blue;">
-        <h1 style="text-align:center; margin: 0 auto;">
-        วันที่เริ่ม:<?php echo $startDate?> วันที่สิ้นสุด:<?php echo $endDate?> 
-        </h1>
-        </div>  
           <div class="col-12 col-sm-6 col-md-3">
-          <!-- Query version แรก -->            
           <?php
             	    include('../pages/tables/function.php');
                   $objConnect = MSHOCI();
-          ?>
+            ?>
             <!-- Query จำนวน admit -->
+            <?php
+                  $SQLTOTAL_IPD_Refer="SELECT Count(ALL i.AN) as TOTAL_IPD_Refer
+                  FROM PATIENTS_REFER_HX refin,IPDTRANS i,PATIENTS p,CREDIT_TYPES ct,NATIVE_CODE n,PLACES pl,DEPARTS dep
+                  where i.an=refin.an and i.hn=p.hn and refin.CREDIT_ID=ct.CREDIT_ID(+) and  p.native_id=n.native_id(+)  and i.PLA_PLACECODE=pl.PLACECODE and
+                  dep.depend_on_id=pl.dep_depend_on_id and
+                  refin.OPDIPD='I' and i.DATEDISCH  BETWEEN to_date('30-09-2023','DD-MM-YYYY') and to_date('1-10-2024','DD-MM-YYYY')";
+
+                  $SQLTOTAL_OPD_Refer="SELECT Count(ALL o.OPD_NO) as TOTAL_OPD_Refer
+                  FROM PATIENTS_REFER_HX refin,PATIENTS p,NATIVE_CODE n,CREDIT_TYPES ct,OPDS o,PLACES pl,DEPARTS dep
+                  where o.OPD_NO=refin.OPD_NO and  refin.PAT_RUN_HN=p.run_hn and  refin.PAT_YEAR_HN=p.year_hn and  p.native_id=n.native_id(+) and refin.CREDIT_ID=ct.CREDIT_ID(+) and o.PLA_PLACECODE=pl.PLACECODE and
+                  dep.depend_on_id=pl.dep_depend_on_id and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(CURRENT_DATE, 'yyyy-MM-dd')";
+
+                  $SQLTOTAL_IPD_DAED="select Count(ALL i.an) as TOTAL_IPD_DAED
+                  from IPDTRANS i,patients p
+                  where  i.hn = p.hn and  DEAD_FLAG='Y' and i.Dateadmit between to_date('30-09-2023','DD-MM-YYYY') and to_date('1-10-2024','DD-MM-YYYY')
+                  Order by Dateadmit asc";                                                                                                                          
+            ?>
             <div class="info-box">
-              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-bed"></i></span>
+              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-ambulance"></i><i class="fas fa-bed"></i></span>
               <div class="info-box-content">
-                <span class="info-box-text">จำนวน admit</span>
-                <span class="info-box-number">                   
-              <?php
-              $db=new IPDQuery();
-              try{
-                $TOTAL_IPDADMIT=$db->Total_IPDAdmit($startDate, $endDate);
-                echo $TOTAL_IPDADMIT;
-              } catch(exception $e){
-                echo "Error:". $e->getMessage();
-              }
-              ?>
+                <span class="info-box-text">จำนวน Refer ผู้ป่วยใน</span>
+                <span class="info-box-number">
+                <?php
+                if($objConnect){
+                    $stid = oci_parse($objConnect, $SQLTOTAL_IPD_Refer);
+                    oci_execute($stid);
+                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
+                      foreach ($row as $item) {
+                          echo  $item;
+                       
+                        }
+                    }
+                }
+                    else
+                    {
+                      echo "ไม่สามารถติดต่อ Oracle ได้";
+                    }
+              ?>  
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -286,20 +263,25 @@
           <!-- /.col -->
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-female"></i><i class="fas fa-male"></i><i class="far fa-smile"></i></span>
+              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-female"></i><i class="fas fa-male"></i><i class="fas fa-ambulance"></i></span>
               <div class="info-box-content">
-                <span class="info-box-text">จำนวนจำหน่าย</span>
-                <span class="info-box-number">
-              <?php
-              $db=new IPDQuery();
-              try{
-                $TOTAL_IPD_DISCH=$db->TOTAL_IPD_DISCH($startDate, $endDate);
-                echo $TOTAL_IPD_DISCH;
-              } catch(exception $e){
-                echo "Error:". $e->getMessage();
-              }
-              ?>  
-              </span>
+                <span class="info-box-text">จำนวน Refer ผู้ป่วยนอก</span>
+                <span class="info-box-number"><?php
+                if($objConnect){
+                    $stid = oci_parse($objConnect, $SQLTOTAL_OPD_Refer);
+                    oci_execute($stid);
+                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
+                      foreach ($row as $item) {
+                          echo  $item;
+                       
+                        }
+                    }
+                }
+                    else
+                    {
+                      echo "ไม่สามารถติดต่อ Oracle ได้";
+                    }
+              ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -315,17 +297,7 @@
               <span class="info-box-icon bg-info elevation-1"><i class="fas fa-ambulance"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">จำนวน Refer IN/OUT</span>
-                <span class="info-box-number">                  
-                <?php 
-              $db=new IPDQuery();
-              try{
-                $TOTAL_IPD_REFER=$db->TOTAL_IPD_REFER($startDate, $endDate);
-                echo $TOTAL_IPD_REFER;
-              } catch(exception $e){
-                echo "Error:". $e->getMessage();
-              }
-              ?>                            
-              </span>
+                <span class="info-box-number">760</span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -337,15 +309,21 @@
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-book-dead"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">จำนวนเสียชีวิต</span>
-                <span class="info-box-number">
-              <?php 
-              $db=new IPDQuery();
-              try{
-                $TOTAL_IPD_DAED=$db->TOTAL_IPD_DAED($startDate, $endDate);
-                echo $TOTAL_IPD_DAED;
-              } catch(exception $e){
-                echo "Error:". $e->getMessage();
-              }
+                <span class="info-box-number"><?php
+                if($objConnect){
+                    $stid = oci_parse($objConnect, $SQLTOTAL_IPD_DAED);
+                    oci_execute($stid);
+                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
+                      foreach ($row as $item) {
+                          echo  $item;
+                       
+                        }
+                    }
+                }
+                    else
+                    {
+                      echo "ไม่สามารถติดต่อ Oracle ได้";
+                    }
               ?>
               </span>
               </div>
@@ -355,7 +333,7 @@
           </div>
           <!-- /.col -->
         </div>
-        <!-- /.row -->
+      </div><!--/. container-fluid -->
     </section>
     <!-- /.content -->
   </div>
@@ -369,66 +347,31 @@
 
   <!-- Main Footer -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2024-2025 <a href="https://maesot.moph.go.th">ศูนย์ข้อมูลโรงพยาบาลแม่สอด</a>.</strong>
+  <strong>Copyright &copy; 2024-2025 <a href="https://maesot.moph.go.th">ศูนย์ข้อมูลโรงพยาบาลแม่สอด</a>.</strong>
     <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 1.0.0
     </div>
   </footer>
 </div>
-<!-- ./wrapper -->
-
-<!-- Bootstrap 4 -->
+<!-- Bootstrap -->
 <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- DataTables  & Plugins -->
-<script src="../plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="../plugins/jszip/jszip.min.js"></script>
-<script src="../plugins/pdfmake/pdfmake.min.js"></script>
-<script src="../plugins/pdfmake/vfs_fonts.js"></script>
-<script src="../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="../plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
-<script src="../dist/js/adminlte.min.js"></script>
-<script>
-  $(function() {
-    $('input[name="StartDateRange"]').daterangepicker({
-      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
-      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
-      locale: {
-        format: 'DD-MM-YYYY',
-        applyLabel: 'ตกลง',
-        cancelLabel: 'ยกเลิก',
-        fromLabel: 'จาก',
-        toLabel: 'ถึง',
-        customRangeLabel: 'กำหนดเอง',
-        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
-        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
-        firstDay: 1
-      }
-    });
-  });
-  $(function() {
-    $('input[name="EndDateRange"]').daterangepicker({
-      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
-      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
-      locale: {
-        format: 'DD-MM-YYYY',
-        applyLabel: 'ตกลง',
-        cancelLabel: 'ยกเลิก',
-        fromLabel: 'จาก',
-        toLabel: 'ถึง',
-        customRangeLabel: 'กำหนดเอง',
-        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
-        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
-        firstDay: 1
-      }
-    });
-  });
-</script>
+<script src="../dist/js/adminlte.js"></script>
+
+<!-- PAGE PLUGINS -->
+<!-- jQuery Mapael -->
+<script src="../plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
+<script src="../plugins/raphael/raphael.min.js"></script>
+<script src="../plugins/jquery-mapael/jquery.mapael.min.js"></script>
+<script src="../plugins/jquery-mapael/maps/usa_states.min.js"></script>
+<!-- ChartJS -->
+<script src="../plugins/chart.js/Chart.min.js"></script>
+
+<!-- AdminLTE for demo purposes -->
+<!--script src="dist/js/demo.js"></script-->
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="../dist/js/pages/dashboard2.js"></script>
 </body>
 </html>

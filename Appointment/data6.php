@@ -11,29 +11,28 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <!-- เพิ่มไฟล์ Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
-
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="../../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <link rel="stylesheet" href="../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
   <!-- iCheck -->
-  <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- JQVMap -->
-  <link rel="stylesheet" href="../../plugins/jqvmap/jqvmap.min.css">
+  <link rel="stylesheet" href="../plugins/jqvmap/jqvmap.min.css">
   <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="../../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- summernote -->
-  <link rel="stylesheet" href="../../plugins/summernote/summernote-bs4.min.css">
+  <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
   <!-- DataTables -->
-  <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="../dist/css/adminlte.min.css">
   <!-- Daterangepicker style -->
   <script src="https://cdn.jsdelivr.net/npm/daterangepicker@latest/daterangepicker.js"></script>
 
@@ -55,7 +54,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="../../index.php" class="nav-link">Home</a>
+        <a href="../index.php" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">ติดต่อ</a>
@@ -96,7 +95,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <img src="../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Brad Diesel
@@ -112,7 +111,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../../dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <img src="../dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   John Pierce
@@ -128,7 +127,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../../dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <img src="../dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Nora Silvester
@@ -188,8 +187,8 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-info elevation-4" style="background-color:rgb(10, 115, 199);">
     <!-- Brand Logo -->
-    <a href="../../index3.php" class="brand-link">
-      <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a href="../index3.php" class="brand-link">
+      <img src="../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">AdminLTE 3</span>
     </a>
 
@@ -198,7 +197,7 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">Alexander Pierce</a>
@@ -224,7 +223,7 @@
                with font-awesome or any other icon font library -->
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-layer-group"></i>
+            <i class="fas fa-layer-group"></i>
               <p>
                 ประเภทผู้ป่วย
                 <i class="right fas fa-angle-left"></i>
@@ -232,26 +231,26 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="../../index.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="../OPD/index.php" class="nav-link">
+                <i class="fas fa-wheelchair"></i>
                   <p>ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../../index2.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="../IPD/index2.php" class="nav-link">
+                <i class="fas fa-bed-pulse"></i>
                   <p>ผู้ป่วยใน</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../../index4.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="../Appointment/index4.php" class="nav-link">
+                <i class="fas fa-calendar"></i>
                   <p>ผู้ป่วยนัด</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../../index3.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="../Refer/index3.php" class="nav-link">
+                <i class="fas fa-truck-medical"></i>
                   <p>ผู้ป่วย Refer</p>
                 </a>
               </li>
@@ -267,37 +266,37 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="../tables/data.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-clock"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอย</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../tables/data5.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-bed-pulse"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอยรวมทั้งหมด</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../tables/data2.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-bed-pulse"></i>
                   <p>ชุดข้อมูลคนไข้ Admit</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data6.php" class="nav-link active">
-                  <i class="fas fa-table nav-icon"></i>
+                <a href="data6.php" class="nav-link active">
+                <i class="fas fa-database"></i><i class="fas fa-calendar"></i>
                   <p>ชุดข้อมูลคนไข้นัด</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../tables/data3.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูลคนไข้ Refer ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../tables/data4.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูลคนไข้ Refer ผู้ป่วยใน</p>
                 </a>
               </li>
@@ -319,7 +318,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="../../index.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
               <li class="breadcrumb-item active">ชุดข้อมูลประเภทนัดหมายเฉพาะผู้ป่วยนอก</li>
             </ol>
           </div>
@@ -327,11 +326,11 @@
       </div><!-- /.container-fluid -->
     </section>
     <?php
-    include '../DataAndSQL/process_department_data.php';
+    include 'process_department_data.php';
     $currentDate = date('Y-m-d');
     $startDate = $currentDate;
     $endDate = $currentDate;
-    $sqlFilePath = realpath('../sqlcommands/AppointData.sql');
+    $sqlFilePath = realpath('AppointData.sql');
     if (isset($_POST['Mark'])) {
     $Mark = $_POST['Mark'];
     // Define meanings for each value
@@ -571,7 +570,7 @@ ORDER BY
   ?>
   </div>
             <?php      
-            include('function.php');
+            include('../function.php');
             $objConnect = MSHOCI();            
             if($objConnect){
             $stid = oci_parse($objConnect, $SQLOPDComtohos);
@@ -652,22 +651,22 @@ ORDER BY
 
 
 <!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- DataTables  & Plugins -->
-<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="../../plugins/jszip/jszip.min.js"></script>
-<script src="../../plugins/pdfmake/pdfmake.min.js"></script>
-<script src="../../plugins/pdfmake/vfs_fonts.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="../plugins/jszip/jszip.min.js"></script>
+<script src="../plugins/pdfmake/pdfmake.min.js"></script>
+<script src="../plugins/pdfmake/vfs_fonts.js"></script>
+<script src="../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <!-- AdminLTE App -->
-<script src="../../dist/js/adminlte.min.js"></script>
+<script src="../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <!--script src="../../dist/js/demo.js"></script-->
 <!-- Date Rang Picker -->

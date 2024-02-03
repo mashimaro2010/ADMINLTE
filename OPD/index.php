@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Data Center | โรงพยาบาลแม่สอด</title>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <!-- jquery -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
   <!-- Google Font: Source Sans Pro -->
@@ -13,22 +17,22 @@
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- JQVMap -->
-  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+  <link rel="stylesheet" href="../plugins/jqvmap/jqvmap.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="../dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- Daterange picker -->
-  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+  <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
-  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+    <img class="animation__shake" src="../dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
   </div>
 
   <!-- Navbar -->
@@ -39,7 +43,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index.php" class="nav-link">Home</a>
+        <a href="../index.php" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">ติดต่อ</a>
@@ -57,7 +61,7 @@
       <li class="nav-item">
         <a class="nav-link" id="logoutLink" role="button">
         <i class="fas fa-right-from-bracket"></i>Logout</a>
-      </li>
+       </li>
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -66,8 +70,8 @@
   <aside class="main-sidebar sidebar-dark-info elevation-4" style="background-color:rgb(10, 115, 199);">
     <!-- Brand Logo -->
     <a href="index3.php" class="brand-link">
-      <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-2" style="opacity: .8">
-      <span class="brand-text font-weight-light">DataCenter รพ.แม่สอด</span>
+      <img src="../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-2" style="opacity: .8">
+      <span class="brand-text font-weight-light">DataCenterรพ.แม่สอด</span>
     </a>
 
     <!-- Sidebar -->
@@ -75,10 +79,22 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">Alexander Pierce</a>
+        </div>
+      </div>
+
+      <!-- SidebarSearch Form -->
+      <div class="form-inline">
+        <div class="input-group" data-widget="sidebar-search">
+          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+          <div class="input-group-append">
+            <button class="btn btn-sidebar">
+              <i class="fas fa-search fa-fw"></i>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -87,8 +103,8 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <a href="#" class="nav-link">
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link active">
               <i class="fas fa-layer-group"></i>
               <p>
                 ประเภทผู้ป่วย
@@ -97,25 +113,25 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="./opd/index.php" class="nav-link ">
+                <a href="../opd/index.php" class="nav-link active">
                   <i class="fas fa-wheelchair"></i>
                   <p>ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./IPD/index2.php" class="nav-link">
+                <a href="../IPD/index2.php" class="nav-link">
                   <i class="fas fa-bed-pulse"></i>
                   <p>ผู้ป่วยใน</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./Appointment/index4.php" class="nav-link">
+                <a href="../Appointment/index4.php" class="nav-link">
                 <i class="fas fa-calendar"></i>
                   <p>ผู้ป่วยนัด</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./refer/index3.php" class="nav-link">
+                <a href="../refer/index3.php" class="nav-link">
                 <i class="fas fa-truck-medical"></i>
                   <p>ผู้ป่วย Refer</p>
                 </a>
@@ -131,31 +147,31 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="opd/data.php" class="nav-link">
+                <a href="../pages/tables/data.php" class="nav-link">
                   <i class="fas fa-database"></i><i class="fas fa-clock"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอย</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/tables/data2.php" class="nav-link">
+                <a href="../pages/tables/data2.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-bed-pulse"></i>
                   <p>ชุดข้อมูลผู้ป่วย Admit</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/tables/data6.php" class="nav-link">
+                <a href="../pages/tables/data6.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-calendar"></i>
                   <p>ชุดข้อมูลคนไข้นัด</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/tables/data3.php" class="nav-link">
+                <a href="../pages/tables/data3.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                 <p>Refer ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/tables/data4.php" class="nav-link">
+                <a href="../pages/tables/data4.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>Refer ผู้ป่วยใน</p>
                 </a>
@@ -195,7 +211,7 @@
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <?php
-            	    include('pages/tables/function.php');
+            	    include('../pages/tables/function.php');
                   $objConnect = MSHOCI();
             ?>
             <!-- Query จำนวน VN -->
@@ -290,7 +306,7 @@
             TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(ofh.datetime,'yyyy-mm-dd')
             and OFH.OPD_NO=O.OPD_NO
             and  TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(CURRENT_DATE, 'yyyy-MM-dd') /* get Present Day */
-             and O.OPD_NO=OW.OPD_NO and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(OW.OPD_DATE,'yyyy-mm-dd')
+            and O.OPD_NO=OW.OPD_NO and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(OW.OPD_DATE,'yyyy-mm-dd')
             Group by O.OPD_NO,P.HN,P.PRENAME,P.NAME,P.SURNAME,p.SEX,o.OPD_DATE,p.BIRTHDAY,OW.CREDIT_ID,
             O.OPD_TIME,o.REACH_OPD_DATETIME,OFH.opd_finance_no,OFH.FT_TYPE_CODE,O.SCREENING_OPD_DATETIME,
             O.FINISH_OPD_DATETIME,o.RX_OPD_DATETIME,ofh.date_created
@@ -474,20 +490,20 @@
   $.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- Bootstrap -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- overlayScrollbars -->
-<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<script src="../plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
-<script src="dist/js/adminlte.js"></script>
+<script src="../dist/js/adminlte.js"></script>
 <!-- PAGE PLUGINS -->
 <!-- jQuery Mapael -->
-<script src="plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
-<script src="plugins/raphael/raphael.min.js"></script>
-<script src="plugins/jquery-mapael/jquery.mapael.min.js"></script>
-<script src="plugins/jquery-mapael/maps/usa_states.min.js"></script>
+<script src="../plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
+<script src="../plugins/raphael/raphael.min.js"></script>
+<script src="../plugins/jquery-mapael/jquery.mapael.min.js"></script>
+<script src="../plugins/jquery-mapael/maps/usa_states.min.js"></script>
 <!-- ChartJS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
-<script src="dist/js/pages/dashboard.js"></script>
+<script src="../plugins/chart.js/Chart.min.js"></script>
+<script src="../dist/js/pages/dashboard.js"></script>
 <script>
     document.getElementById('logoutLink').addEventListener('click', function() {
         window.location.href = 'logout.php';
