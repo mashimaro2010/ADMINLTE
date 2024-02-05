@@ -257,11 +257,7 @@
         </h1>
         </div>  
           <div class="col-12 col-sm-6 col-md-3">
-          <!-- Query version แรก -->            
-          <?php
-            	    include('../pages/tables/function.php');
-                  $objConnect = MSHOCI();
-          ?>
+         
             <!-- Query จำนวน admit -->
             <div class="info-box">
               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-bed"></i></span>

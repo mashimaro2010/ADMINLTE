@@ -26,6 +26,8 @@
   <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
+  <!-- Daterangepicker style -->
+  <script src="https://cdn.jsdelivr.net/npm/daterangepicker@latest/daterangepicker.js"></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -181,18 +183,50 @@
         </ul>
       </nav>
     </div>
+    <?php
+    require_once 'OPDQuery.php';
+    $currentDate = date('d-m-Y');
+    $startDate = $currentDate;
+    $endDate = $currentDate;
+    if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
+      $startDateTime = DateTime::createFromFormat('d-m-Y', $_POST['StartDateRange']);
+      $endDateTime = DateTime::createFromFormat('d-m-Y', $_POST['EndDateRange']);
+  
+      if ($startDateTime && $endDateTime) {
+          // หากการสร้าง DateTime สำเร็จ
+          $startDate = $startDateTime->format('d-m-Y');
+          $endDate = $endDateTime->format('d-m-Y');
+      } else {
+          // การสร้าง DateTime ล้มเหลว, จัดการข้อผิดพลาดที่นี่
+          $startDate = '01-10-2022';
+          $endDate = '30-09-2023';
+      }
+  } else {
+      // ถ้าไม่มีข้อมูลที่ส่งมา กำหนดวันที่เริ่มต้นและสิ้นสุดเป็นค่าเริ่มต้น
+      $startDate = $currentDate;
+      $endDate = $currentDate;
+  }
+    ?>
   </aside>
-
+  <form id="date-form" method="post">
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">ประเภทผู้ป่วยนอก</h1>
+        <div class="col-sm-3">
+            <h1 class="m-0">ประเภทผู้ป่วยนอก</h1>            
           </div><!-- /.col -->
-          <div class="col-sm-6">
+          <div class="col-sm-7 form-group">
+                <label for="start-date">วันที่เริ่ม :</label>
+                <input type="text" name="StartDateRange" id="start-date">
+                <label for="end-date">วันที่สิ้นสุด :</label>
+                <input type="text" name="EndDateRange" id="end-date">
+                <label for="Mark">ตรวจแล้ว :</label>            
+                <button type="submit">ค้นหา</button> 
+          </div>
+          <div class="col-sm-2">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
               <li class="breadcrumb-item active">ผู้ป่วยนอก</li>
@@ -202,42 +236,22 @@
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
+    </form>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-          <div class="col-lg-3 col-6">
+        <div class="row col-12" style="text-align:center; font-size: 22px; font-weight: bold; color: blue;">
+        <h1 style="text-align:center; margin: 0 auto;">
+        วันที่เริ่ม:<?php echo $startDate?> วันที่สิ้นสุด:<?php echo $endDate?> 
+        </h1>
+        </div>  
+          <div class="col-12 col-sm-6 col-md-3">
             <!-- small box -->
             <?php
             	    include('../pages/tables/function.php');
                   $objConnect = MSHOCI();
-            ?>
-            <!-- Query จำนวน VN -->
-            <?php
-                  $SQLAllVisits="SELECT Sum(Count(DISTINCT OPD_NO)) as ALLVISITS
-                  from (SELECT O.OPD_NO,P.HN,P.PRENAME||''||P.NAME||' '||P.SURNAME as psname,OW.CREDIT_ID,
-                  TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')||' '||TO_CHAR(o.OPD_TIME,'HH24:MI:ss') as Open_Visit_Time,
-                  TO_CHAR(o.REACH_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.REACH_OPD_DATETIME,'HH24:MI:ss') as Start_opd_time,
-                  TO_CHAR(O.SCREENING_OPD_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(O.SCREENING_OPD_DATETIME,'HH24:MI:ss') as Screen_opd_time,
-                  TO_CHAR(O.FINISH_OPD_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(O.FINISH_OPD_DATETIME,'HH24:MI:ss') as Finish_opd_time,
-                  (Select Max(To_Char(drw.MAIN_DATE,'yyyy-mm-dd')||' '||TO_CHAR(drw.MAIN_TIME,'HH24:MI:ss')) From data_drug_wh drw where drw.HN=P.HN
-                  and TO_CHAR(drw.MAIN_DATE,'yyyy-mm-dd')=TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')) as Doctor_Entry,
-                  (select Max(To_Char(OFH.ALREADY_RECEIVE_DRUG_DATE,'yyyy-mm-dd')||' '||TO_CHAR(OFH.ALREADY_RECEIVE_DRUG_DATE,'HH24:MI:ss'))
-                  from OPD_FINANCE_HEADERS OFH where OFH.OPD_NO=O.OPD_NO and OFH.FT_TYPE_CODE='03' ) as Received_Drug_Time
-                  from OPDS O,PATIENTS P,OPD_FINANCE_HEADERS OFH,OPD_WAREHOUSE OW
-                  WHERE O.PAT_RUN_HN=P.RUN_HN and O.PAT_YEAR_HN=P.YEAR_HN AND
-                  TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(ofh.datetime,'yyyy-mm-dd')
-                  and OFH.OPD_NO=O.OPD_NO
-                  and  TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(CURRENT_DATE, 'yyyy-MM-dd') /* get Present Day */
-                   and O.OPD_NO=OW.OPD_NO and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(OW.OPD_DATE,'yyyy-mm-dd')
-                  Group by O.OPD_NO,P.HN,P.PRENAME,P.NAME,P.SURNAME,p.SEX,o.OPD_DATE,p.BIRTHDAY,OW.CREDIT_ID,
-                  O.OPD_TIME,o.REACH_OPD_DATETIME,OFH.opd_finance_no,OFH.FT_TYPE_CODE,O.SCREENING_OPD_DATETIME,
-                  O.FINISH_OPD_DATETIME,o.RX_OPD_DATETIME,ofh.date_created
-                  Order By HN,OPD_NO asc)  Temp  Group by HN,PSNAME,CREDIT_ID,
-                  OPEN_VISIT_TIME,START_OPD_TIME,SCREEN_OPD_TIME,FINISH_OPD_TIME,Doctor_Entry,
-                  RECEIVED_DRUG_TIME Order by HN,OPD_NO";
             ?>
             <!-- Query จำนวน DoneScreen -->
             <?php
@@ -316,25 +330,17 @@
             ?>
             <div class="small-box bg-warning">
               <div class="inner">
-                <h2 class="font-weight-bold success-lighter-hover mb-2">
-                  <?php
-                if($objConnect){
-                    $stid = oci_parse($objConnect, $SQLAllVisits);
-                    oci_execute($stid);
-                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
-                      foreach ($row as $item) {
-                          echo  $item;
-                       
-                        }
-                    }
-                }
-                    else
-                    {
-                      echo "ไม่สามารถติดต่อ Oracle ได้";
-                    }
-              ?>
-              </h2>
-                <p>จำนวน VN</p>
+                <h4 class="font-weight-bold success-lighter-hover mb-2">Visit ทั้งหมดวันนี้
+            <?php
+            $db=new OPDQuery();
+            try{
+              $TOTAL_OPDVISIT=$db->TOTAL_OPDVISIT($startDate, $endDate);
+              echo $TOTAL_OPDVISIT;
+            } catch(exception $e){
+              echo "Error:". $e->getMessage();
+            }
+            ?>              
+              </h4>
               </div>
               <div class="icon">
                 <i class="fas fa-hospital-alt"></i>
@@ -347,23 +353,17 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3><?php
-                if($objConnect){
-                    $stid = oci_parse($objConnect, $SQLDoneScreen);
-                    oci_execute($stid);
-                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
-                      foreach ($row as $item) {
-                          echo  $item;
-                       
-                        }
-                    }
-                }
-                    else
-                    {
-                      echo "ไม่สามารถติดต่อ Oracle ได้";
-                    }
-              ?></h3>
-                <p>จำนวนคัดกรอง</p>
+                <h4>คัดกรองไปแล้ว
+            <?php            
+            $db=new OPDQuery();
+            try{
+              $TOTAL_OPDSCREEN=$db->TOTAL_OPDSCREEN($startDate, $endDate);
+              echo $TOTAL_OPDSCREEN;
+            } catch(exception $e){
+              echo "Error:". $e->getMessage();
+            }
+            ?>
+            </h4>
               </div>
               <div class="icon">
                 <i class="fas fa-user-nurse"></i>
@@ -376,24 +376,17 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3><?php
-                if($objConnect){
-                    $stid = oci_parse($objConnect, $SQLDoneDoctor);
-                    oci_execute($stid);
-                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
-                      foreach ($row as $item) {
-                          echo  $item;
-                       
-                        }
+                <h4>พบแพทย์ไปแล้ว
+              <?php             
+                    $db=new OPDQuery();
+                    try{
+                      $DONEDOCTOR=$db->DONEDOCTOR($startDate, $endDate);
+                      echo $DONEDOCTOR;
+                    } catch(exception $e){
+                      echo "Error:". $e->getMessage();
                     }
-                }
-                    else
-                    {
-                      echo "ไม่สามารถติดต่อ Oracle ได้";
-                    }
-              ?></h3>
-
-                <p>จำนวนพบแพทย์</p>
+              ?>
+              Visit</h4>
               </div>
               <div class="icon">
                 <i class="fas fa-user-md"></i>
@@ -406,24 +399,17 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3><?php
-                if($objConnect){
-                    $stid = oci_parse($objConnect, $SQLReceivedDrug);
-                    oci_execute($stid);
-                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
-                      foreach ($row as $item) {
-                          echo  $item;
-                       
-                        }
+                <h4>รับยาแล้ว
+                <?php             
+                    $db=new OPDQuery();
+                    try{
+                      $TOTAL_OPDMEDICINE=$db->TOTAL_OPDMEDICINE($startDate, $endDate);
+                      echo $TOTAL_OPDMEDICINE;
+                    } catch(exception $e){
+                      echo "Error:". $e->getMessage();
                     }
-                }
-                    else
-                    {
-                      echo "ไม่สามารถติดต่อ Oracle ได้";
-                    }
-              ?></h3>
-
-                <p>จำนวนรับยา</p>
+                ?>                  
+                </h4>
               </div>
               <div class="icon">
                 <i class="fas fa-prescription"></i>
@@ -436,7 +422,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>65</h3>
+                <h4>65</h4>
 
                 <p>ระยะเวลารอคอย</p>
               </div>
@@ -451,7 +437,7 @@
             <!-- small box -->
             <div class="small-box bg-gradient-primary">
               <div class="inner">
-                <h3>65</h3>
+                <h4>65</h4>
 
                 <p>จำนวน refer in/out</p>
               </div>
@@ -485,6 +471,8 @@
 </div>
 <!-- ./wrapper -->
 
+<!-- Bootstrap 4 -->
+<script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
   $.widget.bridge('uibutton', $.ui.button)
@@ -508,6 +496,42 @@
     document.getElementById('logoutLink').addEventListener('click', function() {
         window.location.href = 'logout.php';
     });
-  </script>
+</script>
+<script>
+  $(function() {
+    $('input[name="StartDateRange"]').daterangepicker({
+      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
+      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
+      locale: {
+        format: 'DD-MM-YYYY',
+        applyLabel: 'ตกลง',
+        cancelLabel: 'ยกเลิก',
+        fromLabel: 'จาก',
+        toLabel: 'ถึง',
+        customRangeLabel: 'กำหนดเอง',
+        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        firstDay: 1
+      }
+    });
+  });
+  $(function() {
+    $('input[name="EndDateRange"]').daterangepicker({
+      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
+      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
+      locale: {
+        format: 'DD-MM-YYYY',
+        applyLabel: 'ตกลง',
+        cancelLabel: 'ยกเลิก',
+        fromLabel: 'จาก',
+        toLabel: 'ถึง',
+        customRangeLabel: 'กำหนดเอง',
+        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        firstDay: 1
+      }
+    });
+  });
+</script>
 </body>
 </html>
