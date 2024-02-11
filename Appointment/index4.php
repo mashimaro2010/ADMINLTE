@@ -147,7 +147,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index3.php" class="nav-link">
+                <a href="../Refer/index3.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>ผู้ป่วย Refer</p>
                 </a>

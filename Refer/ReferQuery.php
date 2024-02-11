@@ -1,5 +1,5 @@
 <?php
-class OPDQuery{
+class ReferQuery{
     private $connection;
 
     public function __construct() {
@@ -9,6 +9,132 @@ class OPDQuery{
             $m = oci_error();
             throw new Exception('Cannot connect to database: ' . $m['message']);
         }
+    }
+
+    public function TOTAL_REFER_IPD($startDate, $endDate){       
+        $sql="SELECT Count(ALL i.AN) as TOTAL_REFER_IPD
+        FROM PATIENTS_REFER_HX refin,IPDTRANS i,PATIENTS p,CREDIT_TYPES ct,NATIVE_CODE n,PLACES pl,DEPARTS dep
+        where i.an=refin.an and i.hn=p.hn and refin.CREDIT_ID=ct.CREDIT_ID(+) and  p.native_id=n.native_id(+)  and i.PLA_PLACECODE=pl.PLACECODE and
+        dep.depend_on_id=pl.dep_depend_on_id and
+        refin.OPDIPD='I' and i.DATEDISCH  BETWEEN to_date(:startDate,'DD-MM-YYYY') and to_date(:endDate,'DD-MM-YYYY')";
+        $statement = oci_parse($this->connection, $sql);
+        // ผูกตัวแปร
+        oci_bind_by_name($statement, ":startDate", $startDate);
+        oci_bind_by_name($statement, ":endDate", $endDate);
+    
+        // รัน query และตรวจสอบข้อผิดพลาด
+        if (!oci_execute($statement)) {
+            $error = oci_error($statement);
+            throw new Exception("Query execution failed: " . $error['message']);
+        }
+        $row = oci_fetch_assoc($statement);
+        return $TOTAL_REFER_IPD = isset($row['TOTAL_REFER_IPD']) ? $row['TOTAL_REFER_IPD'] : 0; // กำหนดค่าเริ่มต้นเป็น 0 ถ้าไม่มีข้อมูล
+    }    
+
+    public function TOTAL_REFER_OPD($startDate, $endDate){
+
+        $sql="SELECT COUNT(*) AS TOTAL_REFER_OPD
+        FROM (
+            SELECT CONCAT(refin.PAT_RUN_HN, '/' || refin.PAT_YEAR_HN) AS HN,
+                   refin.refertype,
+                   refin.hos_in_card,
+                   TO_CHAR(refin.refer_in_datetime,'dd-mm-yyyy') AS ReferINDate,
+                   refin.refer_out_datetime,
+                   refin.pla_placecode,
+                   refin.opd_no,
+                   refin.OPDIPD,
+                   p.DEAD_FLAG,
+                   ROW_NUMBER() OVER (PARTITION BY CONCAT(refin.PAT_RUN_HN, '/' || refin.PAT_YEAR_HN) ORDER BY refin.refer_in_datetime) AS row_num
+            FROM PATIENTS_REFER_HX refin, patients p
+            WHERE p.run_hn=refin.PAT_RUN_HN
+              AND p.year_hn=refin.PAT_YEAR_HN
+              AND p.DEAD_FLAG is NULL
+              AND OPDIPD IN ('O')
+              AND refin.opd_no IS NOT NULL
+              AND TO_CHAR(refin.refer_in_datetime,'dd-mm-yyyy') BETWEEN :startDate and :endDate)
+        WHERE row_num = 1";
+        $statement = oci_parse($this->connection, $sql);
+        // ผูกตัวแปร
+        oci_bind_by_name($statement, ":startDate", $startDate);
+        oci_bind_by_name($statement, ":endDate", $endDate);
+    
+        // รัน query และตรวจสอบข้อผิดพลาด
+        if (!oci_execute($statement)) {
+            $error = oci_error($statement);
+            throw new Exception("Query execution failed: " . $error['message']);
+        }
+        $row = oci_fetch_assoc($statement);
+        return $TOTAL_REFER_OPD = isset($row['TOTAL_REFER_OPD']) ? $row['TOTAL_REFER_OPD'] : 0; // กำหนดค่าเริ่มต้นเป็น 0 ถ้าไม่มีข้อมูล
+    }
+
+    public function TOTAL_REFER_ALL($startDate, $endDate){       
+        $sql="SELECT COUNT(*) AS TOTAL_REFER_ALL
+        FROM (
+            SELECT CONCAT(refin.PAT_RUN_HN, '/' || refin.PAT_YEAR_HN) AS HN,
+                   refin.refertype,
+                   refin.hos_in_card,
+                   TO_CHAR(refin.refer_in_datetime,'dd-mm-yyyy') AS ReferINDate,
+                   refin.refer_out_datetime,
+                   refin.pla_placecode,
+                   refin.opd_no,
+                   refin.OPDIPD,
+                   p.DEAD_FLAG,
+                   ROW_NUMBER() OVER (PARTITION BY CONCAT(refin.PAT_RUN_HN, '/' || refin.PAT_YEAR_HN) ORDER BY refin.refer_in_datetime) AS row_num
+            FROM PATIENTS_REFER_HX refin, patients p
+            WHERE p.run_hn=refin.PAT_RUN_HN
+              AND p.year_hn=refin.PAT_YEAR_HN
+              AND p.DEAD_FLAG is NULL
+              AND OPDIPD IN ('I','O')
+              AND refin.opd_no IS NOT NULL
+              AND TO_CHAR(refin.refer_in_datetime,'dd-mm-yyyy') BETWEEN :startDate and :endDate)
+        WHERE row_num = 1";
+        $statement = oci_parse($this->connection, $sql);
+        // ผูกตัวแปร
+        oci_bind_by_name($statement, ":startDate", $startDate);
+        oci_bind_by_name($statement, ":endDate", $endDate);
+    
+        // รัน query และตรวจสอบข้อผิดพลาด
+        if (!oci_execute($statement)) {
+            $error = oci_error($statement);
+            throw new Exception("Query execution failed: " . $error['message']);
+        }
+        $row = oci_fetch_assoc($statement);
+        return $TOTAL_REFER_ALL = isset($row['TOTAL_REFER_ALL']) ? $row['TOTAL_REFER_ALL'] : 0; // กำหนดค่าเริ่มต้นเป็น 0 ถ้าไม่มีข้อมูล
+    }
+
+    public function TOTAL_REFER_DEAD($startDate, $endDate){       
+        $sql="SELECT COUNT(*) AS TOTAL_REFER_DEAD
+        FROM (
+            SELECT CONCAT(refin.PAT_RUN_HN, '/' || refin.PAT_YEAR_HN) AS HN,
+                   refin.refertype,
+                   refin.hos_in_card,
+                   TO_CHAR(refin.refer_in_datetime,'dd-mm-yyyy') AS ReferINDate,
+                   refin.refer_out_datetime,
+                   refin.pla_placecode,
+                   refin.opd_no,
+                   refin.OPDIPD,
+                   p.DEAD_FLAG,
+                   ROW_NUMBER() OVER (PARTITION BY CONCAT(refin.PAT_RUN_HN, '/' || refin.PAT_YEAR_HN) ORDER BY refin.refer_in_datetime) AS row_num
+            FROM PATIENTS_REFER_HX refin, patients p
+            WHERE p.run_hn=refin.PAT_RUN_HN
+              AND p.year_hn=refin.PAT_YEAR_HN
+              AND p.DEAD_FLAG='Y'
+              AND OPDIPD IN ('I','O')
+              AND refin.opd_no IS NOT NULL
+              AND TO_CHAR(refin.refer_in_datetime,'dd-mm-yyyy') BETWEEN :startDate and :endDate)
+        WHERE row_num = 1";
+        $statement = oci_parse($this->connection, $sql);
+        // ผูกตัวแปร
+        oci_bind_by_name($statement, ":startDate", $startDate);
+        oci_bind_by_name($statement, ":endDate", $endDate);
+    
+        // รัน query และตรวจสอบข้อผิดพลาด
+        if (!oci_execute($statement)) {
+            $error = oci_error($statement);
+            throw new Exception("Query execution failed: " . $error['message']);
+        }
+        $row = oci_fetch_assoc($statement);
+        return $TOTAL_REFER_DEAD = isset($row['TOTAL_REFER_DEAD']) ? $row['TOTAL_REFER_DEAD'] : 0; // กำหนดค่าเริ่มต้นเป็น 0 ถ้าไม่มีข้อมูล
     }
 
     public function TOTAL_OPDVISIT($startDate, $endDate){       
@@ -26,7 +152,7 @@ class OPDQuery{
         WHERE O.PAT_RUN_HN=P.RUN_HN and O.PAT_YEAR_HN=P.YEAR_HN AND
         TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(ofh.datetime,'yyyy-mm-dd')
         and OFH.OPD_NO=O.OPD_NO
-        and TO_CHAR(o.OPD_DATE,'dd-mm-yyyy') between :startDate and :endDate /* GET Between Day */
+        and TO_CHAR(o.OPD_DATE,'dd-mm-yyyy') between :startDate and :endDate /* get Present Day */ /* get Present Day */
         and O.OPD_NO=OW.OPD_NO and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(OW.OPD_DATE,'yyyy-mm-dd')
         Group by O.OPD_NO,P.HN,P.PRENAME,P.NAME,P.SURNAME,p.SEX,o.OPD_DATE,p.BIRTHDAY,OW.CREDIT_ID,
         O.OPD_TIME,o.REACH_OPD_DATETIME,OFH.opd_finance_no,OFH.FT_TYPE_CODE,O.SCREENING_OPD_DATETIME,

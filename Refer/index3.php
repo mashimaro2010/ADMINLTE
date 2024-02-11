@@ -4,8 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Data Center | โรงพยาบาลแม่สอด</title>
-  <!-- jquery -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome Icons-->
@@ -115,19 +117,19 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="./index.php" class="nav-link">
+                <a href="../OPD/index.php" class="nav-link">
                 <i class="fas fa-wheelchair"></i>
                   <p>ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index2.php" class="nav-link">
+                <a href="../IPD/index2.php" class="nav-link">
                 <i class="fas fa-bed-pulse"></i>
                   <p>ผู้ป่วยใน</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index4.php" class="nav-link">
+                <a href="../Appointment/index4.php" class="nav-link">
                 <i class="fas fa-calendar"></i>
                   <p>ผู้ป่วยนัด</p>
                 </a>
@@ -183,22 +185,54 @@
         </ul>
       </nav>
     </div>
+    <?php
+    require_once 'ReferQuery.php';
+    $currentDate = date('d-m-Y');
+    $startDate = $currentDate;
+    $endDate = $currentDate;
+    if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
+      $startDateTime = DateTime::createFromFormat('d-m-Y', $_POST['StartDateRange']);
+      $endDateTime = DateTime::createFromFormat('d-m-Y', $_POST['EndDateRange']);
+  
+      if ($startDateTime && $endDateTime) {
+          // หากการสร้าง DateTime สำเร็จ
+          $startDate = $startDateTime->format('d-m-Y');
+          $endDate = $endDateTime->format('d-m-Y');
+      } else {
+          // การสร้าง DateTime ล้มเหลว, จัดการข้อผิดพลาดที่นี่
+          $startDate = '01-10-2023';
+          $endDate = '30-09-2024';
+      }
+      } else {
+      // ถ้าไม่มีข้อมูลที่ส่งมา กำหนดวันที่เริ่มต้นและสิ้นสุดเป็นค่าเริ่มต้น
+      $startDate = $currentDate;
+      $endDate = $currentDate;
+      }
+    ?>
   </aside>
-
+  <form id="date-form" method="post">
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">ประเภทผู้ป่วย Refer</h1>
+      <div class="row mb-2">
+        <div class="col-sm-3">
+            <h1 class="m-0">ประเภทผู้ป่วย Refer</h1>            
           </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
+          <div class="col-sm-7 form-group">
+                <label for="start-date">วันที่เริ่ม :</label>
+                <input type="text" name="StartDateRange" id="start-date">
+                <label for="end-date">วันที่สิ้นสุด :</label>
+                <input type="text" name="EndDateRange" id="end-date">
+                <label for="Mark">ตรวจแล้ว :</label>            
+                <button type="submit">ค้นหา</button> 
+          </div>        
+        <div class="row mb-2">
+          <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">ผู้ป่วยใน</li>
-            </ol>
+              <li class="breadcrumb-item active">ผู้ป่วย Refer</li>
+          </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -210,6 +244,11 @@
       <div class="container-fluid">
         <!-- Info boxes -->
         <div class="row">
+        <div class="row col-12" style="text-align:center; font-size: 22px; font-weight: bold; color: blue;">
+        <h1 style="text-align:center; margin: 0 auto;">
+        วันที่เริ่ม:<?php echo $startDate?> วันที่สิ้นสุด:<?php echo $endDate?> 
+        </h1>
+        </div> 
           <div class="col-12 col-sm-6 col-md-3">
           <?php
             	    include('../pages/tables/function.php');
@@ -239,20 +278,13 @@
                 <span class="info-box-text">จำนวน Refer ผู้ป่วยใน</span>
                 <span class="info-box-number">
                 <?php
-                if($objConnect){
-                    $stid = oci_parse($objConnect, $SQLTOTAL_IPD_Refer);
-                    oci_execute($stid);
-                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
-                      foreach ($row as $item) {
-                          echo  $item;
-                       
-                        }
-                    }
-                }
-                    else
-                    {
-                      echo "ไม่สามารถติดต่อ Oracle ได้";
-                    }
+            $db=new ReferQuery();
+            try{
+              $TOTAL_REFER_IPD=$db->TOTAL_REFER_IPD($startDate, $endDate);
+              echo $TOTAL_REFER_IPD;
+            } catch(exception $e){
+              echo "Error:". $e->getMessage();
+            }
               ?>  
                 </span>
               </div>
@@ -266,22 +298,17 @@
               <span class="info-box-icon bg-info elevation-1"><i class="fas fa-female"></i><i class="fas fa-male"></i><i class="fas fa-ambulance"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">จำนวน Refer ผู้ป่วยนอก</span>
-                <span class="info-box-number"><?php
-                if($objConnect){
-                    $stid = oci_parse($objConnect, $SQLTOTAL_OPD_Refer);
-                    oci_execute($stid);
-                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
-                      foreach ($row as $item) {
-                          echo  $item;
-                       
-                        }
+                <span class="info-box-number">
+                  <?php
+                    $db=new ReferQuery();
+                    try{
+                      $TOTAL_REFER_OPD=$db->TOTAL_REFER_OPD($startDate, $endDate);
+                      echo $TOTAL_REFER_OPD;
+                    } catch(exception $e){
+                      echo "Error:". $e->getMessage();
                     }
-                }
-                    else
-                    {
-                      echo "ไม่สามารถติดต่อ Oracle ได้";
-                    }
-              ?></span>
+                  ?>
+              </span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -297,7 +324,17 @@
               <span class="info-box-icon bg-info elevation-1"><i class="fas fa-ambulance"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">จำนวน Refer IN/OUT</span>
-                <span class="info-box-number">760</span>
+                <span class="info-box-number">
+                <?php
+                    $db=new ReferQuery();
+                    try{
+                      $TOTAL_REFER_ALL=$db->TOTAL_REFER_ALL($startDate, $endDate);
+                      echo $TOTAL_REFER_ALL;
+                    } catch(exception $e){
+                      echo "Error:". $e->getMessage();
+                    }
+                  ?>
+                </span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -309,22 +346,16 @@
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-book-dead"></i></span>
               <div class="info-box-content">
                 <span class="info-box-text">จำนวนเสียชีวิต</span>
-                <span class="info-box-number"><?php
-                if($objConnect){
-                    $stid = oci_parse($objConnect, $SQLTOTAL_IPD_DAED);
-                    oci_execute($stid);
-                    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {	
-                      foreach ($row as $item) {
-                          echo  $item;
-                       
-                        }
+                <span class="info-box-number">
+              <?php
+                    $db=new ReferQuery();
+                    try{
+                      $TOTAL_REFER_DEAD=$db->TOTAL_REFER_DEAD($startDate, $endDate);
+                      echo $TOTAL_REFER_DEAD;
+                    } catch(exception $e){
+                      echo "Error:". $e->getMessage();
                     }
-                }
-                    else
-                    {
-                      echo "ไม่สามารถติดต่อ Oracle ได้";
-                    }
-              ?>
+                  ?>
               </span>
               </div>
               <!-- /.info-box-content -->
@@ -352,14 +383,24 @@
       <b>Version</b> 1.0.0
     </div>
   </footer>
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
 </div>
+<script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
 <!-- Bootstrap -->
 <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- overlayScrollbars -->
 <script src="../plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../dist/js/adminlte.js"></script>
-
+<!-- overlayScrollbars -->
+<script src="../plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- PAGE PLUGINS -->
 <!-- jQuery Mapael -->
 <script src="../plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
@@ -368,10 +409,42 @@
 <script src="../plugins/jquery-mapael/maps/usa_states.min.js"></script>
 <!-- ChartJS -->
 <script src="../plugins/chart.js/Chart.min.js"></script>
-
-<!-- AdminLTE for demo purposes -->
-<!--script src="dist/js/demo.js"></script-->
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="../dist/js/pages/dashboard2.js"></script>
+<script>
+  $(function() {
+    $('input[name="StartDateRange"]').daterangepicker({
+      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
+      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
+      locale: {
+        format: 'DD-MM-YYYY',
+        applyLabel: 'ตกลง',
+        cancelLabel: 'ยกเลิก',
+        fromLabel: 'จาก',
+        toLabel: 'ถึง',
+        customRangeLabel: 'กำหนดเอง',
+        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        firstDay: 1
+      }
+    });
+  });
+  $(function() {
+    $('input[name="EndDateRange"]').daterangepicker({
+      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
+      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
+      locale: {
+        format: 'DD-MM-YYYY',
+        applyLabel: 'ตกลง',
+        cancelLabel: 'ยกเลิก',
+        fromLabel: 'จาก',
+        toLabel: 'ถึง',
+        customRangeLabel: 'กำหนดเอง',
+        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        firstDay: 1
+      }
+    });
+  });
+</script>
 </body>
 </html>

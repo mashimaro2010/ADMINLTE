@@ -129,13 +129,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index2.php" class="nav-link active">
+                <a href="index2.php" class="nav-link active">
                 <i class="fas fa-bed-pulse"></i>
                   <p>ผู้ป่วยใน</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index4.php" class="nav-link">
+                <a href="../Appointment/index4.php" class="nav-link">
                 <i class="fas fa-calendar"></i>
                   <p>ผู้ป่วยนัด</p>
                 </a>
