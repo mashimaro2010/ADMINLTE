@@ -228,7 +228,7 @@
                 <label for="Mark">ตรวจแล้ว :</label>            
                 <button type="submit">ค้นหา</button> 
           </div>        
-        <div class="row mb-2">
+        <div class="col-sm-2">
           <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
               <li class="breadcrumb-item active">ผู้ป่วย Refer</li>
