@@ -155,7 +155,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/tables/data4.php" class="nav-link">
+                <a href="Refer/data4.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>Refer ผู้ป่วยใน</p>
                 </a>

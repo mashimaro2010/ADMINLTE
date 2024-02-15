@@ -4,31 +4,39 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ชุดข้อมูล Refer ผู้ป่วยใน</title>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <!-- เพิ่มไฟล์ Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <!-- Font Awesome Icons-->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <link rel="stylesheet" href="../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
   <!-- iCheck -->
-  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- JQVMap -->
-  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+  <link rel="stylesheet" href="../plugins/jqvmap/jqvmap.min.css">
   <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+  <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- summernote -->
-  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+  <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
   <!-- DataTables -->
-  <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+  <!-- Daterangepicker style -->
+  <script src="https://cdn.jsdelivr.net/npm/daterangepicker@latest/daterangepicker.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -40,7 +48,7 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="../../index.php" class="nav-link">Home</a>
+        <a href="../index.php" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">ติดต่อ</a>
@@ -81,7 +89,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <img src="../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Brad Diesel
@@ -97,7 +105,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../../dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <img src="../dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   John Pierce
@@ -113,7 +121,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../../dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <img src="../dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Nora Silvester
@@ -173,8 +181,8 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-info elevation-4" style="background-color:rgb(10, 115, 199);">
     <!-- Brand Logo -->
-    <a href="../../index3.php" class="brand-link">
-      <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a href="../index3.php" class="brand-link">
+      <img src="../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">AdminLTE 3</span>
     </a>
 
@@ -183,7 +191,7 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">Alexander Pierce</a>
@@ -209,7 +217,7 @@
                with font-awesome or any other icon font library -->
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-layer-group"></i>
+              <i class="fas fa-layer-group"></i>
               <p>
                 ประเภทผู้ป่วย
                 <i class="right fas fa-angle-left"></i>
@@ -217,20 +225,26 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="../../index.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="../index.php" class="nav-link">
+                  <i class="fas fa-wheelchair"></i>
                   <p>ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../../index2.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="../index2.php" class="nav-link">
+                  <i class="fas fa-bed-pulse"></i>
                   <p>ผู้ป่วยใน</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../../index2.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="../Appointment/index4.php" class="nav-link">
+                <i class="fas fa-calendar"></i>
+                  <p>ผู้ป่วยนัด</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="../Refer/index3.php" class="nav-link">
+                  <i class="fas fa-truck-medical"></i>
                   <p>ผู้ป่วย Refer</p>
                 </a>
               </li>
@@ -244,35 +258,36 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="../tables/data.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+            <li class="nav-item">
+                <a href="opd/data.php" class="nav-link">
+                  <i class="fas fa-database"></i><i class="fas fa-clock"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอย</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data2.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
-                  <p>ชุดข้อมูลคนไข้ Admit</p>
+                <a href="pages/tables/data2.php" class="nav-link">
+                <i class="fas fa-database"></i><i class="fas fa-bed-pulse"></i>
+                  <p>ชุดข้อมูลผู้ป่วย Admit</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data6.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <a href="pages/tables/data6.php" class="nav-link">
+                <i class="fas fa-database"></i><i class="fas fa-calendar"></i>
                   <p>ชุดข้อมูลคนไข้นัด</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data3.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
-                  <p>ชุดข้อมูลคนไข้ Refer ผู้ป่วยนอก</p>
+                <a href="data3.php" class="nav-link">
+                <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
+                <p>Refer ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data4.php" class="nav-link active">
-                  <i class="fas fa-table nav-icon"></i>
-                  <p>ชุดข้อมูลคนไข้ Refer ผู้ป่วยใน</p>
+                <a href="data4.php" class="nav-link active">
+                <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
+                  <p>Refer ผู้ป่วยใน</p>
                 </a>
+              </li>
               </li>
         </ul>
       </nav>
@@ -280,26 +295,52 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-
+  <form id="date-form" method="post">
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3">
             <h1>ชุดข้อมูล Refer ผู้ป่วยใน</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="../../index.php">Home</a></li>
-              <li class="breadcrumb-item active">ชุดข้อมูล Refer ผู้ป่วยใน</li>
-            </ol>
-          </div>
         </div>
-      </div><!-- /.container-fluid -->
+        <div class="col-sm-7 d-flex-center">
+          <label for="start-date">วันที่เริ่ม :</label>
+          <input type="text" name="StartDateRange" class="custom-input"/>
+          <label for="end-date">วันที่สิ้นสุด :</label>
+          <input type="text" Name="EndDateRange" class="custom-input"/>
+          <button type="submit">ค้นหา</button>
+        </div>
+        <div class="col-sm-2">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
+                <li class="breadcrumb-item active">ชุดข้อมูล Refer ผู้ป่วยใน</li>
+            </ol>
+        </div>
+    </div>
+    </div>
     </section>
+    </form>
 
+    <?php
+    if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
+      // ถ้ามีการส่งค่า POST มา เราสามารถนำค่ามาเก็บไว้ในตัวแปรตามที่ต้องการ
+      $startDate = $_POST['StartDateRange'];
+      $endDate = $_POST['EndDateRange'];
+  
+      // ทำสิ่งที่ต้องการกับ $startDate และ $endDate ที่ได้รับจาก POST
+  } else {
+      // หากไม่มีการส่งค่า POST มา
+      // คุณสามารถกำหนดค่าเริ่มต้นให้กับ $startDate และ $endDate ได้ที่นี่
+      $currentDate = date('d-m-Y');
+      $startDate = $currentDate;
+      $endDate = $currentDate;
+  
+      // ทำสิ่งที่ต้องการเมื่อไม่มีการส่งค่า POST มา
+  }
+                
+    ?>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -308,40 +349,26 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">ชุดข้อมูล Refer ผู้ป่วยใน</h3>
+                <div style="text-align:center; font-size: 22px; font-weight: bold; color: blue;">
+                <?php               
+              echo "<h2> วันที่เริ่ม : ".$startDate." วันที่สิ้นสุด: ".$endDate;
+              ?>
               </div>
+              </div>
+
               <!-- Function Connect Oracle Data Base -->
             <?php 
-            include('function.php');
-            $objConnect = MSHOCI();
-            $SQLRefer="SELECT 'OUT' as Ref,decode(refin.OPDIPD,'O','OPD','IPD') as Depart,TO_CHAR(decode(refin.REFERTYPE,'1',refin.REFER_NO,'')) as in_Number,cast(refin.PAT_RUN_HN||'/'||refin.PAT_YEAR_HN as char(20)) as HN,i.an,
-            TO_CHAR(refin.REFER_IN_DATETIME,'yyyy-mm-dd') as Refer_Date,TO_CHAR(i.DATEADMIT,'yyyy-mm-dd') as Date_Admit,TO_CHAR(i.DATEDISCH,'yyyy-mm-dd') as Date_Disc,
-            p.PRENAME||''||p.NAME||' '||p.SURNAME as psname,TO_CHAR(decode(refin.REFERTYPE,'2',refin.REFER_NO,'')) as out_Number,
-            (select h.OFF_ID from HOSPITAL h where h.OFF_ID=refin.HOS_IN_CARD and rownum<=1) as Hosp_Code,
-            (select h.OFF_NAME2||' '||h.OFF_NAME1 from HOSPITAL h where h.OFF_ID=refin.HOS_IN_CARD and rownum<=1) as Hosp_Name,
-            i.REFER_REASON,i.DC_REMARK,i.DISCHARGE_REMARK,TO_Char(p.BIRTHDAY,'yyyy-mm-dd') as BIRTHDATE,trunc(months_between(i.DATEADMIT,p.BIRTHDAY)/12) age,
-            DECODE(p.SEX, 'M','ชาย','หญิง') as sex,n.name as nat_name,
-            p.HOME_BOOK_HOME as addrpart,p.VILLAGE as moopart,
-            (select a.NAME from ADDRESS a where a.code=p.TAMBON) as tumbon,
-            (select a.NAME from ADDRESS a where a.code=p.DIS_DIST_CODE||0||0 and a.TYPE='2') as ampher,
-            (select a.NAME from ADDRESS a where a.code=p.PRO1_PROV_CODE||0||0||0||0 and a.TYPE='1') as PROVINCE,
-            refin.CREDIT_ID,ct.name as credit_name,pl.fullplace,dep.fullname as dep,
-            (select idag.ICD_CODE from IPDDIAGS idag where idag.IPD_RUN_AN=i.RUN_AN and idag.IPD_YEAR_AN=i.YEAR_AN and idag.TYPE='1' and rownum<=1) as pdx,
-            (select d.PRENAME||''||d.NAME||' '||d.SURNAME from DOC_DBFS d where d.DOC_CODE=refin.DD_DOC_CODE and rownum<=1) as refer_doc_name,
-            (select d.PRENAME||''||d.NAME||' '||d.SURNAME from IPDDIAGS idag,DOC_DBFS d where idag.IPD_RUN_AN=i.RUN_AN and idag.IPD_YEAR_AN=i.YEAR_AN and idag.DOC1=d.doc_code and idag.TYPE='1') as RX_doc_name
-            FROM PATIENTS_REFER_HX refin,IPDTRANS i,PATIENTS p,CREDIT_TYPES ct,NATIVE_CODE n,PLACES pl,DEPARTS dep
-            where i.an=refin.an and i.hn=p.hn and refin.CREDIT_ID=ct.CREDIT_ID(+) and  p.native_id=n.native_id(+)  and i.PLA_PLACECODE=pl.PLACECODE and
-            dep.depend_on_id=pl.dep_depend_on_id and
-            refin.OPDIPD='I' and i.DATEDISCH  BETWEEN to_date('30-09-2023','DD-MM-YYYY') and to_date('1-10-2024','DD-MM-YYYY')
-            Order By Refer_Date Desc";
-	    if($objConnect){
-		$stid = oci_parse($objConnect, $SQLRefer);
-		oci_execute($stid);
+            // Include ไฟล์ที่มีคลาส ReferDataRender
+            require_once 'ReferDataRender.php';
+            // สร้างอ็อบเจกต์ของคลาส ReferDataRender
+            $ReferDataRender = new ReferDataRender();
+            // กำหนดวันที่เริ่มต้นและสิ้นสุด            
             ?>
               <!-- /.card-header -->
               <div class="card-body">
                 <table id="ReferData" class="table table-bordered table-striped">
                 <thead>
-            <tr>
+                <tr>
                 <th>REF</th>
                 <th>DEPART</th>
                 <th>IN_NUMBER</th>
@@ -375,24 +402,25 @@
                 <th>RX_doc_name</th>
             </tr>
         </thead>
-<?php
-		echo "<tbody>";
-	while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
-    	echo "<tr>\n";
-		
-    foreach ($row as $item) {
-        echo  "<td>".($item !== null ? htmlentities($item, ENT_QUOTES) : "&nbsp;") . "</td>\n";
+        <?php
+echo "<tbody>";
+try {
+    $result = $ReferDataRender->Bind_IPDRefer($startDate, $endDate);
+
+    // ทำสิ่งที่คุณต้องการกับผลลัพธ์ที่ได้
+    foreach ($result as $row) {
+        echo "<tr>\n";
+        foreach ($row as $item) {
+            echo "<td>" . ($item !== null ? htmlentities($item, ENT_QUOTES) : "&nbsp;") . "</td>\n";
+        }
+        echo "</tr>\n";
     }
-    	echo "</tr>\n";
-		
-	}
-		echo "</tbody>";
-		echo "</table>\n";
-	}
-	else
-	{
-		echo "ไม่สามารถติดต่อ Oracle ได้";
-	}
+    echo "</tbody>";
+    echo "</table>\n";
+} catch (Exception $e) {
+    // จัดการข้อผิดพลาดที่เกิดขึ้น เช่น แสดงข้อความผิดพลาดออกทางหน้าเว็บ
+    echo "Error: " . $e->getMessage();
+}
 ?>
                   <!-- <tfoot>
                   <tr>
@@ -420,7 +448,7 @@
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.2.0
+      <b>Data Center โรงพยาบาลแม่สอด Version</b> 1.0.0
     </div>
     <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
   </footer>
@@ -431,30 +459,60 @@
   </aside>
   <!-- /.control-sidebar -->
 </div>
-<!-- ./wrapper -->
 
-<!-- jQuery -->
-<script src="../../plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- DataTables  & Plugins -->
-<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="../../plugins/jszip/jszip.min.js"></script>
-<script src="../../plugins/pdfmake/pdfmake.min.js"></script>
-<script src="../../plugins/pdfmake/vfs_fonts.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="../plugins/jszip/jszip.min.js"></script>
+<script src="../plugins/pdfmake/pdfmake.min.js"></script>
+<script src="../plugins/pdfmake/vfs_fonts.js"></script>
+<script src="../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <!-- AdminLTE App -->
-<script src="../../dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<!--script src="../../dist/js/demo.js"></script-->
-<!-- Page specific script -->
+<script src="../dist/js/adminlte.min.js"></script>
+<script>
+  $(function() {
+    $('input[name="StartDateRange"]').daterangepicker({
+      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
+      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
+      locale: {
+        format: 'DD-MM-YYYY',
+        applyLabel: 'ตกลง',
+        cancelLabel: 'ยกเลิก',
+        fromLabel: 'จาก',
+        toLabel: 'ถึง',
+        customRangeLabel: 'กำหนดเอง',
+        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        firstDay: 1
+      }
+    });
+  });
+  $(function() {
+    $('input[name="EndDateRange"]').daterangepicker({
+      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
+      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
+      locale: {
+        format: 'DD-MM-YYYY',
+        applyLabel: 'ตกลง',
+        cancelLabel: 'ยกเลิก',
+        fromLabel: 'จาก',
+        toLabel: 'ถึง',
+        customRangeLabel: 'กำหนดเอง',
+        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        firstDay: 1
+      }
+    });
+  });
+</script>
 <script>
   $(function () {
     $("#ReferData").DataTable({

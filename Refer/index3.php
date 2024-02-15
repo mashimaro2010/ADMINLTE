@@ -8,10 +8,12 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <!-- เพิ่มไฟล์ Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome Icons-->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
@@ -28,6 +30,14 @@
   <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+  <!-- Daterangepicker style -->
+  <script src="https://cdn.jsdelivr.net/npm/daterangepicker@latest/daterangepicker.js"></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -169,13 +179,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../pages/tables/data3.php" class="nav-link">
+                <a href="data3.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูล Refer ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../pages/tables/data4.php" class="nav-link">
+                <a href="data4.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูล Refer ผู้ป่วยใน</p>
                 </a>

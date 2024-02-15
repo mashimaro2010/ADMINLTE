@@ -556,7 +556,6 @@ ORDER BY
           <div class="col-12">        
             <div class="card">
               <div class="card-header">
-<!--ใส่เลือกวันที่ --> 
               <!-- Function Connect Oracle Data Base -->
               <?php if (!isset($selectedMeaning)) {
     $selectedMeaning = "ทั้งหมด"; // หรือใส่ค่าตามที่คุณต้องการ

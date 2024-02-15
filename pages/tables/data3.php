@@ -456,7 +456,7 @@
                 </a>
               </li> -->
               <li class="nav-item">
-                <a href="../tables/data.php" class="nav-link">
+                <a href="../tables/data.php" class="nav-link active">
                   <i class="fas fa-table nav-icon"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอย</p>
                 </a>

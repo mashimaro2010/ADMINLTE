@@ -1,0 +1,23 @@
+.d-flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.custom-input {
+    font-size: 14px; /* เปลี่ยนเป็นขนาดตามที่คุณต้องการ */
+        line-height: 14px; /* เท่ากับ font-size */
+        padding: 5px; /* กำหนดความห่างระหว่างขอบของ TextBox */
+        margin-right: 5px; /* กำหนดระยะห่างระหว่าง TextBox และ label */
+}
+
+.d-flex-center > div {
+    margin-right: 10px;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.align-items-center {
+    align-items: center;
+}
