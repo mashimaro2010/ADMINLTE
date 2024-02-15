@@ -271,7 +271,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data6.php" class="nav-link">
+                <a href="../Appointment/data6.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-calendar"></i>
                   <p>ชุดข้อมูลคนไข้นัด</p>
                 </a>

@@ -20,8 +20,8 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome Icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
@@ -119,9 +119,9 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
+            <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-layer-group"></i>
+            <i class="fas fa-layer-group"></i>
               <p>
                 ประเภทผู้ป่วย
                 <i class="right fas fa-angle-left"></i>
@@ -129,26 +129,26 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="./index.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="../OPD/index.php" class="nav-link">
+                <i class="fas fa-wheelchair"></i>
                   <p>ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="./index2.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-bed-pulse"></i>
                   <p>ผู้ป่วยใน</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="./index4.php" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-calendar"></i>
                   <p>ผู้ป่วยนัด</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../Refer/index3.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <i class="fas fa-truck-medical"></i>
                   <p>ผู้ป่วย Refer</p>
                 </a>
               </li>
@@ -156,40 +156,40 @@
             </ul>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-database"></i>
+            <i class="fas fa-database"></i>
               <p>
               ดูข้อมูล
-                <i class="fas fa-angle-left right"></i>
+              <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="../pages/tables/data.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <a href="opd/data.php" class="nav-link">
+                <i class="fas fa-database"></i><i class="fas fa-clock"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอย</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../pages/tables/data2.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-bed-pulse"></i>
                   <p>ชุดข้อมูลคนไข้ Admit</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="data6.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-calendar"></i>
                   <p>ชุดข้อมูล ผู้ป่วยนัด</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../pages/tables/data3.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูล Refer ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../pages/tables/data4.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
+                <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูล Refer ผู้ป่วยใน</p>
                 </a>
               </li>
