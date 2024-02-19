@@ -217,25 +217,25 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="../index.php" class="nav-link">
+                <a href="index.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../index2.php" class="nav-link">
+                <a href="../IPD/index2.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>ผู้ป่วยใน</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../index4.php" class="nav-link">
+                <a href="../Appointment/index4.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>ผู้ป่วยนัด</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../index2.php" class="nav-link">
+                <a href="../Refer/index2.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>ผู้ป่วย Refer</p>
                 </a>
@@ -263,25 +263,25 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data2.php" class="nav-link">
+                <a href="../IPD/data2.php" class="nav-link">
                   <i class="fas fa-table nav-icon"></i>
                   <p>ชุดข้อมูลคนไข้ Admit</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data6.php" class="nav-link">
+                <a href="../Appointment/data6.php" class="nav-link">
                   <i class="fas fa-table nav-icon"></i>
                   <p>ชุดข้อมูลคนไข้นัด</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data3.php" class="nav-link">
+                <a href="../Refer/data3.php" class="nav-link">
                   <i class="fas fa-table nav-icon"></i>
                   <p>ชุดข้อมูลคนไข้ Refer ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data4.php" class="nav-link">
+                <a href="../Refer/data4.php" class="nav-link">
                   <i class="fas fa-table nav-icon"></i>
                   <p>ชุดข้อมูลคนไข้ Refer ผู้ป่วยใน</p>
                 </a>

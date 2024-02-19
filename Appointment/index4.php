@@ -135,13 +135,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index2.php" class="nav-link">
+                <a href="../IPD/index2.php" class="nav-link">
                 <i class="fas fa-bed-pulse"></i>
                   <p>ผู้ป่วยใน</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./index4.php" class="nav-link active">
+                <a href="index4.php" class="nav-link active">
                 <i class="fas fa-calendar"></i>
                   <p>ผู้ป่วยนัด</p>
                 </a>
@@ -164,13 +164,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="opd/data.php" class="nav-link">
+                <a href="../opd/data.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-clock"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอย</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../pages/tables/data2.php" class="nav-link">
+                <a href="../IPD/data2.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-bed-pulse"></i>
                   <p>ชุดข้อมูลคนไข้ Admit</p>
                 </a>
@@ -182,13 +182,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../pages/tables/data3.php" class="nav-link">
+                <a href="../Refer/data3.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูล Refer ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../pages/tables/data4.php" class="nav-link">
+                <a href="../Refer/data4.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูล Refer ผู้ป่วยใน</p>
                 </a>

@@ -149,31 +149,31 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="../pages/tables/data.php" class="nav-link">
+                <a href="data.php" class="nav-link">
                   <i class="fas fa-database"></i><i class="fas fa-clock"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอย</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../pages/tables/data2.php" class="nav-link">
+                <a href="../IPD/data2.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-bed-pulse"></i>
                   <p>ชุดข้อมูลผู้ป่วย Admit</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../pages/tables/data6.php" class="nav-link">
+                <a href="../Appointment/data6.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-calendar"></i>
                   <p>ชุดข้อมูลคนไข้นัด</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../pages/tables/data3.php" class="nav-link">
+                <a href="../Refer/data3.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                 <p>Refer ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../pages/tables/data4.php" class="nav-link">
+                <a href="../Refer/data4.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>Refer ผู้ป่วยใน</p>
                 </a>

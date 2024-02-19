@@ -243,7 +243,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../Appointment/index4.php" class="nav-link">
+                <a href="index4.php" class="nav-link">
                 <i class="fas fa-calendar"></i>
                   <p>ผู้ป่วยนัด</p>
                 </a>
@@ -265,19 +265,19 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="../tables/data.php" class="nav-link">
+                <a href="../OPD/data.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-clock"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอย</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data5.php" class="nav-link">
+                <a href="../OPD/data5.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-bed-pulse"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอยรวมทั้งหมด</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data2.php" class="nav-link">
+                <a href="../IPD/data2.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-bed-pulse"></i>
                   <p>ชุดข้อมูลคนไข้ Admit</p>
                 </a>
@@ -289,13 +289,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data3.php" class="nav-link">
+                <a href="../Refer/data3.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูลคนไข้ Refer ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../tables/data4.php" class="nav-link">
+                <a href="../Refer/data4.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-truck-medical"></i>
                   <p>ชุดข้อมูลคนไข้ Refer ผู้ป่วยใน</p>
                 </a>
