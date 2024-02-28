@@ -12,28 +12,16 @@ class OPDQuery{
     }
 
     public function TOTAL_OPDVISIT($startDate, $endDate){       
-        $sql="SELECT Sum(Count(DISTINCT OPD_NO)) as TOTAL_OPDVISIT
-        from (SELECT O.OPD_NO,P.HN,P.PRENAME||''||P.NAME||' '||P.SURNAME as psname,OW.CREDIT_ID,
-        TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')||' '||TO_CHAR(o.OPD_TIME,'HH24:MI:ss') as Open_Visit_Time,
-        TO_CHAR(o.REACH_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.REACH_OPD_DATETIME,'HH24:MI:ss') as Start_opd_time,
-        TO_CHAR(O.SCREENING_OPD_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(O.SCREENING_OPD_DATETIME,'HH24:MI:ss') as Screen_opd_time,
-        TO_CHAR(O.FINISH_OPD_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(O.FINISH_OPD_DATETIME,'HH24:MI:ss') as Finish_opd_time,
-        (Select Max(To_Char(drw.MAIN_DATE,'yyyy-mm-dd')||' '||TO_CHAR(drw.MAIN_TIME,'HH24:MI:ss')) From data_drug_wh drw where drw.HN=P.HN
-        and TO_CHAR(drw.MAIN_DATE,'yyyy-mm-dd')=TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')) as Doctor_Entry,
-        (select Max(To_Char(OFH.ALREADY_RECEIVE_DRUG_DATE,'yyyy-mm-dd')||' '||TO_CHAR(OFH.ALREADY_RECEIVE_DRUG_DATE,'HH24:MI:ss'))
-        from OPD_FINANCE_HEADERS OFH where OFH.OPD_NO=O.OPD_NO and OFH.FT_TYPE_CODE='03' ) as Received_Drug_Time
-        from OPDS O,PATIENTS P,OPD_FINANCE_HEADERS OFH,OPD_WAREHOUSE OW
-        WHERE O.PAT_RUN_HN=P.RUN_HN and O.PAT_YEAR_HN=P.YEAR_HN AND
-        TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(ofh.datetime,'yyyy-mm-dd')
-        and OFH.OPD_NO=O.OPD_NO
-        and TO_CHAR(o.OPD_DATE,'dd-mm-yyyy') between :startDate and :endDate /* GET Between Day */
-        and O.OPD_NO=OW.OPD_NO and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(OW.OPD_DATE,'yyyy-mm-dd')
-        Group by O.OPD_NO,P.HN,P.PRENAME,P.NAME,P.SURNAME,p.SEX,o.OPD_DATE,p.BIRTHDAY,OW.CREDIT_ID,
-        O.OPD_TIME,o.REACH_OPD_DATETIME,OFH.opd_finance_no,OFH.FT_TYPE_CODE,O.SCREENING_OPD_DATETIME,
-        O.FINISH_OPD_DATETIME,o.RX_OPD_DATETIME,ofh.date_created
-        Order By HN,OPD_NO asc)  Temp  Group by HN,PSNAME,CREDIT_ID,
-        OPEN_VISIT_TIME,START_OPD_TIME,SCREEN_OPD_TIME,FINISH_OPD_TIME,Doctor_Entry,
-        RECEIVED_DRUG_TIME Order by HN,OPD_NO";
+        $sql="SELECT COUNT(*) as TOTAL_OPDVISIT
+        FROM (
+            SELECT O.OPD_NO
+            FROM OPDS O
+            JOIN PATIENTS P ON O.PAT_RUN_HN=P.RUN_HN AND O.PAT_YEAR_HN=P.YEAR_HN
+            JOIN OPD_FINANCE_HEADERS OFH ON TO_CHAR(O.OPD_DATE, 'yyyy-mm-dd')=TO_CHAR(OFH.datetime, 'yyyy-mm-dd') AND OFH.OPD_NO=O.OPD_NO
+            JOIN OPD_WAREHOUSE OW ON O.OPD_NO=OW.OPD_NO AND TO_CHAR(O.OPD_DATE, 'yyyy-mm-dd')=TO_CHAR(OW.OPD_DATE, 'yyyy-mm-dd')
+            WHERE TO_CHAR(O.OPD_DATE, 'yyyy-mm-dd') BETWEEN :startDate AND :endDate /* GET Between Day */
+            GROUP BY O.OPD_NO
+        ) Temp";
         $statement = oci_parse($this->connection, $sql);
         // ผูกตัวแปร
         oci_bind_by_name($statement, ":startDate", $startDate);
@@ -63,7 +51,7 @@ class OPDQuery{
         WHERE O.PAT_RUN_HN=P.RUN_HN and O.PAT_YEAR_HN=P.YEAR_HN AND
         TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(ofh.datetime,'yyyy-mm-dd')
         and OFH.OPD_NO=O.OPD_NO
-        and TO_CHAR(o.OPD_DATE,'dd-mm-yyyy') between :startDate and :endDate /* get Present Day */
+        and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between :startDate and :endDate /* get Present Day */
         and O.OPD_NO=OW.OPD_NO and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(OW.OPD_DATE,'yyyy-mm-dd')
         Group by O.OPD_NO,P.HN,P.PRENAME,P.NAME,P.SURNAME,p.SEX,o.OPD_DATE,p.BIRTHDAY,OW.CREDIT_ID,
         O.OPD_TIME,o.REACH_OPD_DATETIME,OFH.opd_finance_no,OFH.FT_TYPE_CODE,O.SCREENING_OPD_DATETIME,
@@ -100,7 +88,7 @@ class OPDQuery{
         WHERE O.PAT_RUN_HN=P.RUN_HN and O.PAT_YEAR_HN=P.YEAR_HN AND
         TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(ofh.datetime,'yyyy-mm-dd')
         and OFH.OPD_NO=O.OPD_NO
-        and TO_CHAR(o.OPD_DATE,'dd-mm-yyyy') between :startDate and :endDate /* get Present Day */ /* get Present Day */
+        and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between :startDate and :endDate /* get Present Day */ /* get Present Day */
         and O.OPD_NO=OW.OPD_NO and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(OW.OPD_DATE,'yyyy-mm-dd')
         Group by O.OPD_NO,P.HN,P.PRENAME,P.NAME,P.SURNAME,p.SEX,o.OPD_DATE,p.BIRTHDAY,OW.CREDIT_ID,
         O.OPD_TIME,o.REACH_OPD_DATETIME,OFH.opd_finance_no,OFH.FT_TYPE_CODE,O.SCREENING_OPD_DATETIME,
@@ -137,7 +125,7 @@ class OPDQuery{
         WHERE O.PAT_RUN_HN=P.RUN_HN and O.PAT_YEAR_HN=P.YEAR_HN AND
         TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(ofh.datetime,'yyyy-mm-dd')
         and OFH.OPD_NO=O.OPD_NO
-        and TO_CHAR(o.OPD_DATE,'dd-mm-yyyy') between :startDate and :endDate /* get Present Day */
+        and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd') between :startDate and :endDate /* get Present Day */
         and O.OPD_NO=OW.OPD_NO and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(OW.OPD_DATE,'yyyy-mm-dd')
         Group by O.OPD_NO,P.HN,P.PRENAME,P.NAME,P.SURNAME,p.SEX,o.OPD_DATE,p.BIRTHDAY,OW.CREDIT_ID,
         O.OPD_TIME,o.REACH_OPD_DATETIME,OFH.opd_finance_no,OFH.FT_TYPE_CODE,O.SCREENING_OPD_DATETIME,

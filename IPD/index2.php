@@ -241,13 +241,11 @@
               <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
               <li class="breadcrumb-item active">ผู้ป่วยใน</li>
             </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- /.content-header -->
   </form>
-    <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="row">
@@ -261,7 +259,7 @@
             <!-- Query จำนวน admit -->
             <div class="info-box">
               <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-bed"></i></span>
-              <div class="info-box-content">
+                <div class="info-box-content">
                 <span class="info-box-text">จำนวน admit</span>
                 <span class="info-box-number">                   
               <?php
@@ -272,14 +270,11 @@
               } catch(exception $e){
                 echo "Error:". $e->getMessage();
               }
-              ?>
+              ?> ราย
                 </span>
               </div>
-              <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box -->
           </div>
-          <!-- /.col -->
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
               <span class="info-box-icon bg-info elevation-1"><i class="fas fa-female"></i><i class="fas fa-male"></i><i class="far fa-smile"></i></span>
@@ -294,40 +289,13 @@
               } catch(exception $e){
                 echo "Error:". $e->getMessage();
               }
-              ?>  
+              ?> ราย 
               </span>
               </div>
-              <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box -->
           </div>
-          <!-- /.col -->
 
-          <!-- fix for small devices only -->
           <div class="clearfix hidden-md-up"></div>
-
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-ambulance"></i></span>
-              <div class="info-box-content">
-                <span class="info-box-text">จำนวน Refer IN/OUT</span>
-                <span class="info-box-number">                  
-                <?php 
-              $db=new IPDQuery();
-              try{
-                $TOTAL_IPD_REFER=$db->TOTAL_IPD_REFER($startDate, $endDate);
-                echo $TOTAL_IPD_REFER;
-              } catch(exception $e){
-                echo "Error:". $e->getMessage();
-              }
-              ?>                            
-              </span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
               <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-book-dead"></i></span>
@@ -343,6 +311,45 @@
                 echo "Error:". $e->getMessage();
               }
               ?>
+              </span>
+              </div>              
+            </div>            
+          </div>
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-ambulance"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">จำนวน Refer IN</span>
+                <span class="info-box-number">                  
+                <?php 
+              $db=new IPDQuery();
+              try{
+                $TOTAL_IPD_REFER=$db->TOTAL_IPD_REFER($startDate, $endDate);
+                echo $TOTAL_IPD_REFER;
+              } catch(exception $e){
+                echo "Error:". $e->getMessage();
+              }
+              ?>                            
+              </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-ambulance"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">จำนวน Refer OUT</span>
+                <span class="info-box-number">                  
+                <?php 
+              $db=new IPDQuery();
+              try{
+                $TOTAL_IPD_REFER=$db->TOTAL_IPD_REFER($startDate, $endDate);
+                echo $TOTAL_IPD_REFER;
+              } catch(exception $e){
+                echo "Error:". $e->getMessage();
+              }
+              ?>                            
               </span>
               </div>
               <!-- /.info-box-content -->

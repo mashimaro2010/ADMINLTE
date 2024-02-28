@@ -301,7 +301,8 @@
             ?>
             <div class="small-box bg-warning">
               <div class="inner">
-                <h2 class="font-weight-bold success-lighter-hover mb-2">
+                <H2 class="font-weight-bold success-lighter-hover mb-2">จำนวน Visit</H2>
+                <H2 class="font-weight-bold success-lighter-hover mb-2">
                   <?php
                 if($objConnect){
                     $stid = oci_parse($objConnect, $SQLAllVisits);
@@ -317,14 +318,12 @@
                     {
                       echo "ไม่สามารถติดต่อ Oracle ได้";
                     }
-              ?>
-              </h2>
-                <p>จำนวน VN</p>
+              ?> ราย
+              </H2>              
               </div>
               <div class="icon">
                 <i class="fas fa-hospital-alt"></i>
-              </div>
-              <a href="#" class="small-box-footer">ดูรายละเอียด <i class="fas fa-arrow-circle-right"></i></a>
+              </div>              
             </div>
           </div>
           <!-- ./col -->
@@ -332,7 +331,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3><?php
+                <h2>คัดกรอง</h2><h2><?php
                 if($objConnect){
                     $stid = oci_parse($objConnect, $SQLDoneScreen);
                     oci_execute($stid);
@@ -347,13 +346,11 @@
                     {
                       echo "ไม่สามารถติดต่อ Oracle ได้";
                     }
-              ?></h3>
-                <p>จำนวนคัดกรอง</p>
+              ?> ราย</h2>              
               </div>
               <div class="icon">
                 <i class="fas fa-user-nurse"></i>
               </div>
-              <a href="#" class="small-box-footer">ดูรายละเอียด <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -361,7 +358,7 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3><?php
+                <h2>พบแพทย์</h2><h2><?php
                 if($objConnect){
                     $stid = oci_parse($objConnect, $SQLDoneDoctor);
                     oci_execute($stid);
@@ -376,14 +373,11 @@
                     {
                       echo "ไม่สามารถติดต่อ Oracle ได้";
                     }
-              ?></h3>
-
-                <p>จำนวนพบแพทย์</p>
+              ?> ราย</h2>
               </div>
               <div class="icon">
                 <i class="fas fa-user-md"></i>
-              </div>
-              <a href="#" class="small-box-footer">ดูรายละเอียด <i class="fas fa-arrow-circle-right"></i></a>
+              </div>              
             </div>
           </div>
           <!-- ./col -->
@@ -391,7 +385,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3><?php
+                <h2>รับยา </h2><h2><?php
                 if($objConnect){
                     $stid = oci_parse($objConnect, $SQLReceivedDrug);
                     oci_execute($stid);
@@ -406,14 +400,11 @@
                     {
                       echo "ไม่สามารถติดต่อ Oracle ได้";
                     }
-              ?></h3>
-
-                <p>จำนวนรับยา</p>
+              ?> ราย</h2>
               </div>
               <div class="icon">
                 <i class="fas fa-prescription"></i>
               </div>
-              <a href="#" class="small-box-footer">ดูรายละเอียด <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
 
@@ -421,14 +412,13 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>65</h3>
-
-                <p>ระยะเวลารอคอย</p>
+                <h2>ระยะเวลารอคอ</h2>
+                <h2>120</h2>      
+                <h2>ต่อนาที/ราย</h2>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
-              </div>
-              <a href="#" class="small-box-footer">ดูรายละเอียด <i class="fas fa-arrow-circle-right"></i></a>
+              </div>              
             </div>
           </div>
 
@@ -436,14 +426,12 @@
             <!-- small box -->
             <div class="small-box bg-gradient-primary">
               <div class="inner">
-                <h3>65</h3>
-
-                <p>จำนวน refer in/out</p>
+                <h2>จำนวน Refer in</h2><h2>47 ราย</h2>
+                <h2>จำนวน Refer Out</h2><h2>7 ราย</h2>
               </div>
               <div class="icon">
                 <i class="fas fa-ambulance"></i>
-              </div>
-              <a href="#" class="small-box-footer">ดูรายละเอียด <i class="fas fa-arrow-circle-right"></i></a>
+              </div>              
             </div>
           </div>
           <!-- ./col -->

@@ -185,21 +185,21 @@
     </div>
     <?php
     require_once 'OPDQuery.php';
-    $currentDate = date('d-m-Y');
+    $currentDate = date('Y-m-d');
     $startDate = $currentDate;
     $endDate = $currentDate;
     if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
-      $startDateTime = DateTime::createFromFormat('d-m-Y', $_POST['StartDateRange']);
-      $endDateTime = DateTime::createFromFormat('d-m-Y', $_POST['EndDateRange']);
+      $startDateTime = DateTime::createFromFormat('Y-m-d', $_POST['StartDateRange']);
+      $endDateTime = DateTime::createFromFormat('Y-m-d', $_POST['EndDateRange']);
   
       if ($startDateTime && $endDateTime) {
           // หากการสร้าง DateTime สำเร็จ
-          $startDate = $startDateTime->format('d-m-Y');
-          $endDate = $endDateTime->format('d-m-Y');
+          $startDate = $startDateTime->format('Y-m-d');
+          $endDate = $endDateTime->format('Y-m-d');
       } else {
           // การสร้าง DateTime ล้มเหลว, จัดการข้อผิดพลาดที่นี่
-          $startDate = '01-10-2022';
-          $endDate = '30-09-2023';
+          $startDate = '2023-10-01';
+          $endDate = '2024-09-30';
       }
   } else {
       // ถ้าไม่มีข้อมูลที่ส่งมา กำหนดวันที่เริ่มต้นและสิ้นสุดเป็นค่าเริ่มต้น
@@ -330,7 +330,8 @@
             ?>
             <div class="small-box bg-warning">
               <div class="inner">
-                <h4 class="font-weight-bold success-lighter-hover mb-2">Visit ทั้งหมดวันนี้
+                <h4>Visit ในวัน</h4>
+                <h4>
             <?php
             $db=new OPDQuery();
             try{
@@ -339,13 +340,12 @@
             } catch(exception $e){
               echo "Error:". $e->getMessage();
             }
-            ?>              
+            ?> ราย              
               </h4>
               </div>
               <div class="icon">
                 <i class="fas fa-hospital-alt"></i>
-              </div>
-              <a href="#" class="small-box-footer">ดูรายละเอียด <i class="fas fa-arrow-circle-right"></i></a>
+              </div>              
             </div>
           </div>
           <!-- ./col -->
@@ -353,7 +353,8 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h4>คัดกรองไปแล้ว
+                <h4>คัดกรองไปแล้ว</h4>
+                <h4>
             <?php            
             $db=new OPDQuery();
             try{
@@ -363,12 +364,11 @@
               echo "Error:". $e->getMessage();
             }
             ?>
-            </h4>
+            ราย</h4>
               </div>
               <div class="icon">
                 <i class="fas fa-user-nurse"></i>
-              </div>
-              <a href="#" class="small-box-footer">ดูรายละเอียด <i class="fas fa-arrow-circle-right"></i></a>
+              </div>              
             </div>
           </div>
           <!-- ./col -->
@@ -376,7 +376,8 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h4>พบแพทย์ไปแล้ว
+                <h4>พบแพทย์ไปแล้ว</h4>
+                <h4>
               <?php             
                     $db=new OPDQuery();
                     try{
@@ -386,12 +387,12 @@
                       echo "Error:". $e->getMessage();
                     }
               ?>
-              Visit</h4>
+              ราย</h4>
               </div>
               <div class="icon">
                 <i class="fas fa-user-md"></i>
               </div>
-              <a href="#" class="small-box-footer">ดูรายละเอียด <i class="fas fa-arrow-circle-right"></i></a>
+              
             </div>
           </div>
           <!-- ./col -->
@@ -399,7 +400,8 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h4>รับยาแล้ว
+                <h4>รับยาแล้ว</h4>
+                <h4>
                 <?php             
                     $db=new OPDQuery();
                     try{
@@ -408,13 +410,13 @@
                     } catch(exception $e){
                       echo "Error:". $e->getMessage();
                     }
-                ?>                  
+                ?> ราย                 
                 </h4>
               </div>
               <div class="icon">
                 <i class="fas fa-prescription"></i>
               </div>
-              <a href="#" class="small-box-footer">ดูรายละเอียด <i class="fas fa-arrow-circle-right"></i></a>
+              
             </div>
           </div>
 
@@ -422,29 +424,41 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h4>65</h4>
-
-                <p>ระยะเวลารอคอย</p>
+              <h4>ระยะเวลารอคอย</h4>  
+              <h4>65 นาทีต่อราย</h4>
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
               </div>
-              <a href="#" class="small-box-footer">ดูรายละเอียด <i class="fas fa-arrow-circle-right"></i></a>
+              
             </div>
           </div>
 
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-gradient-primary">
+            <div class="small-box bg-warning">
               <div class="inner">
-                <h4>65</h4>
-
-                <p>จำนวน refer in/out</p>
+              <h4>จำนวน Refer In</h4>  
+              <h4>65 ราย</h4>                
               </div>
               <div class="icon">
                 <i class="fas fa-ambulance"></i>
               </div>
-              <a href="#" class="small-box-footer">ดูรายละเอียด <i class="fas fa-arrow-circle-right"></i></a>
+              
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+              <h4>จำนวน Refer Out</h4>
+                <h4>65 ราย</h4>                
+              </div>
+              <div class="icon">
+                <i class="fas fa-ambulance"></i>
+              </div>
+              
             </div>
           </div>
           <!-- ./col -->
@@ -499,7 +513,7 @@
       singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
       showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
       locale: {
-        format: 'DD-MM-YYYY',
+        format: 'YYYY-MM-DD',
         applyLabel: 'ตกลง',
         cancelLabel: 'ยกเลิก',
         fromLabel: 'จาก',
@@ -516,7 +530,7 @@
       singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
       showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
       locale: {
-        format: 'DD-MM-YYYY',
+        format: 'YYYY-MM-DD',
         applyLabel: 'ตกลง',
         cancelLabel: 'ยกเลิก',
         fromLabel: 'จาก',
