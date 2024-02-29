@@ -218,7 +218,7 @@
                with font-awesome or any other icon font library -->
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-layer-group"></i>
+              <i class="fas fa-layer-group"></i>
               <p>
                 ประเภทผู้ป่วย
                 <i class="right fas fa-angle-left"></i>
@@ -227,25 +227,25 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="index.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fas fa-wheelchair"></i>
                   <p>ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../ipd/index2.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fas fa-bed-pulse"></i>
                   <p>ผู้ป่วยใน</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../Appointment/index4.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fas fa-calendar"></i>
                   <p>ผู้ป่วยนัด</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../Refer/index3.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fas fa-truck-medical"></i>
                   <p>ผู้ป่วย Refer</p>
                 </a>
               </li>

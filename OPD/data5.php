@@ -4,11 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ชุดข้อมูลระยะเวลารอคอยทุกแผนก</title>
-
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+ <!-- Font Awesome Icons-->
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">  <!-- Ionicons -->
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
@@ -29,6 +32,8 @@
   <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+  <!-- Daterangepicker style -->
+  <script src="https://cdn.jsdelivr.net/npm/daterangepicker@latest/daterangepicker.js"></script>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -218,25 +223,25 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="index.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fas fa-wheelchair"></i>
                   <p>ผู้ป่วยนอก</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../IPD/index2.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fas fa-bed-pulse"></i>
                   <p>ผู้ป่วยใน</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../Appointment/index4.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fas fa-calendar"></i>
                   <p>ผู้ป่วยนัด</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="../Refer/index2.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fas fa-truck-medical"></i>
                   <p>ผู้ป่วย Refer</p>
                 </a>
               </li>
