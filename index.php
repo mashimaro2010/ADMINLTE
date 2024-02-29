@@ -412,7 +412,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h2>ระยะเวลารอคอ</h2>
+                <h2>ระยะเวลารอคอย</h2>
                 <h2>120</h2>      
                 <h2>ต่อนาที/ราย</h2>
               </div>
@@ -423,10 +423,18 @@
           </div>
 
           <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-gradient-primary">
+            <div class="small-box bg-warning">
               <div class="inner">
                 <h2>จำนวน Refer in</h2><h2>47 ราย</h2>
+              </div>
+              <div class="icon">
+                <i class="fas fa-ambulance"></i>
+              </div>              
+            </div>
+          </div>
+          <div class="col-lg-3 col-6">
+            <div class="small-box bg-success">
+              <div class="inner">
                 <h2>จำนวน Refer Out</h2><h2>7 ราย</h2>
               </div>
               <div class="icon">
@@ -434,10 +442,7 @@
               </div>              
             </div>
           </div>
-          <!-- ./col -->
         </div>
-        <!-- /.row -->
-        <!-- Main row -->
         <div class="row">
     </section>
     <!-- /.content -->
