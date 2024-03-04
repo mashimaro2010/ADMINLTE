@@ -79,7 +79,7 @@
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">เจ้าหน้าที่</a>
         </div>
       </div>
 
@@ -167,17 +167,22 @@
       </nav>
     </div>
   </aside>
-
+<?php
+$currentDate = date('Y-m-d');
+$ThaiCurrentDate=date('d-m-Y');
+?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Dash Board ผู้ป่วยนอก</h1>
+          <div class="col-sm-8">
+            <div style="display: flex; justify-content: center;"><H1 class="m-0">Dash Board ผู้ป่วยนอก 
+            วันที่ :<?php echo $ThaiCurrentDate ?>
+            </H1></div>
           </div><!-- /.col -->
-          <div class="col-sm-6">
+          <div class="col-sm-4">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
               <li class="breadcrumb-item active">ผู้ป่วยนอก</li>
@@ -413,8 +418,7 @@
             <div class="small-box bg-success">
               <div class="inner">
                 <h2>ระยะเวลารอคอย</h2>
-                <h2>120</h2>      
-                <h2>ต่อนาที/ราย</h2>
+                <h2>120 ต่อนาที/ราย</h2>      
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph"></i>
@@ -425,7 +429,8 @@
           <div class="col-lg-3 col-6">
             <div class="small-box bg-warning">
               <div class="inner">
-                <h2>จำนวน Refer in</h2><h2>47 ราย</h2>
+                <h2>จำนวน Refer in</h2>
+                <h2>47 ราย</h2>
               </div>
               <div class="icon">
                 <i class="fas fa-ambulance"></i>
