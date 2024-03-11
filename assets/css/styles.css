@@ -2,10 +2,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap");
 /*=============== VARIABLES CSS ===============*/
 :root {
-  /*========== Colors ==========*/
-  /*Color mode HSL(hue, saturation, lightness)*/
-  --white-color: hsl(0, 0%, 100%);
-  --black-color: hsl(0, 0%, 0%);
   /*========== Font and typography ==========*/
   /*.5rem = 8px | 1rem = 16px ...*/
   --body-font: "Poppins", sans-serif;
@@ -66,13 +62,15 @@ img {
 .login__form {
   position: relative;
   background-color: hsla(241, 72%, 86%, 0.1);
-  border: 2px solid var(--white-color);
+  border: 2px solid darkviolet;
   margin-inline: 1.5rem;
   padding: 2.5rem 1.5rem;
   border-radius: 1rem;
   backdrop-filter: blur(2px);
 }
 .login__title {
+  color: darkviolet; /* เปลี่ยนสีของตัวหนังสือเป็นสีม่วงเข้ม */
+  text-shadow: 1px 1px lavender; /* เพิ่มเงาตัวหนังสือเป็นสีม่วงอ่อน */
   text-align: center;
   font-size: var(--h1-font-size);
   font-weight: var(--font-medium);
@@ -105,6 +103,7 @@ img {
 }
 .login__box-input {
   position: relative;
+  border: 1px solid darkviolet; /* Change "darkviolet" to your preferred purple color */
 }
 .login__label {
   position: absolute;
@@ -112,6 +111,7 @@ img {
   top: 13px;
   font-weight: var(--font-medium);
   transition: top 0.3s, font-size 0.3s;
+  color: white; /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
 }
 .login__eye {
   position: absolute;
@@ -133,6 +133,8 @@ img {
 }
 .login__check-label, .login__forgot, .login__register {
   font-size: var(--small-font-size);
+  font-size: 16px; /* ขยายขนาดตัวหนังสือเป็น 20px */
+  color: white; /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
 }
 .login__check-group {
   column-gap: 0.5rem;
@@ -141,41 +143,60 @@ img {
   width: 16px;
   height: 16px;
 }
-.login__forgot {
+.login__forgot, .login__register {
   color: var(--white-color);
+  font-size: 16px; /* ขยายขนาดตัวหนังสือเป็น 20px */
+  color: white; /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
 }
 .login__forgot:hover {
   text-decoration: underline;
+  color:darkviolet; /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
 }
 .login__button {
+  color: white; /* เปลี่ยนสีตัวหนังสือเป็นสีขาว */
   width: 100%;
   padding: 1rem;
-  border-radius: 0.5rem;
-  background-color: var(--white-color);
-  font-weight: var(--font-medium);
+  border-radius: 1.5rem;
+  background-color: var(--purple-color);
+  font-weight:bold;
+  font-size: 22px; /* ขยายขนาดตัวหนังสือเป็น 20px */
   cursor: pointer;
   margin-bottom: 2rem;
+  transition: background-color 0.3s ease-in-out;
+  &:hover {
+    color: darkviolet;
+    background-color: var(--purple-color-2);
+  }
 }
 .login__register {
   text-align: center;
+  font-weight:bold;
+  font-size: 18px; /* ขยายขนาดตัวหนังสือเป็น 20px */
+  color: white; /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
 }
 .login__register a {
+  font-weight:bold;
+  font-size: 18px; /* ขยายขนาดตัวหนังสือเป็น 20px */
   color: var(--white-color);
   font-weight: var(--font-medium);
 }
 .login__register a:hover {
+  font-size: 18px; /* ขยายขนาดตัวหนังสือเป็น 20px */
   text-decoration: underline;
+  color: darkviolet;
+  text-shadow: 0 0 2px white; /* ใส่สีขอบตัวหนังสือเป็นสีขาว */
 }
 
 /* Input focus move up label */
 .login__input:focus + .login__label {
-  top: -12px;
+  text-shadow: 0 0 5px #000;
+  top: -10px;
   font-size: var(--small-font-size);
 }
 
 /* Input focus sticky top label */
 .login__input:not(:placeholder-shown).login__input:not(:focus) + .login__label {
-  top: -12px;
+  top: -10px;
   font-size: var(--small-font-size);
 }
 
@@ -189,8 +210,5 @@ img {
     width: 432px;
     padding: 4rem 3rem 3.5rem;
     border-radius: 1.5rem;
-  }
-  .login__title {
-    font-size: 2rem;
   }
 }
