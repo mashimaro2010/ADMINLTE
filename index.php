@@ -1,3 +1,6 @@
+<?php
+require 'auth_session.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -491,6 +494,6 @@ $ThaiCurrentDate=date('d-m-Y');
     document.getElementById('logoutLink').addEventListener('click', function() {
         window.location.href = 'logout.php';
     });
-  </script>
+</script>
 </body>
 </html>

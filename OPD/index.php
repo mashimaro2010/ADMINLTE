@@ -1,3 +1,6 @@
+<?php
+require '../auth_session.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -549,5 +552,10 @@
     });
   });
 </script>
+<script>
+    document.getElementById('logoutLink').addEventListener('click', function() {
+        window.location.href = '../logout.php';
+    });
+  </script>
 </body>
 </html>
