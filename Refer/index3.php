@@ -240,7 +240,7 @@
           </div>        
         <div class="col-sm-2">
           <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="..">Home</a></li>
               <li class="breadcrumb-item active">ผู้ป่วย Refer</li>
           </ol>
           </div><!-- /.col -->
@@ -258,117 +258,152 @@
         <h1 style="text-align:center; margin: 0 auto;">
         วันที่เริ่ม:<?php echo $startDate?> วันที่สิ้นสุด:<?php echo $endDate?> 
         </h1>
-        </div> 
-          <div class="col-12 col-sm-6 col-md-3">
-          <?php
-            	    include('../pages/tables/function.php');
-                  $objConnect = MSHOCI();
-            ?>
-            <!-- Query จำนวน admit -->
-            <?php                
-                  $SQLTOTAL_OPD_Refer="SELECT Count(ALL o.OPD_NO) as TOTAL_OPD_Refer
-                  FROM PATIENTS_REFER_HX refin,PATIENTS p,NATIVE_CODE n,CREDIT_TYPES ct,OPDS o,PLACES pl,DEPARTS dep
-                  where o.OPD_NO=refin.OPD_NO and  refin.PAT_RUN_HN=p.run_hn and  refin.PAT_YEAR_HN=p.year_hn and  p.native_id=n.native_id(+) and refin.CREDIT_ID=ct.CREDIT_ID(+) and o.PLA_PLACECODE=pl.PLACECODE and
-                  dep.depend_on_id=pl.dep_depend_on_id and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(CURRENT_DATE, 'yyyy-MM-dd')";
-
-                  $SQLTOTAL_IPD_DAED="select Count(ALL i.an) as TOTAL_IPD_DAED
-                  from IPDTRANS i,patients p
-                  where  i.hn = p.hn and  DEAD_FLAG='Y' and i.Dateadmit between to_date('30-09-2023','DD-MM-YYYY') and to_date('1-10-2024','DD-MM-YYYY')
-                  Order by Dateadmit asc";                                                                                                                          
-            ?>
-            <div class="info-box">
-              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-ambulance"></i><i class="fas fa-bed"></i></span>
-              <div class="info-box-content">
-                <span class="info-box-text">จำนวน Refer ผู้ป่วยใน</span>
-                <span class="info-box-number">
-                <?php
-            $db=new ReferQuery();
-            try{
-              $TOTAL_REFER_IPD=$db->TOTAL_REFER_IPD($startDate, $endDate);
-              echo $TOTAL_REFER_IPD;
-            } catch(exception $e){
-              echo "Error:". $e->getMessage();
-            }
-              ?>  
-                </span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-female"></i><i class="fas fa-male"></i><i class="fas fa-ambulance"></i></span>
-              <div class="info-box-content">
-                <span class="info-box-text">จำนวน Refer ผู้ป่วยนอก</span>
-                <span class="info-box-number">
-                  <?php
-                    $db=new ReferQuery();
-                    try{
-                      $TOTAL_REFER_OPD=$db->TOTAL_REFER_OPD($startDate, $endDate);
-                      echo $TOTAL_REFER_OPD;
-                    } catch(exception $e){
-                      echo "Error:". $e->getMessage();
-                    }
-                  ?>
-              </span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-
-          <!-- fix for small devices only -->
-          <div class="clearfix hidden-md-up"></div>
-
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-ambulance"></i></span>
-              <div class="info-box-content">
-                <span class="info-box-text">จำนวน Refer IN/OUT</span>
-                <span class="info-box-number">
-                <?php
-                    $db=new ReferQuery();
-                    try{
-                      $TOTAL_REFER_ALL=$db->TOTAL_REFER_ALL($startDate, $endDate);
-                      echo $TOTAL_REFER_ALL;
-                    } catch(exception $e){
-                      echo "Error:". $e->getMessage();
-                    }
-                  ?>
-                </span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-book-dead"></i></span>
-              <div class="info-box-content">
-                <span class="info-box-text">จำนวนเสียชีวิต</span>
-                <span class="info-box-number">
-              <?php
-                    $db=new ReferQuery();
-                    try{
-                      $TOTAL_REFER_DEAD=$db->TOTAL_REFER_DEAD($startDate, $endDate);
-                      echo $TOTAL_REFER_DEAD;
-                    } catch(exception $e){
-                      echo "Error:". $e->getMessage();
-                    }
-                  ?>
-              </span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-          </div>
-          <!-- /.col -->
         </div>
+        <div class="Card border-primary mb-3 row col-12 alert" style="background-color:#ebf2ff; opacity: 2.0;content:"";">
+         <div class="row col-12" style="display: flex;align-items: center;justify-content: center; font-size: 24px;color: #007c82;">Refer ผู้ป่วยนอก</div>
+            <div class="col-12 col-sm-6 col-md-3">          
+              <!-- Query จำนวน admit -->
+              <div class="info-box">
+                <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-ambulance"></i><i class="fas fa-bed"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">จำนวน Refer ผู้ป่วยนอก</span>
+                  <span class="info-box-number">
+                  <?php
+              $db=new ReferQuery();
+              try{
+                $TOTAL_REFER_OPDALL=$db->TOTAL_REFER_OPDALL($startDate, $endDate);
+                echo $TOTAL_REFER_OPDALL;
+              } catch(exception $e){
+                echo "Error:". $e->getMessage();
+              }
+                ?>  
+                  </span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-female"></i><i class="fas fa-male"></i><i class="fas fa-ambulance"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">ReferIN</span>
+                  <span class="info-box-number">
+                    <?php
+                      $db=new ReferQuery();
+                      try{
+                        $TOTAL_REFER_OPDALL=$db->TOTAL_REFER_OPDALL($startDate, $endDate);
+                        echo $TOTAL_REFER_OPDALL;
+                      } catch(exception $e){
+                        echo "Error:". $e->getMessage();
+                      }
+                    ?>
+                </span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+            </div>
+
+            <div class="clearfix hidden-md-up"></div>
+
+            <div class="col-12 col-sm-6 col-md-3">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-ambulance"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">ReferOUT</span>
+                  <span class="info-box-number">
+                  <?php
+                      $db=new ReferQuery();
+                      try{
+                        $TOTAL_REFER_ALL=$db->TOTAL_REFER_ALL($startDate, $endDate);
+                        echo $TOTAL_REFER_ALL;
+                      } catch(exception $e){
+                        echo "Error:". $e->getMessage();
+                      }
+                    ?>
+                  </span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+          </div>
+        </div>        
       </div><!--/. container-fluid -->
+      <div class="Card border-primary mb-3 row col-12 alert" style="background-color:#ebf2ff; opacity: 2.0;content:"";>
+         <div class="row col-12" style="display: flex;align-items: Center;justify-content: center; font-size: 24px;color: #007c82;">Refer ผู้ป่วยใน</div>
+            <div class="col-12 col-sm-6 col-md-3">          
+              <!-- Query จำนวน admit -->
+              <div class="info-box">
+                <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-ambulance"></i><i class="fas fa-bed"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">จำนวน Refer ผู้ป่วยใน</span>
+                  <span class="info-box-number">
+                  <?php
+              $db=new ReferQuery();
+              try{
+                $TOTAL_REFER_IPDALL=$db->TOTAL_REFER_IPDALL($startDate, $endDate);
+                echo $TOTAL_REFER_IPDALL;
+              } catch(exception $e){
+                echo "Error:". $e->getMessage();
+              }
+                ?>  
+                  </span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-female"></i><i class="fas fa-male"></i><i class="fas fa-ambulance"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">ReferIN</span>
+                  <span class="info-box-number">
+                    <?php
+                      $db=new ReferQuery();
+                      try{
+                        $TOTAL_REFER_IPD=$db->TOTAL_REFER_IPD($startDate, $endDate);
+                        echo $TOTAL_REFER_IPD;
+                      } catch(exception $e){
+                        echo "Error:". $e->getMessage();
+                      }
+                    ?>
+                </span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+            </div>
+
+            <div class="clearfix hidden-md-up"></div>
+
+            <div class="col-12 col-sm-6 col-md-3">
+              <div class="info-box mb-3">
+                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-ambulance"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">ReferOUT</span>
+                  <span class="info-box-number">
+                  <?php
+                      $db=new ReferQuery();
+                      try{
+                        $TOTAL_REFER_ALL=$db->TOTAL_REFER_ALL($startDate, $endDate);
+                        echo $TOTAL_REFER_ALL;
+                      } catch(exception $e){
+                        echo "Error:". $e->getMessage();
+                      }
+                    ?>
+                  </span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+          </div>
+        </div>
     </section>
     <!-- /.content -->
   </div>

@@ -185,27 +185,20 @@
     </div>
     <?php
     require_once 'OPDQuery.php';
-    $currentDate = date('Y-m-d');
+    require_once '../Refer/ReferQuery.php';
+    require_once '../classes/validation/Validator.php';
+    $currentDate = date('d-m-Y');
+    echo "วันที่ ปัจจุบัน :".$currentDate;
     $startDate = $currentDate;
     $endDate = $currentDate;
     if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
-      $startDateTime = DateTime::createFromFormat('Y-m-d', $_POST['StartDateRange']);
-      $endDateTime = DateTime::createFromFormat('Y-m-d', $_POST['EndDateRange']);
-  
-      if ($startDateTime && $endDateTime) {
-          // หากการสร้าง DateTime สำเร็จ
-          $startDate = $startDateTime->format('Y-m-d');
-          $endDate = $endDateTime->format('Y-m-d');
-      } else {
-          // การสร้าง DateTime ล้มเหลว, จัดการข้อผิดพลาดที่นี่
-          $startDate = '2023-10-01';
-          $endDate = '2024-09-30';
-      }
-  } else {
-      // ถ้าไม่มีข้อมูลที่ส่งมา กำหนดวันที่เริ่มต้นและสิ้นสุดเป็นค่าเริ่มต้น
+      $startDate = $_POST['StartDateRange'];
+      $endDate = $_POST['EndDateRange'];      
+    } else {
+          // ถ้าไม่มีข้อมูลที่ส่งมา กำหนดวันที่เริ่มต้นและสิ้นสุดเป็นค่าเริ่มต้น
       $startDate = $currentDate;
       $endDate = $currentDate;
-  }
+    }
     ?>
   </aside>
   <form id="date-form" method="post">
@@ -244,6 +237,11 @@
         <div class="row">
         <div class="row col-12" style="text-align:center; font-size: 22px; font-weight: bold; color: blue;">
         <h1 style="text-align:center; margin: 0 auto;">
+        <?php
+        //$validator = new DateValidator();
+        //$startDate = $validator->convertDate($startDate);
+        //$endDate = $validator->convertDate($endDate);
+        ?>
         วันที่เริ่ม:<?php echo $startDate?> วันที่สิ้นสุด:<?php echo $endDate?> 
         </h1>
         </div>  
@@ -438,8 +436,16 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-              <h4>จำนวน Refer In</h4>  
-              <h4>65 ราย</h4>                
+              <h4>จำนวน OPD Refer</h4>  
+              <h4><?php
+            $db=new ReferQuery();
+            try{
+              $TOTAL_REFER_OPDALL=$db->TOTAL_REFER_OPDALL($startDate, $endDate);
+              echo $TOTAL_REFER_OPDALL;
+            } catch(exception $e){
+              echo "Error:". $e->getMessage();
+            }
+            ?></h4>                
               </div>
               <div class="icon">
                 <i class="fas fa-ambulance"></i>
@@ -513,7 +519,7 @@
       singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
       showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
       locale: {
-        format: 'YYYY-MM-DD',
+        format: 'DD-MM-YYYY',
         applyLabel: 'ตกลง',
         cancelLabel: 'ยกเลิก',
         fromLabel: 'จาก',
@@ -530,7 +536,7 @@
       singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
       showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
       locale: {
-        format: 'YYYY-MM-DD',
+        format: 'DD-MM-YYYY',
         applyLabel: 'ตกลง',
         cancelLabel: 'ยกเลิก',
         fromLabel: 'จาก',
