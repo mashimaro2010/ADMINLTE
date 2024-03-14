@@ -27,7 +27,8 @@ button {
 }
 
 body {
-  color: var(--white-color);
+  /*color: var(--white-color);*/
+  background-color: #e5ecfb;
 }
 
 input,
@@ -62,14 +63,14 @@ img {
 .login__form {
   position: relative;
   background-color: hsla(241, 72%, 86%, 0.1);
-  border: 2px solid darkviolet;
+  border: 2px solid rgb(10, 10, 10);
   margin-inline: 1.5rem;
   padding: 2.5rem 1.5rem;
   border-radius: 1rem;
   backdrop-filter: blur(2px);
 }
 .login__title {
-  color: darkviolet; /* เปลี่ยนสีของตัวหนังสือเป็นสีม่วงเข้ม */
+  color: rgb(12, 12, 12); /* เปลี่ยนสีของตัวหนังสือเป็นสีม่วงเข้ม */
   text-shadow: 1px 1px lavender; /* เพิ่มเงาตัวหนังสือเป็นสีม่วงอ่อน */
   text-align: center;
   font-size: var(--h1-font-size);
@@ -111,7 +112,7 @@ img {
   top: 13px;
   font-weight: var(--font-medium);
   transition: top 0.3s, font-size 0.3s;
-  color: white; /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
+  color: rgb(12, 12, 12); /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
 }
 .login__eye {
   position: absolute;
@@ -134,7 +135,7 @@ img {
 .login__check-label, .login__forgot, .login__register {
   font-size: var(--small-font-size);
   font-size: 16px; /* ขยายขนาดตัวหนังสือเป็น 20px */
-  color: white; /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
+  color: rgb(5, 5, 5); /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
 }
 .login__check-group {
   column-gap: 0.5rem;
@@ -146,14 +147,14 @@ img {
 .login__forgot, .login__register {
   color: var(--white-color);
   font-size: 16px; /* ขยายขนาดตัวหนังสือเป็น 20px */
-  color: white; /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
+  color: rgb(5, 5, 5); /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
 }
 .login__forgot:hover {
   text-decoration: underline;
-  color:darkviolet; /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
+  color:rgb(253, 251, 253); /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
 }
 .login__button {
-  color: white; /* เปลี่ยนสีตัวหนังสือเป็นสีขาว */
+  color: rgb(10, 10, 10); /* เปลี่ยนสีตัวหนังสือเป็นสีขาว */
   width: 100%;
   padding: 1rem;
   border-radius: 1.5rem;
@@ -164,7 +165,7 @@ img {
   margin-bottom: 2rem;
   transition: background-color 0.3s ease-in-out;
   &:hover {
-    color: darkviolet;
+    color:rgb(253, 251, 253);
     background-color: var(--purple-color-2);
   }
 }
@@ -172,7 +173,7 @@ img {
   text-align: center;
   font-weight:bold;
   font-size: 18px; /* ขยายขนาดตัวหนังสือเป็น 20px */
-  color: white; /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
+  color: rgb(10, 10, 10); /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
 }
 .login__register a {
   font-weight:bold;
@@ -183,7 +184,7 @@ img {
 .login__register a:hover {
   font-size: 18px; /* ขยายขนาดตัวหนังสือเป็น 20px */
   text-decoration: underline;
-  color: darkviolet;
+  color:rgb(253, 251, 253);
   text-shadow: 0 0 2px white; /* ใส่สีขอบตัวหนังสือเป็นสีขาว */
 }
 

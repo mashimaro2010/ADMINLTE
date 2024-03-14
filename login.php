@@ -12,9 +12,9 @@
 
       <title>Login Data Center</title>
    </head>
-   <body>
+   <body class="body">
       <div class="login">
-         <img src="assets/img/login-bg2.jpg" alt="login image" class="login__img">
+         <!--<img src="assets/img/login-bg2.jpg" alt="login image" class="login__img">-->
 
          <form action="auth_login.php" method="post" class="login__form">
             <h2 class="login__title">Login Data Center</h2>
