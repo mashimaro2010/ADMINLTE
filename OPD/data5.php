@@ -264,7 +264,7 @@
               <li class="nav-item">
                 <a href="data5.php" class="nav-link active">
                   <i class="fas fa-table nav-icon"></i>
-                  <p>ชุดข้อมูลระยะเวลารอคอยรวมทั้งหมด</p>
+                  <p>ระยะเวลารอคอยคำนวณช่วงเวลา</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -316,7 +316,12 @@
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
+<?php
+    $ThaiCurrentDate=date('d-m-Y');
+    $startDate = $ThaiCurrentDate;
+    $endDate = $ThaiCurrentDate;
+    require_once 'OPDQuery.php';
+?>
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -329,80 +334,18 @@
                 </div>
               </div>
               <!-- Function Connect Oracle Data Base -->
-            <?php 
-            include('../function.php');
-            $objConnect = MSHOCI();
-            $SQLWaitting_ALL="select o.OPD_NO,p.hn,p.prename||''||p.name||' '||p.surname as psname,DECODE(p.SEX, 'M','Man','Women') as sex,trunc(months_between(o.OPD_DATE,p.BIRTHDAY)/12) age_year,
-            ct.name as credit_name,ctm.name as cometohos,pl.fullplace,doc.prename||''||doc.name||' '||doc.surname as doctor_name,
-            (select sum(a.M_SELL) from  ACCIDENT_FINANCE_4 a where a.N17=o.opd_no) as price,
-            TO_CHAR(o.OPD_DATE,'yyyy-MM-dd')||' '||TO_CHAR(o.OPD_TIME,'HH24:MI:ss') as visit_time,
-            TO_CHAR(o.REACH_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.REACH_OPD_DATETIME,'HH24:MI:ss') as start_opd_time,
-            TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss') as screen_opd_time,
-            TO_CHAR(o.RX_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.RX_OPD_DATETIME,'HH24:MI:ss') rx_opd_time,
-            TO_CHAR(o.FINISH_OPD_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(o.FINISH_OPD_DATETIME,'HH24:MI:ss') as finnish_opd_time,
-            TO_CHAR(o.AFTER_DOC_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(o.AFTER_DOC_DATETIME,'HH24:MI:ss') as doctor_time,
-            (select TO_CHAR(ofh.DATETIME_IN_SECOND,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.DATETIME_IN_SECOND,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1) as DATETIME_IN_SECOND,
-            (select TO_CHAR(ofh.CHECK_DRUG_OK_DATE,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.CHECK_DRUG_OK_DATE,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1) as CHECK_DRUG_OK_DATE,
-            (select TO_CHAR(ofh.ALREADY_RECEIVE_DRUG_DATE,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.ALREADY_RECEIVE_DRUG_DATE,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1) as ALREADY_RECEIVE_DRUG_DATE,
-            DECODE(o.SCREENING_OPD_DATETIME,null, ' ',DECODE(o.OPD_TIME, null, ' ',ROUND((TO_DATE(TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')-
-            TO_DATE(TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')||' '||TO_CHAR(o.OPD_TIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')) *24*60,2))) as time_screen,
-            
-            DECODE(o.AFTER_DOC_DATETIME,null, ' ',DECODE(o.RX_OPD_DATETIME, null, ' ',ROUND((TO_DATE(TO_CHAR(o.AFTER_DOC_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(o.AFTER_DOC_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')-
-            TO_DATE(TO_CHAR(o.RX_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.RX_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')) *24*60,2))) as time_doctor,
-            
-            DECODE((select ofh.ALREADY_RECEIVE_DRUG_DATE from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1), null, 0,DECODE((select ofh.DATETIME_IN_SECOND
-            from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1), null, 0,
-            ROUND((TO_DATE((select TO_CHAR(ofh.ALREADY_RECEIVE_DRUG_DATE,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.ALREADY_RECEIVE_DRUG_DATE,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1),'YYYY-MM-DD HH24:MI:ss')-
-            TO_DATE((select TO_CHAR(ofh.DATETIME_IN_SECOND,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.DATETIME_IN_SECOND,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1),'YYYY-MM-DD HH24:MI:ss')) *1440, 2))) as time_drug,
-            
-            DECODE(o.SCREENING_OPD_DATETIME,null, ' ',DECODE((select ofh.DATETIME_IN_SECOND
-            from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1), null, ' ',ROUND((TO_DATE((select TO_CHAR(ofh.DATETIME_IN_SECOND,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.DATETIME_IN_SECOND,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1),'YYYY-MM-DD HH24:MI:ss')-TO_DATE(TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')) *1440, 2))) as time_drugload,
-            DECODE((o.SCREENING_OPD_DATETIME),null, ' ',DECODE(o.RX_OPD_DATETIME, null, ' ',ROUND((TO_DATE(TO_CHAR(o.RX_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.RX_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')-TO_DATE(TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')
-            ) *24*60,2))) as time_docdrug,
-            ROUND(
-            DECODE(o.SCREENING_OPD_DATETIME,null, 0,DECODE(o.OPD_TIME, null, 0,ROUND((TO_DATE(TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')-
-            TO_DATE(TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')||' '||TO_CHAR(o.OPD_TIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')) *24*60,2)))+
-            DECODE(o.AFTER_DOC_DATETIME,null, 0,DECODE(o.RX_OPD_DATETIME, null, 0,ROUND((TO_DATE(TO_CHAR(o.AFTER_DOC_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(o.AFTER_DOC_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')-
-            TO_DATE(TO_CHAR(o.RX_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.RX_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')) *24*60,2)))
-            +
-            DECODE((select ofh.ALREADY_RECEIVE_DRUG_DATE from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1), null, 0,DECODE((select ofh.DATETIME_IN_SECOND
-            from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1), null, 0,
-            ROUND((TO_DATE((select TO_CHAR(ofh.ALREADY_RECEIVE_DRUG_DATE,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.ALREADY_RECEIVE_DRUG_DATE,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1),'YYYY-MM-DD HH24:MI:ss')-
-            TO_DATE((select TO_CHAR(ofh.DATETIME_IN_SECOND,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.DATETIME_IN_SECOND,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1),'YYYY-MM-DD HH24:MI:ss')) *1440, 2)))+
-            DECODE(o.SCREENING_OPD_DATETIME,null, 0,DECODE((select ofh.DATETIME_IN_SECOND
-            from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1), null, 0,ROUND((TO_DATE((select TO_CHAR(ofh.DATETIME_IN_SECOND,'yyyy-mm-dd') ||' '||TO_CHAR(ofh.DATETIME_IN_SECOND,'HH24:MI:ss') from OPD_FINANCE_HEADERS ofh
-            where ofh.OPD_NO=o.OPD_NO and ofh.ALREADY_RECEIVE_DRUG_FLAG='Y' and rownum<=1),'YYYY-MM-DD HH24:MI:ss')-TO_DATE(TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')) *1440, 2)))+
-            DECODE((o.SCREENING_OPD_DATETIME),null, 0,DECODE(o.RX_OPD_DATETIME, null, 0,ROUND((TO_DATE(TO_CHAR(o.RX_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.RX_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')-TO_DATE(TO_CHAR(o.SCREENING_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.SCREENING_OPD_DATETIME,'HH24:MI:ss'),'YYYY-MM-DD HH24:MI:ss')
-            ) *24*60,2))),2)as sum_time,(select n.name from native_code n where n.native_id=p.native_id and rownum<=1) as nat_name,o.mark_yn
-            from OPDS o,PATIENTS p,OPD_WAREHOUSE ow,CREDIT_TYPES ct,COME_TO_HOSPITAL_CODE ctm,PLACES pl,DOC_DBFS doc
-            where o.OPD_NO=ow.OPD_NO  and ow.credit_id=ct.credit_id and o.PAT_RUN_HN=p.RUN_HN and
-            o.PAT_YEAR_HN=p.YEAR_HN and o.COME_TO_HOSPITAL_CODE=ctm.CODE and
-            doc.DOC_CODE=o.DD_DOC_CODE and o.PLA_PLACECODE=pl.PLACECODE and
-            pl.PT_PLACE_TYPE_CODE='1' and pl.Del_Flag is NULL  and o.OPD_DATE BETWEEN TO_DATE('2024-02-02','yyyy-mm-dd')  and TO_DATE('2024-02-02','yyyy-mm-dd') +0.99999
-            Order by pl.PLACECODE Desc";
-	    if($objConnect){
-		$stid = oci_parse($objConnect, $SQLWaitting_ALL);
-		oci_execute($stid);
+            <?php
+            try{
+              $db=new OPDQuery();
+              $result =$db->WaitTing_Time_Period($startDate,$endDate);
+              if (count($result) > 0) {
             ?>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="ReferData" class="table table-bordered table-striped">
+                <table id="WaitTing_Time_Period" class="table table-bordered table-striped">
                 <thead>
             <tr>
+                <th>ลำดับ</th>
                 <th>OPD_NO</th>
                 <th>HN</th>
                 <th>ชื่อ นามสกุล</th>
@@ -432,24 +375,27 @@
                 <th>ตรวจแล้ว</th>
             </tr>
         </thead>
-<?php
-		echo "<tbody>";
-	while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
-    	echo "<tr>\n";
-		
-    foreach ($row as $item) {
-        echo  "<td>".($item !== null ? htmlentities($item, ENT_QUOTES) : "&nbsp;") . "</td>\n";
+        <?php              
+    foreach ($result as $row) {
+        echo "<tr>";
+        foreach ($row as $item) {
+            // ตรวจสอบว่า $item ไม่ใช่ null ก่อนส่งไปยัง htmlentities()
+            if ($item !== null) {
+                echo "<td>" . htmlentities($item, ENT_QUOTES) . "</td>";
+            } else {
+                // ถ้า $item เป็น null, แสดงข้อความเริ่มต้นหรือเว้นว่าง
+                echo "<td></td>";
+            }
+        }
+        echo "</tr>";
     }
-    	echo "</tr>\n";
-		
-	}
-		echo "</tbody>";
-		echo "</table>\n";
-	}
-	else
-	{
-		echo "ไม่สามารถติดต่อ Oracle ได้";
-	}
+    echo "</tbody></table></div>";
+} else {
+    echo "No data found";
+}
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+}
 ?>
                   <!-- <tfoot>
                   <tr>
@@ -513,32 +459,51 @@
 <!--script src="../../dist/js/demo.js"></script-->
 <!-- Page specific script -->
 
-<script>  
-  $(function () {
-    $("#ReferData").DataTable({
-      "responsive": true, 
-      "lengthChange": true, 
-      "autoWidth": false,
-      "fixedColumns": true,
-      "buttons": ["excel", "print"],  //"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-      "exportOptions": {
-      "modifer": {
-      "page": 'all',
-      "search": 'none'}
-    }
+<script>
+$(function () {
+  var userFilename = ""; // ตัวแปรสำหรับเก็บชื่อไฟล์ที่ผู้ใช้ป้อน
+  $("#WaitTing_Time_Period").DataTable({
+    "responsive": true, 
+    "lengthChange": true, 
+    "autoWidth": false,
+    "fixedColumns": true,
+    "buttons": [
+      {
+        extend: 'excelHtml5',
+        text: '<i class="fa fa-file-excel"></i> Excel', // เพิ่มไอคอน Excel
+        action: function ( e, dt, button, config ) {
+          userFilename = prompt("กำหนดชื่อไฟล์ที่บันทึก:", userFilename);
+          if (userFilename) { // ตรวจสอบว่าผู้ใช้ได้ป้อนชื่อไฟล์หรือไม่
+            $.extend(true, config, {
+              title: 'จำนวนผู้ป่วย COPD ที่ต้องรับกลับเข้าโรงพยาบาล ภายใน 28 วัน',
+              filename: userFilename, // ใช้ชื่อไฟล์ที่ผู้ใช้ป้อน
+              exportOptions: {
+                modifier: {
+                  page: 'all',
+                  search: 'none'
+                }
+              }
+            });
+            $.fn.DataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
+          }
+        }
+      },
+      // ... คุณสามารถเพิ่มปุ่มอื่นๆ ตามต้องการ ...
+    ],
+  }).buttons().container().appendTo('#WaitTing_Time_Period_wrapper .col-md-6:eq(0)');
+});
+document.addEventListener("DOMContentLoaded", function () {
+    var searchInput = document.getElementById("searchInput");
+    var departmentCodeSelect = document.getElementById("DepartmentCode");
 
-    }).buttons().container().appendTo('#ReferData_wrapper .col-md-6:eq(0)');
-
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
+    searchInput.addEventListener("input", function () {
+        var searchText = searchInput.value.toLowerCase();
+        Array.from(departmentCodeSelect.options).forEach(function (option) {
+            var text = option.textContent.toLowerCase();
+            option.style.display = text.includes(searchText) ? "block" : "none";
+        });
     });
-  });
+});
 </script>
 </body>
 </html>
