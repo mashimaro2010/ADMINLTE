@@ -28,7 +28,7 @@ button {
 
 body {
   /*color: var(--white-color);*/
-  background-color: #e5ecfb;
+  background-color: #fafafa;
 }
 
 input,
@@ -62,7 +62,7 @@ img {
 }
 .login__form {
   position: relative;
-  background-color: hsla(241, 72%, 86%, 0.1);
+  background-color: hsla(240, 58%, 93%, 0.1);
   border: 2px solid rgb(10, 10, 10);
   margin-inline: 1.5rem;
   padding: 2.5rem 1.5rem;
@@ -151,7 +151,7 @@ img {
 }
 .login__forgot:hover {
   text-decoration: underline;
-  color:rgb(253, 251, 253); /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
+  color:darkviolet; /* เพิ่มบรรทัดนี้เพื่อเปลี่ยนสีตัวหนังสือเป็นสีขาว */
 }
 .login__button {
   color: rgb(10, 10, 10); /* เปลี่ยนสีตัวหนังสือเป็นสีขาว */
@@ -165,7 +165,7 @@ img {
   margin-bottom: 2rem;
   transition: background-color 0.3s ease-in-out;
   &:hover {
-    color:rgb(253, 251, 253);
+    color:darkviolet;
     background-color: var(--purple-color-2);
   }
 }
@@ -184,7 +184,7 @@ img {
 .login__register a:hover {
   font-size: 18px; /* ขยายขนาดตัวหนังสือเป็น 20px */
   text-decoration: underline;
-  color:rgb(253, 251, 253);
+  color:darkviolet;
   text-shadow: 0 0 2px white; /* ใส่สีขอบตัวหนังสือเป็นสีขาว */
 }
 
