@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>WaittingPreriod</title>
-  <!-- Google Font: Source Sans Pro -->
-  <link id="bsdp-css" href="https://unpkg.com/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker3.min.css" rel="stylesheet">
-  <!-- Date PickUP -->
-  <link rel="stylesheet" href="https://adminlte.io/themes/v3/plugins/daterangepicker/daterangepicker.css" >
+  <title>ชุดข้อมูลระยะเวลารอคอยทุกแผนก</title>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome Icons-->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+ <!-- Font Awesome Icons-->
+ <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">  <!-- Ionicons -->
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
@@ -23,13 +23,7 @@
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
   <!-- Daterange picker -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-
+  <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
   <!-- DataTables -->
@@ -38,6 +32,8 @@
   <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+  <!-- Daterangepicker style -->
+  <script src="https://cdn.jsdelivr.net/npm/daterangepicker@latest/daterangepicker.js"></script>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -218,7 +214,7 @@
                with font-awesome or any other icon font library -->
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="fas fa-layer-group"></i>
+              <i class="nav-icon fas fa-layer-group"></i>
               <p>
                 ประเภทผู้ป่วย
                 <i class="right fas fa-angle-left"></i>
@@ -232,7 +228,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../ipd/index2.php" class="nav-link">
+                <a href="../IPD/index2.php" class="nav-link">
                   <i class="fas fa-bed-pulse"></i>
                   <p>ผู้ป่วยใน</p>
                 </a>
@@ -244,7 +240,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="../Refer/index3.php" class="nav-link">
+                <a href="../Refer/index2.php" class="nav-link">
                   <i class="fas fa-truck-medical"></i>
                   <p>ผู้ป่วย Refer</p>
                 </a>
@@ -260,15 +256,9 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="data.php" class="nav-link active">
+                <a href="data2.php" class="nav-link active">
                   <i class="fas fa-table nav-icon"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอย</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="data5.php" class="nav-link">
-                  <i class="fas fa-table nav-icon"></i>
-                  <p>ชุดข้อมูลระยะเวลารอคอยรวมทั้งหมด</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -301,156 +291,158 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
+  <?php
+  $ThaiCurrentDate=date('d-m-Y');
+  $startDate = $ThaiCurrentDate;
+  $endDate = $ThaiCurrentDate;
+  require_once 'OPDQuery.php';
+    if (isset($_POST['StartDateRange']) && isset($_POST['EndDateRange'])) {
+    $startDate = DateTime::createFromFormat('d-m-Y', $_POST['StartDateRange'])->format('d-m-Y');
+    $endDate = DateTime::createFromFormat('d-m-Y', $_POST['EndDateRange'])->format('d-m-Y');
+  } else {
+      // ถ้าไม่มีข้อมูลที่ส่งมา กำหนดวันที่เริ่มต้นและสิ้นสุดเป็นค่าเริ่มต้น
+      $startDate = $ThaiCurrentDate;
+      $endDate = $ThaiCurrentDate;
+  }
+    ?>
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>ชุดข้อมูลผู้ป่วยนอก</h1>
+            <h1>ชุดข้อมูลระยะเวลารอคอย</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="../../index.php">Home</a></li>
-              <li class="breadcrumb-item active">ข้อมูลผู้ป่วยนอก</li>
+              <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
+              <li class="breadcrumb-item active">ชุดข้อมูลระยะเวลารอคอย</li>
             </ol>
           </div>
         </div>
       </div><!-- /.container-fluid -->
     </section>
-
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-12">        
-            <div class="card">
-              <div class="card-header">
-
-      <form>
-        <div class="row form-group">
-          <div class="row justify-content-center">
-            <div class="col-4">
-              <div class="input-group date" id="datepickerstart">
-                <label for="date" id="startDate" name="startDate" class="col-sm-2 col-form-label">วันที่เริ่ม :</label>
-                <input type="text" class="form-control" />
-                <span class="input-group-append">
-                  <span class="input-group-text bg-white d-block">
-                    <i class="fa fa-calendar"></i>
-                  </span>
-                </span>
+          <div class="col-12 text-center">        
+            <div>
+              <div class="col-12 form-group">
+              <form method="post">
+              <div class="col-12 form-group">
+              <label for="start-date">
+              <i class="fas fa-calendar-alt"></i> วันที่เริ่ม :</label>
+              <input type="text" name="StartDateRange" id="start-date" />   
+              <label for="end-date">
+              <i class="fas fa-calendar-alt"></i> วันที่สิ้นสุด :</label>
+              <input type="text" name="EndDateRange" id="end-date" />
+              <button type="submit"><i class="fas fa-search"></i> ค้นหา</button>
               </div>
-            </div>
-            <div class="col-4">
-              <div class="input-group date" id="datepickerend">
-                <label for="date" class="col-sm-3 col-form-label">วันที่สิ้นสุด :</label>
-                <input type="text" name="endDate" class="form-control" />
-                <span class="input-group-append">
-                  <span class="input-group-text bg-white d-block">
-                    <i class="fa fa-calendar"></i>
-                  </span>
-                </span>
-              </div>
-            </div>
-              <div class="col-4">
-              <div class="input-group date" id="datepickerend">
-              <button type="button" class="btn btn-primary click" onclick="Senddate()">click</button>  
-              </div>
+              </form>
             </div>
           </div>
         </div>
-      </form>
-                
-              </div>
+      </div>
               <!-- Function Connect Oracle Data Base -->
-            <?php 
-            include('../function.php');
-            $objConnect = MSHOCI();
-            $SQL="SELECT OPD_NO,HN,PSNAME,
-            OPEN_VISIT_TIME,START_OPD_TIME,SCREEN_OPD_TIME,FINISH_OPD_TIME,Doctor_Entry,RECEIVED_DRUG_TIME
-            from (SELECT O.OPD_NO,P.HN,P.PRENAME||''||P.NAME||' '||P.SURNAME as psname,OW.CREDIT_ID,
-            TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')||' '||TO_CHAR(o.OPD_TIME,'HH24:MI:ss') as Open_Visit_Time,
-            TO_CHAR(o.REACH_OPD_DATETIME,'yyyy-mm-dd')||' '||TO_CHAR(o.REACH_OPD_DATETIME,'HH24:MI:ss') as Start_opd_time,
-            TO_CHAR(O.SCREENING_OPD_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(O.SCREENING_OPD_DATETIME,'HH24:MI:ss') as Screen_opd_time,
-            TO_CHAR(O.FINISH_OPD_DATETIME,'yyyy-mm-dd') ||' '||TO_CHAR(O.FINISH_OPD_DATETIME,'HH24:MI:ss') as Finish_opd_time,
-            (Select Max(To_Char(drw.MAIN_DATE,'yyyy-mm-dd')||' '||TO_CHAR(drw.MAIN_TIME,'HH24:MI:ss')) From data_drug_wh drw where drw.HN=P.HN
-            and TO_CHAR(drw.MAIN_DATE,'yyyy-mm-dd')=TO_CHAR(CURRENT_DATE, 'yyyy-mm-dd')) as Doctor_Entry,
-            (select Max(To_Char(OFH.ALREADY_RECEIVE_DRUG_DATE,'yyyy-mm-dd')||' '||TO_CHAR(OFH.ALREADY_RECEIVE_DRUG_DATE,'HH24:MI:ss'))
-            from OPD_FINANCE_HEADERS OFH where OFH.OPD_NO=O.OPD_NO and OFH.FT_TYPE_CODE='03' ) as Received_Drug_Time
-            from OPDS O,PATIENTS P,OPD_FINANCE_HEADERS OFH,OPD_WAREHOUSE OW
-            WHERE O.PAT_RUN_HN=P.RUN_HN and O.PAT_YEAR_HN=P.YEAR_HN AND
-            TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(ofh.datetime,'yyyy-mm-dd')
-            and OFH.OPD_NO=O.OPD_NO
-            and  TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(CURRENT_DATE, 'yyyy-MM-dd') /* get Present Day */
-             and O.OPD_NO=OW.OPD_NO and TO_CHAR(o.OPD_DATE,'yyyy-mm-dd')=TO_CHAR(OW.OPD_DATE,'yyyy-mm-dd')
-            Group by O.OPD_NO,P.HN,P.PRENAME,P.NAME,P.SURNAME,p.SEX,o.OPD_DATE,p.BIRTHDAY,OW.CREDIT_ID,
-            O.OPD_TIME,o.REACH_OPD_DATETIME,OFH.opd_finance_no,OFH.FT_TYPE_CODE,O.SCREENING_OPD_DATETIME,
-            O.FINISH_OPD_DATETIME,o.RX_OPD_DATETIME,ofh.date_created
-            Order By HN,OPD_NO asc)  Temp  Group by OPD_NO,HN,PSNAME,CREDIT_ID,
-            OPEN_VISIT_TIME,START_OPD_TIME,SCREEN_OPD_TIME,FINISH_OPD_TIME,Doctor_Entry,
-            RECEIVED_DRUG_TIME Order by HN,OPD_NO asc";         
-	    if($objConnect){
-		$stid = oci_parse($objConnect, $SQL);
-		oci_execute($stid);
+            <?php
+            try{
+              $db=new OPDQuery();
+              $result =$db->WaitTing_Time_Period($startDate,$endDate);
+              if (count($result) > 0) {
             ?>
               <!-- /.card-header -->
-              <div class="card-body">
-                <table id="WaittingPreriod" class="table table-bordered table-striped">
+              <div class="card-body col-12">
+                <table id="WaitTing_Time_Period" class="table table-bordered table-striped">
                 <thead>
-            <tr>
-                
-				<th>OPD_NO</th>
+                <tr>
+                <th>ลำดับ</th>
+                <th>OPD_NO</th>
                 <th>HN</th>
-                <th>PSNAME</th>
-				        <th>OPEN_VISIT_TIME</th>
-                <th>START_OPD_TIME</th>
-                <th>SCREEN_OPD_TIME</th>
-                <th>FINISH_OPD_TIME</th>
-                <th>Doctor_Entry</th>
-                <th>RECEIVED_DRUG_TIME</th>
+                <th>ชื่อ นามสกุล</th>
+                <th>เพศ</th>
+				        <th>อายุ</th>
+                <th>ชื่อสิทธิ์</th>
+                <th>มาโดย</th>
+                <th>แผนก</th>
+                <th>ชื่อแพทย์ที่ตรวจ</th>
+                <th>PRICE</th>
+                <th>เวลาเปิด Visit</th>
+                <th>ลงความดัน/ส่วนสูง</th>
+                <th>พยาบาลซักประวัติ</th>
+                <th>RX_OPD_TIME</th>
+                <th>FINNISH_OPD_TIME</th>
+                <th>DOCTOR_TIME</th>
+                <th>DATETIME_IN_SECOND</th>
+                <th>CHECK_DRUG_OK_DATE</th>
+                <th>ALREADY_RECEIVE_DRUG_DATE</th>
+                <th>ใช้เวลาในการซักประวัติ</th>
+                <th>ใช้เวลาในการตรวจ</th>
+                <th>ใช้เวลาในการคีย์รายการยา</th>
+                <th>TIME_DRUGLOAD</th>
+                <th>TIME_DOCDRUG</th>
+                <th>เวลารวมทั้งหมด/นาที</th>
+                <th>สัญชาติ</th>
+                <th>ตรวจแล้ว</th>
             </tr>
         </thead>
-<?php
-		echo "<tbody>";
-	while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
-    	echo "<tr>\n";
-		
-    foreach ($row as $item) {
-        echo  "<td>".($item !== null ? htmlentities($item, ENT_QUOTES) : "&nbsp;") . "</td>\n";
-    }
-    	echo "</tr>\n";
-		
-	}
-		echo "</tbody>";
-		echo "</table>\n";
-	}
-	else
-	{
-		echo "ไม่สามารถติดต่อ Oracle ได้";
-	}
+        <?php              
+    foreach ($result as $row) {
+        echo "<tr>";
+        foreach ($row as $item) {
+            // ตรวจสอบว่า $item ไม่ใช่ null ก่อนส่งไปยัง htmlentities()
+            if ($item !== null) {
+                echo "<td>" . htmlentities($item, ENT_QUOTES) . "</td>";
+            } else {
+                // ถ้า $item เป็น null, แสดงข้อความเริ่มต้นหรือเว้นว่าง
+                echo "<td></td>";
+            }
+        }
+              echo "</tr>";
+          }
+?>          
+        </tbody>
+          <tfoot>
+          <tr>
+          <th></th>
+          <th id="SumTotal"></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          </tr>
+        </tfoot>  
+        </table></div>
+<?php      } else {
+          echo "No data found";
+      }
+      } catch (Exception $e) {
+          echo "Error: " . $e->getMessage();
+      }
 ?>
-                  <!-- <tfoot>
-                  <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
-                  </tr>
-                  </tfoot> -->
-                </table>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
   </div>
@@ -470,8 +462,8 @@
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery -->
-<!-- <script src="../../plugins/jquery/jquery3_4_1.min.js"></script> -->
+<!-- jQuery UI 1.11.4 -->
+<script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- DataTables  & Plugins -->
@@ -487,52 +479,101 @@
 <script src="../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <!-- AdminLTE App -->
 <script src="../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <!--script src="../../dist/js/demo.js"></script-->
 <!-- Page specific script -->
 <script>
-  $(function () {
-    $("#WaittingPreriod").DataTable({
-      "responsive": true, 
-      "lengthChange": true, 
-      "autoWidth": false,
-      "fixedColumns": true,
-      "buttons": ["excel", "print"],  //"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-      "exportOptions": {
-      "modifer": {
-      "page": 'all',
-      "search": 'none'}
-    }
-
-    }).buttons().container().appendTo('#WaittingPreriod_wrapper .col-md-6:eq(0)');
-
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
+  $(function() {
+    $('input[name="StartDateRange"]').daterangepicker({
+      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
+      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
+      locale: {
+        format: 'DD-MM-YYYY',
+        applyLabel: 'ตกลง',
+        cancelLabel: 'ยกเลิก',
+        fromLabel: 'จาก',
+        toLabel: 'ถึง',
+        customRangeLabel: 'กำหนดเอง',
+        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        firstDay: 1
+      }
+    });
+  });
+  $(function() {
+    $('input[name="EndDateRange"]').daterangepicker({
+      singleDatePicker: true, // เปิดให้เลือกเฉพาะวันที่เริ่ม
+      showDropdowns: true, // (ตามต้องการ) แสดง dropdown สำหรับเลือกเดือนและปี
+      locale: {
+        format: 'DD-MM-YYYY',
+        applyLabel: 'ตกลง',
+        cancelLabel: 'ยกเลิก',
+        fromLabel: 'จาก',
+        toLabel: 'ถึง',
+        customRangeLabel: 'กำหนดเอง',
+        daysOfWeek: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        firstDay: 1
+      }
     });
   });
 </script>
-<script type="text/javascript">
-      document.querySelector('.click').addEventListener('click', (e) => {
-  // Do whatever you want
-      e.target.textContent = 'Load Data!';
-      });
-      $(function () {
-        $("#datepickerstart").datepicker({ format: "dd/mm/yyyy",autoclose: true, });
-      });
-      $(function () {
-        $("#datepickerend").datepicker({ format: "dd/mm/yyyy",autoclose: true, });
-      });
-      function Senddate() {
-        alert(startdate);
-      }
+<script>
+  function initializeDataTable() {
+  var userFilename = ""; // ตัวแปรสำหรับเก็บชื่อไฟล์ที่ผู้ใช้ป้อน
+
+  var table = $("#WaitTing_Time_Period").DataTable({
+    "responsive": true,
+    "lengthChange": true,
+    "autoWidth": false,
+    "fixedColumns": true,
+    "buttons": [
+      {
+        extend: 'excelHtml5',
+        text: '<i class="fa fa-file-excel"></i> Excel', // เพิ่มไอคอน Excel
+        action: function ( e, dt, button, config ) {
+          userFilename = prompt("กำหนดชื่อไฟล์ที่บันทึก:", userFilename);
+          if (userFilename) { // ตรวจสอบว่าผู้ใช้ได้ป้อนชื่อไฟล์หรือไม่
+            $.extend(true, config, {
+              title: 'ชุดข้อมูลระยะเวลารอคอยทุกแผนก',
+              filename: userFilename, // ใช้ชื่อไฟล์ที่ผู้ใช้ป้อน
+              exportOptions: {
+                modifier: {
+                  page: 'all',
+                  search: 'none'
+                },
+                columns: ':visible',
+                footer: true // เพิ่ม `footer: true`
+              }
+            });
+            $.fn.DataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
+          }
+        }
+      },
+      // ... คุณสามารถเพิ่มปุ่มอื่นๆ ตามต้องการ ...
+    ],
+  }).buttons().container().appendTo('#WaitTing_Time_Period_wrapper .col-md-6:eq(0)');
+}
+$(document).ready(function() {
+  initializeDataTable();
+  var table = $('#WaitTing_Time_Period').DataTable();
+
+  // คำนวณผลรวมของคอลัมน์ที่ 25
+  var column = table.column(25);
+  var total = column.data().map(function (value) { return parseFloat(value); }).filter(function (value) { return !isNaN(value); }).reduce(function (a, b) {
+    return a + b;
+  });
+
+  // แสดงผลลัพธ์โดยมีจุดทศนิยม 2 ตำแหน่ง
+  var formattedTotal = total.toLocaleString('th-TH', { maximumFractionDigits: 2 });
+
+  // แสดงผลลัพธ์ใน #SumTotal
+  $('#SumTotal').html(formattedTotal);
+});
 </script>
 </body>
 </html>

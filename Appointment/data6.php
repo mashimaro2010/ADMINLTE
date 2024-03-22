@@ -269,13 +269,7 @@
                 <i class="fas fa-database"></i><i class="fas fa-clock"></i>
                   <p>ชุดข้อมูลระยะเวลารอคอย</p>
                 </a>
-              </li>
-              <li class="nav-item">
-                <a href="../OPD/data5.php" class="nav-link">
-                <i class="fas fa-database"></i><i class="fas fa-bed-pulse"></i>
-                  <p>ชุดข้อมูลระยะเวลารอคอยรวมทั้งหมด</p>
-                </a>
-              </li>
+              </li>              
               <li class="nav-item">
                 <a href="../IPD/data2.php" class="nav-link">
                 <i class="fas fa-database"></i><i class="fas fa-bed-pulse"></i>
