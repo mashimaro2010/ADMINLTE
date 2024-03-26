@@ -364,11 +364,10 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h5 class="card-title">Pie Chart แสดงจำนวนผู้ป่วยนัดแยกตามแผนก</h5>
-                
+                <h5 class="card-title">Pie Chart แสดงจำนวนผู้ป่วยนัดแยกตามแผนก</h5>                
             </div>
             <div class="container-fluid" style="width: 800px; height: 800px;">
-              <canvas id="myChart"></canvas>
+              <canvas id="myChart" class="align-self-start"></canvas>
             </div>
             </div>
           </div>

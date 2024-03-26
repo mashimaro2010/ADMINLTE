@@ -329,7 +329,7 @@ require '../auth_session.php';
             OPEN_VISIT_TIME,START_OPD_TIME,SCREEN_OPD_TIME,FINISH_OPD_TIME,Doctor_Entry,
             RECEIVED_DRUG_TIME Order by HN,OPD_NO";
             ?>
-            <div class="small-box bg-warning">
+            <div class="small-box bg-info">
               <div class="inner">
                 <h4>Visit ในวัน</h4>
                 <h4>
@@ -352,7 +352,7 @@ require '../auth_session.php';
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-success">
+            <div class="small-box bg-info">
               <div class="inner">
                 <h4>คัดกรองไปแล้ว</h4>
                 <h4>
@@ -375,7 +375,7 @@ require '../auth_session.php';
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-warning">
+            <div class="small-box bg-info">
               <div class="inner">
                 <h4>พบแพทย์ไปแล้ว</h4>
                 <h4>
@@ -399,7 +399,7 @@ require '../auth_session.php';
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-success">
+            <div class="small-box bg-info">
               <div class="inner">
                 <h4>รับยาแล้ว</h4>
                 <h4>
@@ -423,7 +423,7 @@ require '../auth_session.php';
 
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-success">
+            <div class="small-box bg-info">
               <div class="inner">
               <h4>ระยะเวลารอคอย</h4>  
               <h4>65 นาทีต่อราย</h4>
@@ -437,7 +437,7 @@ require '../auth_session.php';
 
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-warning">
+            <div class="small-box bg-info">
               <div class="inner">
               <h4>จำนวน OPD Refer</h4>  
               <h4><?php
@@ -459,7 +459,7 @@ require '../auth_session.php';
 
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-success">
+            <div class="small-box bg-info">
               <div class="inner">
               <h4>จำนวน Refer Out</h4>
                 <h4>65 ราย</h4>                

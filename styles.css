@@ -14,20 +14,23 @@
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 .hospital-icon::before {    
-    color: #007bff;
+    color: #a5d9f3;
   }
 .user-icon::before{
-    color: #007bff;   
+    color: #a5d9f3;   
 }
 .user-md-icon::before{
-    color: #007bff;
+    color:#a5d9f3;
 }
 .prescription-icon::before{
-    color: #007bff;
+    color:#a5d9f3;
 }
 .pie-graph-icon::before{
-    color: #007bff;
+    color: #a5d9f3;
 }
 .ambulance-icon::before{
-    color: #007bff;
+    color: #a5d9f3;
+}
+.col-margin{
+    margin-bottom: 20px;
 }

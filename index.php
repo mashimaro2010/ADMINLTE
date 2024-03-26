@@ -201,7 +201,7 @@ $ThaiCurrentDate=date('d-m-Y');
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-          <div class="col-lg-3 col-6">
+          <div class="col-lg-3 col-6 col-margin">
             <!-- small box -->
             <?php
             	    include('pages/tables/function.php');
@@ -308,9 +308,9 @@ $ThaiCurrentDate=date('d-m-Y');
             RECEIVED_DRUG_TIME Order by HN,OPD_NO";
             ?>
             <div class="small-box mb-2">
-              <div class="inner">
-                <H2 class="font-weight-bold success-lighter-hover">จำนวน Visit</H2>
-                <H2 class="font-weight-bold success-lighter-hover">
+              <div class="bg-info">
+                <H2 class="font-weight-bold">จำนวน Visit</H2>
+                <H2 class="font-weight-bold">
                   <?php
                 if($objConnect){
                     $stid = oci_parse($objConnect, $SQLAllVisits);
@@ -338,9 +338,9 @@ $ThaiCurrentDate=date('d-m-Y');
           <div class="col-lg-2 col-6">
             <!-- small box -->
             <div class="small-box mb-2">
-              <div class="inner">
-                <h2 class="font-weight-bold success-lighter-hover">คัดกรอง</h2>
-                <h2 class="font-weight-bold success-lighter-hover"><?php
+              <div class="bg-info">
+                <h2 class="font-weight-bold">คัดกรอง</h2>
+                <h2 class="font-weight-bold"><?php
                 if($objConnect){
                     $stid = oci_parse($objConnect, $SQLDoneScreen);
                     oci_execute($stid);
@@ -366,9 +366,9 @@ $ThaiCurrentDate=date('d-m-Y');
           <div class="col-lg-2 col-6">
             <!-- small box -->
             <div class="small-box mb-2">
-              <div class="inner">
-                <h2 class="font-weight-bold success-lighter-hover">พบแพทย์</h2>
-                <h2 class="font-weight-bold success-lighter-hover"><?php
+              <div class="bg-info">
+                <h2 class="font-weight-bold">พบแพทย์</h2>
+                <h2 class="font-weight-bold"><?php
                 if($objConnect){
                     $stid = oci_parse($objConnect, $SQLDoneDoctor);
                     oci_execute($stid);
@@ -394,9 +394,9 @@ $ThaiCurrentDate=date('d-m-Y');
           <div class="col-lg-2 col-6">
             <!-- small box -->
             <div class="small-box mb-2">
-              <div class="inner">
-                <h2 class="font-weight-bold success-lighter-hover">รับยา </h2>
-                <h2 class="font-weight-bold success-lighter-hover"><?php
+              <div class="bg-info">
+                <h2 class="font-weight-bold">รับยา </h2>
+                <h2 class="font-weight-bold"><?php
                 if($objConnect){
                     $stid = oci_parse($objConnect, $SQLReceivedDrug);
                     oci_execute($stid);
@@ -421,9 +421,9 @@ $ThaiCurrentDate=date('d-m-Y');
 
           <div class="col-lg-3 col-6">            
             <div class="small-box mb-2">
-              <div class="inner">
-                <h2 class="font-weight-bold success-lighter-hover">ระยะเวลารอคอย</h2>
-                <h2 class="font-weight-bold success-lighter-hover">120 ต่อนาที/ราย</h2>      
+              <div class="bg-info">
+                <h2 class="font-weight-bold">ระยะเวลารอคอย</h2>
+                <h2 class="font-weight-bold">120 ต่อนาที/ราย</h2>      
               </div>
               <div class="icon">
                 <i class="ion ion-pie-graph pie-graph-icon"></i>
@@ -436,11 +436,11 @@ $currentDate = date('d-m-Y');
 $startDate = $currentDate;
 $endDate = $currentDate;
 ?>          
-          <div class="col-lg-4">
+          <div class="col-lg-4 col-margin">
             <div class="small-box mb-2">
-              <div class="inner">
-                <h2 class="font-weight-bold success-lighter-hover">OPD Refer ทั้งหมด</h2>
-                <h2 class="font-weight-bold success-lighter-hover"><?php
+              <div class="bg-info">
+                <h2 class="font-weight-bold">OPD Refer ทั้งหมด</h2>
+                <h2 class="font-weight-bold"><?php
               $db=new ReferQuery();
               try{
                 $TOTAL_REFER_OPDALL=$db->TOTAL_REFER_OPDALL($startDate, $endDate);
@@ -457,9 +457,9 @@ $endDate = $currentDate;
           </div>
           <div class="col-lg-4">
             <div class="small-box mb-2">
-              <div class="inner">
-                <h2 class="font-weight-bold success-lighter-hover">OPD Refer IN</h2>
-                <h2 class="font-weight-bold success-lighter-hover"><?php
+              <div class="bg-info">
+                <h2 class="font-weight-bold">OPD Refer IN</h2>
+                <h2 class="font-weight-bold"><?php
                       $db=new ReferQuery();
                       try{
                         $TOTAL_REFER_OPDALL=$db->TOTAL_REFER_OPDALL($startDate, $endDate);
@@ -476,9 +476,9 @@ $endDate = $currentDate;
           </div>
           <div class="col-lg-4">
             <div class="small-box mb-2">
-              <div class="inner">
-                <h2 class="font-weight-bold success-lighter-hover">OPD Refer Out</h2>
-                <h2 class="font-weight-bold success-lighter-hover"><?php
+              <div class="bg-info">
+                <h2 class="font-weight-bold">OPD Refer Out</h2>
+                <h2 class="font-weight-bold"><?php
                       $db=new ReferQuery();
                       try{
                         $TOTAL_REFER_ALL=$db->TOTAL_REFER_ALL($startDate, $endDate);
@@ -493,11 +493,11 @@ $endDate = $currentDate;
               </div>              
             </div>
           </div>
-          <div class="col-lg-4">
+          <div class="col-lg-4 col-margin">
             <div class="small-box mb-2">
-              <div class="inner">
-                <h2 class="font-weight-bold success-lighter-hover">IPD Refer ทั้งหมด</h2>
-                <h2 class="font-weight-bold success-lighter-hover"><?php
+              <div class="bg-info">
+                <h2 class="font-weight-bold">IPD Refer ทั้งหมด</h2>
+                <h2 class="font-weight-bold"><?php
               $db=new ReferQuery();
               try{
                 $TOTAL_REFER_IPDALL=$db->TOTAL_REFER_IPDALL($startDate, $endDate);
@@ -514,9 +514,9 @@ $endDate = $currentDate;
           </div>
           <div class="col-lg-4">
             <div class="small-box mb-2">
-              <div class="inner">
-                <h2 class="font-weight-bold success-lighter-hover">IPD Refer IN</h2>
-                <h2 class="font-weight-bold success-lighter-hover"><?php
+              <div class="bg-info">
+                <h2 class="font-weight-bold">IPD Refer IN</h2>
+                <h2 class="font-weight-bold"><?php
                       $db=new ReferQuery();
                       try{
                         $TOTAL_REFER_IPD=$db->TOTAL_REFER_IPD($startDate, $endDate);
@@ -533,9 +533,9 @@ $endDate = $currentDate;
           </div>
           <div class="col-lg-4">
             <div class="small-box mb-2">
-              <div class="inner">
-                <h2 class="font-weight-bold success-lighter-hover">IPD Refer Out</h2>
-                <h2 class="font-weight-bold success-lighter-hover"><?php
+              <div class="bg-info">
+                <h2 class="font-weight-bold">IPD Refer Out</h2>
+                <h2 class="font-weight-bold"><?php
                       $db=new ReferQuery();
                       try{
                         $TOTAL_REFER_ALL=$db->TOTAL_REFER_ALL($startDate, $endDate);
