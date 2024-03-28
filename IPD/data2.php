@@ -342,8 +342,7 @@
         <div class="row">
           <div class="col-12">        
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">ชุดข้อมูลผู้ป่วย Admit</h3>
+              <div class="card-header">                
                 <div style="text-align:center; font-size: 22px; font-weight: bold; color: blue;">
                 <?php echo "<h2> วันที่เริ่ม : ".$startDate." วันที่สิ้นสุด: ".$endDate;?>
                 </div>
@@ -360,13 +359,12 @@
               <div class="card-body">
                 <table id="WaittingPreriod" class="table table-bordered table-striped">
                 <thead>
-            <tr>
-                
-				<th>AN</th>
+            <tr>                
+				        <th>AN</th>
                 <th>BED_NO</th>
                 <th>PLA_PLACECODE</th>
                 <th>FULLPLACE</th>
-				<th>FLNAME</th>
+				        <th>FLNAME</th>
                 <th>อาการ</th>
                 <th>AdmitDateTime</th>
             </tr>

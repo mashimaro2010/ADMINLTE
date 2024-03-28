@@ -338,6 +338,15 @@
               <label for="end-date">
               <i class="fas fa-calendar-alt"></i> วันที่สิ้นสุด :</label>
               <input type="text" name="EndDateRange" id="end-date" />
+              <i class="fas fa-calendar-alt"></i> เลือกข้อมูล :</label>
+              <select name="cars" id="car-select">
+              <option value="1">ดูทั้งหมด</option>
+              <option value="2">ลงเวลาครบทุกอย่าง</option>
+              <option value="3">ไม่ลงเวลาวัดความดัน</option>
+              <option value="4">ไม่ลงเวลาซักประวัติ</option>
+              <option value="5">ไม่ลงหมอตรวจ</option>
+              <option value="6">ไม่ลงเวลารับยา</option>                  
+              </select>
               <button type="submit"><i class="fas fa-search"></i> ค้นหา</button>
               </div>
               </form>
@@ -349,10 +358,16 @@
             <?php
             try{
               $db=new OPDQuery();
-              $result =$db->WaitTing_Time_Period($startDate,$endDate);
+              $result =$db->WaitTing_Success($startDate,$endDate);
               if (count($result) > 0) {
             ?>
               <!-- /.card-header -->
+            <div class="card">
+              <div class="card-header">                
+                <div style="text-align:center; font-size: 22px; font-weight: bold; color: blue;">
+                <?php echo "<h2> วันที่เริ่ม : ".$startDate." วันที่สิ้นสุด: ".$endDate;?>
+                </div>
+                </div>            
               <div class="card-body col-12">
                 <table id="WaitTing_Time_Period" class="table table-bordered table-striped">
                 <thead>
@@ -405,29 +420,29 @@
         </tbody>
           <tfoot>
           <tr>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
           <th id="SumTotal"></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
           <th></th>
           <th></th>
           <th></th>
@@ -443,6 +458,7 @@
           echo "Error: " . $e->getMessage();
       }
 ?>
+    
     </section>
     <!-- /.content -->
   </div>
@@ -531,6 +547,7 @@
     "lengthChange": true,
     "autoWidth": false,
     "fixedColumns": true,
+    "dom": 'Bfrtip', // เพิ่ม `dom: 'Bfrtip'`
     "buttons": [
       {
         extend: 'excelHtml5',
@@ -546,7 +563,7 @@
                   page: 'all',
                   search: 'none'
                 },
-                columns: ':visible',
+                columns: ':not(:hidden)', // เปลี่ยน `columns: ':visible'` เป็น `columns: ':not(:hidden)'`
                 footer: true // เพิ่ม `footer: true`
               }
             });
@@ -557,7 +574,12 @@
       // ... คุณสามารถเพิ่มปุ่มอื่นๆ ตามต้องการ ...
     ],
   }).buttons().container().appendTo('#WaitTing_Time_Period_wrapper .col-md-6:eq(0)');
+  // เพิ่ม `buttons` ลงใน `initComplete`
+  table.on( 'initComplete', function () {
+    table.buttons().container().appendTo('#WaitTing_Time_Period_wrapper .col-md-6:eq(0)');
+  });
 }
+
 $(document).ready(function() {
   initializeDataTable();
   var table = $('#WaitTing_Time_Period').DataTable();
